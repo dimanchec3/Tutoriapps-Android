@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+       <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#5BBF21"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="94.75"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/tvSeparador"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:background="#000000"
+            android:gravity="center_vertical"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/bCrearPost"
+            android:layout_width="34dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="5"
+            android:background="@drawable/custom_crear"
+            android:paddingBottom="24dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="34dp" >
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Nombre"
+            android:textColor="#43bd00"
+            android:textSize="15dip"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvName"
+            android:layout_alignParentRight="true"
+            android:text="Date"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvSeparador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvDate"
+            android:layout_alignBottom="@+id/tvDate"
+            android:layout_toLeftOf="@+id/tvDate"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="·"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvSeparador"
+            android:layout_alignBottom="@+id/tvSeparador"
+            android:layout_toLeftOf="@+id/tvSeparador"
+            android:text="Grupo"
+            android:textSize="10dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="TEXTO"
+        android:textColor="#FFFFFF"
+        android:textSize="12dp" />
+
+</LinearLayout>
