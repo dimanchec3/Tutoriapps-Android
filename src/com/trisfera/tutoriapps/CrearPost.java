@@ -13,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +40,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	private ProgressDialog pDialog;
 	HttpEntity entity;
 	Bundle extras;
-	int i=0;
+	Typeface font;
+	int i = 0;
 	String[] gid, gnombre;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 
@@ -76,7 +78,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		token = extras.getString("token");
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
-		
+		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
+		etCrearPost.setTypeface(font);
 	}
 
 	@Override
@@ -84,16 +87,14 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bPostear:
-			
-			//Revisar si el loading da error.
+
 			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
 			postData();
 			Intent iHome = new Intent(getBaseContext(), TutsActivity.class);
 			setResult(RESULT_OK, null);
 			finish();
-			i=1;
+			i = 1;
 			startActivity(iHome);
-			
 			break;
 		}
 	}
@@ -102,8 +103,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (i==1)
-		pDialog.dismiss();
+		if (i == 1)
+			pDialog.dismiss();
 	}
 
 	private void postData() {

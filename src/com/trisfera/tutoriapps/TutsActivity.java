@@ -77,6 +77,7 @@ public class TutsActivity extends Activity implements OnClickListener {
 		tvSlogan.setTypeface(font);
 		etUser.setTypeface(font);
 		etPass.setTypeface(font);
+		tvWarning.setTypeface(font);
 	}
 
 	@Override
