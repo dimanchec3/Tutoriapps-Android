@@ -25,13 +25,17 @@ public final class R {
     public static final class id {
         public static final int bCrearPost=0x7f060007;
         public static final int bPostear=0x7f060002;
+        public static final int bResponder=0x7f060018;
         public static final int bSubmit=0x7f06000e;
+        public static final int etComentario=0x7f060016;
         public static final int etCrearPost=0x7f060000;
         public static final int etPass=0x7f06000d;
         public static final int etUser=0x7f06000c;
-        public static final int logOut=0x7f060015;
+        public static final int logOut=0x7f06001a;
+        public static final int lvComentarios=0x7f060015;
         public static final int lvGrupos=0x7f060008;
         public static final int lvPosts=0x7f060009;
+        public static final int refresh=0x7f060019;
         public static final int sGrupos=0x7f060001;
         public static final int tvDate=0x7f060014;
         public static final int tvFecha=0x7f060012;
@@ -41,6 +45,7 @@ public final class R {
         public static final int tvId=0x7f060004;
         public static final int tvName=0x7f060010;
         public static final int tvSeparador=0x7f060006;
+        public static final int tvSeparador2=0x7f060017;
         public static final int tvSlogan=0x7f06000b;
         public static final int tvText=0x7f060013;
         public static final int tvTutoriapps=0x7f06000a;

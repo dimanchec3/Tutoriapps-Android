@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 public class CrearPost extends Activity implements OnItemSelectedListener,
@@ -35,8 +36,10 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	HttpPost httppost;
 	ArrayList<NameValuePair> nameValuePairs;
 	HttpResponse response;
+	private ProgressDialog pDialog;
 	HttpEntity entity;
 	Bundle extras;
+	int i=0;
 	String[] gid, gnombre;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 
@@ -61,7 +64,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sGrupos.setAdapter(adaptador);
 	}
-	
+
 	private void initialise() {
 		// TODO Auto-generated method stub
 		etCrearPost = (EditText) findViewById(R.id.etCrearPost);
@@ -71,11 +74,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		sGrupos.setOnItemSelectedListener(this);
 		extras = getIntent().getExtras();
 		token = extras.getString("token");
-		//items = extras.getStringArray("items");
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
-			
-		
 		
 	}
 
@@ -84,14 +84,26 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bPostear:
-			ProgressDialog.show(CrearPost.this, "", "Loading...");
+			
+			//Revisar si el loading da error.
+			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
 			postData();
 			Intent iHome = new Intent(getBaseContext(), TutsActivity.class);
-			setResult(0, null);
-			startActivity(iHome);
+			setResult(RESULT_OK, null);
 			finish();
+			i=1;
+			startActivity(iHome);
+			
 			break;
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (i==1)
+		pDialog.dismiss();
 	}
 
 	private void postData() {
@@ -118,7 +130,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -131,7 +142,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

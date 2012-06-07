@@ -18,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -28,13 +29,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TutsActivity extends Activity implements OnClickListener {
 
 	EditText etUser, etPass;
 	Button bLogin, bLogOut;
 	TextView tvWarning, tvToken, token2, tvTutoriapps, tvSlogan;
-	String username, password, collected = null;
+	String username, password, token = null;
 	HttpClient httpclient;
 	HttpPost httppost;
 	ArrayList<NameValuePair> nameValuePairs;
@@ -42,7 +44,9 @@ public class TutsActivity extends Activity implements OnClickListener {
 	HttpEntity entity;
 	String FILENAME = "Interno";
 	FileOutputStream fos;
+	private ProgressDialog pDialog;
 	FileInputStream fis = null;
+	int i = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,21 +71,32 @@ public class TutsActivity extends Activity implements OnClickListener {
 		tvWarning = (TextView) findViewById(R.id.tvWarning);
 		tvTutoriapps = (TextView) findViewById(R.id.tvTutoriapps);
 		tvSlogan = (TextView) findViewById(R.id.tvSlogan);
-		bLogin.setOnClickListener(this);		
+		bLogin.setOnClickListener(this);
 		Typeface font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvTutoriapps.setTypeface(font, 1);
 		tvSlogan.setTypeface(font);
+		etUser.setTypeface(font);
+		etPass.setTypeface(font);
 	}
 
 	@Override
 	public void onClick(View v) {
 
 		switch (v.getId()) {
-
 		case R.id.bSubmit:
+
 			submit();
+			i = 1;
 			break;
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (i == 1)
+			pDialog.dismiss();
 	}
 
 	public void submit() {
@@ -113,7 +128,8 @@ public class TutsActivity extends Activity implements OnClickListener {
 				response = httpclient.execute(httppost);
 
 				if (response.getStatusLine().getStatusCode() == 200) {
-
+					pDialog = ProgressDialog.show(this, "Iniciando sesión",
+							"Cargando...");
 					entity = response.getEntity();
 					if (entity != null) {
 
@@ -128,9 +144,10 @@ public class TutsActivity extends Activity implements OnClickListener {
 						fos.close();
 
 						acasa();
+
 					}
 
-				} else
+				} else 
 					tvWarning.setText("E-mail o contraseña inválidos.");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -143,7 +160,7 @@ public class TutsActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		getToken();
 		Intent iHome = new Intent(getBaseContext(), Home.class);
-		iHome.putExtra("token", collected);
+		iHome.putExtra("token", token);
 		iHome.putExtra("filename", FILENAME);
 		startActivity(iHome);
 		finish();
@@ -156,7 +173,7 @@ public class TutsActivity extends Activity implements OnClickListener {
 			byte[] dataArray;
 			dataArray = new byte[fis.available()];
 			while (fis.read(dataArray) != -1) {
-				collected = new String(dataArray);
+				token = new String(dataArray);
 			}
 
 			fis.close();
@@ -165,6 +182,6 @@ public class TutsActivity extends Activity implements OnClickListener {
 		} catch (IOException e) {
 			return "";
 		}
-		return collected;
+		return token;
 	}
 }

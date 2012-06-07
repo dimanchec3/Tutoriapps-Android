@@ -8,13 +8,13 @@
         android:numericShortcut="1"
         android:title="About Us">
     </item>
-    
+       -->
     <item
-        android:id="@+id/preferences"
-        android:title="Preferences">
+        android:id="@+id/refresh"
+        android:title="Refresh">
         
     </item>
-    -->
+ 
     <item
         android:id="@+id/logOut"
         android:title="Log Out">

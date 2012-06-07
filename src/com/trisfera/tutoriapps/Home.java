@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener {
@@ -44,13 +45,13 @@ public class Home extends Activity implements OnClickListener,
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	String[] gid, gnombre;
-	Button bLogOut, bCrearPost;
+	Button bCrearPost;
 	HttpClient client, client2;
 	ListView myListView, myListView2;
 	public TextView tvId = null;
 	Bundle extras;
 	TextView tvHeader;
-	String token, id;
+	String token, id, FILENAME;
 	Intent iCrearPost, iArray;
 	FancyAdapter aa = null;
 	FancyAdapter2 fancy2 = null;
@@ -77,6 +78,7 @@ public class Home extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.home);
+
 		initialiseHome();
 		try {
 			getdata();
@@ -109,10 +111,7 @@ public class Home extends Activity implements OnClickListener,
 		myListView.setDivider(null);
 		myListView2.setVerticalFadingEdgeEnabled(false);
 		myListView.setVerticalFadingEdgeEnabled(false);
-		/*
-		 * bLogOut = (Button) findViewById(R.id.bLogOut);
-		 * bLogOut.setOnClickListener(this);
-		 */
+		FILENAME = extras.getString("filename");
 
 	}
 
@@ -160,6 +159,7 @@ public class Home extends Activity implements OnClickListener,
 				aa = new FancyAdapter();
 
 				myListView.setAdapter(aa);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,33 +220,28 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bCrearPost:
-			
-			
+
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
-			
-			gid = new String[arrayGrupos.size()];
-			gnombre = new String[arrayGrupos.size()];
-			
-			for(int i = 0 ; i < arrayGrupos.size(); i++) {
-				//items[i] = arrayGrupos.get(i).id + ":" + arrayGrupos.get(i).name;
-				gid[i] = arrayGrupos.get(i).id;
-				gnombre[i] = arrayGrupos.get(i).name;
-			}
-						
+
+			arregloGrupos();
+
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			iCrearPost.putExtras(extras);
 			startActivityForResult(iCrearPost, 0);
-
-			/*
-			 * case R.id.bLogOut: Bundle extras = getIntent().getExtras();
-			 * String FILENAME = extras.getString("filename"); startActivity(new
-			 * Intent(this, TutsActivity.class)); deleteFile(FILENAME);
-			 * finish(); break;
-			 */
 		}
+	}
 
+	private void arregloGrupos() {
+		// TODO Auto-generated method stub
+		gid = new String[arrayGrupos.size()];
+		gnombre = new String[arrayGrupos.size()];
+
+		for (int i = 0; i < arrayGrupos.size(); i++) {
+			gid[i] = arrayGrupos.get(i).id;
+			gnombre[i] = arrayGrupos.get(i).name;
+		}
 	}
 
 	@Override
@@ -254,8 +249,11 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (requestCode == 0)
+		if (resultCode == RESULT_OK)
 			finish();
+		else
+			aa.notifyDataSetChanged();
+			
 	}
 
 	@Override
@@ -271,22 +269,16 @@ public class Home extends Activity implements OnClickListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-		/*
-		 * case R.id.aboutUs:
-		 * 
-		 * break;
-		 * 
-		 * case R.id.preferences:
-		 * 
-		 * break;
-		 */
-		case R.id.logOut:
 
-			String FILENAME = extras.getString("filename");
+		case R.id.logOut:
 			startActivity(new Intent(this, TutsActivity.class));
 			deleteFile(FILENAME);
 			borrarToken(token);
 			finish();
+			break;
+		case R.id.refresh:
+			//finish();
+			//startActivity(getIntent());
 			break;
 		}
 		return false;
@@ -296,7 +288,7 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 
 		StringBuilder url = new StringBuilder(URL_TOKEN);
-		url.append(token);
+		url.append(token + ".json");
 		HttpDelete get = new HttpDelete(url.toString());
 		try {
 			HttpResponse r = client.execute(get);
@@ -310,7 +302,6 @@ public class Home extends Activity implements OnClickListener,
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 	}
 
 	class FancyAdapter extends ArrayAdapter<Post> {
@@ -410,7 +401,14 @@ public class Home extends Activity implements OnClickListener,
 			iSingle.putExtra("texto", texto);
 			iSingle.putExtra("fecha", fecha);
 			iSingle.putExtra("grupo", grupo);
-			startActivity(iSingle);
+			iSingle.putExtra("token", token);
+			iSingle.putExtra("filename", FILENAME);
+			arregloGrupos();
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			iSingle.putExtras(extras);
+
+			startActivityForResult(iSingle, 0);
 			break;
 		case R.id.lvGrupos:
 

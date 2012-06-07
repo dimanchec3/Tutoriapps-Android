@@ -12,7 +12,7 @@
         android:layout_weight="0.35"
         android:ems="10"
         android:gravity="top"
-        android:hint="Escribir post..."
+        android:hint="Escribe tu post..."
         android:inputType="textMultiLine" >
     </EditText>
 

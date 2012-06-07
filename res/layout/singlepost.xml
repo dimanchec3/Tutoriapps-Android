@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
-       <LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="#5BBF21"
@@ -15,18 +16,18 @@
             android:id="@+id/tvHeader"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="94.75"
+            android:layout_weight="94.5"
             android:gravity="center_vertical"
             android:paddingLeft="12dp"
             android:text="@string/app_name"
-            android:textColor="#ffffff"
+            android:textColor="#FFFFFF"
             android:textSize="24dp" />
 
         <TextView
             android:id="@+id/tvSeparador"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".25"
+            android:layout_weight=".5"
             android:background="#000000"
             android:gravity="center_vertical"
             android:text=" " />
@@ -42,15 +43,18 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="34dp" >
+        android:layout_height="wrap_content"
+        android:layout_margin="2.5dp"
+        android:background="#D3E8A3"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" >
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:text="Nombre"
-            android:textColor="#43bd00"
+            android:textColor="#000000"
             android:textSize="15dip"
             android:textStyle="bold" />
 
@@ -61,6 +65,7 @@
             android:layout_alignBottom="@+id/tvName"
             android:layout_alignParentRight="true"
             android:text="Date"
+            android:textColor="#000000"
             android:textSize="10dp" />
 
         <TextView
@@ -73,6 +78,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="·"
+            android:textColor="#000000"
             android:textSize="10dp" />
 
         <TextView
@@ -83,15 +89,66 @@
             android:layout_alignBottom="@+id/tvSeparador"
             android:layout_toLeftOf="@+id/tvSeparador"
             android:text="Grupo"
+            android:textColor="#000000"
             android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:text="TEXTO"
+            android:textColor="#000000"
+            android:textSize="12dp" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvText"
-        android:layout_width="fill_parent"
+    <ListView
+        android:id="@+id/lvComentarios"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1"
+        android:background="#EBF4D5" >
+    </ListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TEXTO"
-        android:textColor="#FFFFFF"
-        android:textSize="12dp" />
+        android:layout_margin="5dp"
+        android:background="#EFF7DD" >
+
+        <EditText
+            android:id="@+id/etComentario"
+            android:layout_width="235dp"
+            android:layout_height="wrap_content"
+            android:background="#EFF7DD"
+            android:ems="10"
+            android:hint="Escribe tu comentario..."
+            android:inputType="textMultiLine"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tvSeparador2"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_toRightOf="@+id/etComentario"
+            android:background="#CCCCCC"
+            android:text=" " />
+
+        <Button
+            android:id="@+id/bResponder"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tvSeparador2"
+            android:background="#EFF7DD"
+            android:text="Responder" />
+    </RelativeLayout>
 
 </LinearLayout>
