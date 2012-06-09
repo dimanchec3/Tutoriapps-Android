@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.HttpEntity;
@@ -18,6 +21,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -37,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener {
@@ -44,7 +49,7 @@ public class Home extends Activity implements OnClickListener,
 	static String URL;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	String[] gid, gnombre;
+	String[] gid, gnombre, fechaformato;
 	Button bCrearPost;
 	HttpClient client, client2;
 	ListView myListView, myListView2;
@@ -56,12 +61,14 @@ public class Home extends Activity implements OnClickListener,
 	FancyAdapter aa = null;
 	FancyAdapter2 fancy2 = null;
 	Typeface font;
+	long mStartTime;
 	int i = 0;
 	private ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
 
 	class Post {
+		public String id;
 		public String text;
 		public String created_at;
 		public String name;
@@ -80,7 +87,12 @@ public class Home extends Activity implements OnClickListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.home);
 
-		initialiseHome();
+		try {
+			initialiseHome();
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			getdata();
 			getGrupos();
@@ -93,7 +105,7 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	private void initialiseHome() {
+	private void initialiseHome() throws ParseException {
 
 		client = new DefaultHttpClient();
 		client2 = new DefaultHttpClient();
@@ -109,10 +121,11 @@ public class Home extends Activity implements OnClickListener,
 		URL = "http://10.0.2.2:3000/api/v1/groups/home/posts.json?auth_token=";
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
-		myListView.setDivider(null);
+		// myListView.setDivider(null);
 		myListView2.setVerticalFadingEdgeEnabled(false);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		FILENAME = extras.getString("filename");
+		mStartTime = System.currentTimeMillis();
 
 	}
 
@@ -143,8 +156,25 @@ public class Home extends Activity implements OnClickListener,
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Post resultRow = new Post();
-						resultRow.created_at = json_data
-								.getString("created_at");
+						resultRow.id = json_data.getString("id");
+						// resultRow.created_at =
+						// json_data.getString("created_at");
+
+						String creado = json_data.getString("created_at");
+
+						fechaformato = new String[jArray.length()];
+
+						fechaformato[i] = creado;
+
+						SimpleDateFormat curFormater = new SimpleDateFormat(
+								"yyyy-MM-dd'T'hh:mm:ss'Z'");
+						Date dateObj = curFormater.parse(fechaformato[i]);
+						SimpleDateFormat postFormater = new SimpleDateFormat(
+								"dd/MMM/yyyy");
+						String newDateStr = postFormater.format(dateObj);
+
+						resultRow.created_at = newDateStr;
+
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
@@ -160,7 +190,7 @@ public class Home extends Activity implements OnClickListener,
 				aa = new FancyAdapter();
 
 				myListView.setAdapter(aa);
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -224,9 +254,7 @@ public class Home extends Activity implements OnClickListener,
 
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
-
 			arregloGrupos();
-
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			iCrearPost.putExtras(extras);
@@ -252,8 +280,6 @@ public class Home extends Activity implements OnClickListener,
 
 		if (resultCode == RESULT_OK)
 			finish();
-		else
-			aa.notifyDataSetChanged();
 	}
 
 	@Override
@@ -271,7 +297,8 @@ public class Home extends Activity implements OnClickListener,
 		switch (item.getItemId()) {
 
 		case R.id.logOut:
-			pDialog = ProgressDialog.show(this, "Cerrando sesión", "Cargando...");
+			pDialog = ProgressDialog.show(this, "Cerrando sesión",
+					"Cargando...");
 			deleteFile(FILENAME);
 			borrarToken(token);
 			startActivity(new Intent(this, TutsActivity.class));
@@ -279,13 +306,13 @@ public class Home extends Activity implements OnClickListener,
 			finish();
 			break;
 		case R.id.refresh:
-			//finish();
-			//startActivity(getIntent());
+			// finish();
+			// startActivity(getIntent());
 			break;
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -293,7 +320,6 @@ public class Home extends Activity implements OnClickListener,
 		if (i == 1)
 			pDialog.dismiss();
 	}
-
 
 	private void borrarToken(String token) {
 		// TODO Auto-generated method stub
@@ -312,6 +338,40 @@ public class Home extends Activity implements OnClickListener,
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}
+	}
+
+	class FancyAdapter2 extends ArrayAdapter<Grupos> {
+		FancyAdapter2() {
+			super(Home.this, android.R.layout.simple_list_item_1, arrayGrupos);
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder2 holder;
+			if (convertView == null) {
+				LayoutInflater inflater = getLayoutInflater();
+				convertView = inflater.inflate(R.layout.grupos, null);
+				holder = new ViewHolder2(convertView);
+				convertView.setTag(holder);
+			} else
+				holder = (ViewHolder2) convertView.getTag();
+			holder.populateGrupos(arrayGrupos.get(position));
+			return (convertView);
+		}
+	}
+
+	class ViewHolder2 {
+		public TextView tvGrupos = null;
+
+		ViewHolder2(View row) {
+			tvGrupos = (TextView) row.findViewById(R.id.tvGrupos);
+			tvId = (TextView) row.findViewById(R.id.tvId);
+		}
+
+		void populateGrupos(Grupos r) {
+			tvGrupos.setText(r.name);
+			tvId.setText(r.id);
+			tvGrupos.setTypeface(font);
 		}
 	}
 
@@ -335,36 +395,19 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	class FancyAdapter2 extends ArrayAdapter<Grupos> {
-		FancyAdapter2() {
-			super(Home.this, android.R.layout.simple_list_item_1, arrayGrupos);
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder2 holder;
-			if (convertView == null) {
-				LayoutInflater inflater = getLayoutInflater();
-				convertView = inflater.inflate(R.layout.grupos, null);
-				holder = new ViewHolder2(convertView);
-				convertView.setTag(holder);
-			} else
-				holder = (ViewHolder2) convertView.getTag();
-			holder.populateGrupos(arrayGrupos.get(position));
-			return (convertView);
-		}
-	}
-
 	class ViewHolder {
 		public TextView tvName = null;
 		public TextView tvText = null;
 		public TextView tvFecha = null;
 		public TextView tvGroup = null;
+		public TextView tvIdPost = null;
 
 		ViewHolder(View row) {
 			tvName = (TextView) row.findViewById(R.id.tvName);
 			tvText = (TextView) row.findViewById(R.id.tvText);
 			tvFecha = (TextView) row.findViewById(R.id.tvFecha);
 			tvGroup = (TextView) row.findViewById(R.id.tvGroup);
+			tvIdPost = (TextView) row.findViewById(R.id.tvIdPost);
 		}
 
 		void populateFrom(Post r) {
@@ -372,25 +415,11 @@ public class Home extends Activity implements OnClickListener,
 			tvText.setText(r.text);
 			tvFecha.setText(r.created_at);
 			tvGroup.setText(r.group);
+			tvIdPost.setText(r.id);
 			tvName.setTypeface(font, 1);
 			tvText.setTypeface(font, 0);
 			tvFecha.setTypeface(font);
 			tvGroup.setTypeface(font);
-		}
-	}
-
-	class ViewHolder2 {
-		public TextView tvGrupos = null;
-
-		ViewHolder2(View row) {
-			tvGrupos = (TextView) row.findViewById(R.id.tvGrupos);
-			tvId = (TextView) row.findViewById(R.id.tvId);
-		}
-
-		void populateGrupos(Grupos r) {
-			tvGrupos.setText(r.name);
-			tvId.setText(r.id);
-			tvGrupos.setTypeface(font);
 		}
 	}
 
@@ -408,15 +437,19 @@ public class Home extends Activity implements OnClickListener,
 					.getText().toString();
 			String grupo = ((TextView) arg1.findViewById(R.id.tvGroup))
 					.getText().toString();
+			String idPost = ((TextView) arg1.findViewById(R.id.tvIdPost))
+					.getText().toString();
 			iSingle.putExtra("nombre", nombre);
 			iSingle.putExtra("texto", texto);
 			iSingle.putExtra("fecha", fecha);
 			iSingle.putExtra("grupo", grupo);
 			iSingle.putExtra("token", token);
 			iSingle.putExtra("filename", FILENAME);
+			iSingle.putExtra("idPost", idPost);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
+
 			iSingle.putExtras(extras);
 
 			startActivityForResult(iSingle, 0);

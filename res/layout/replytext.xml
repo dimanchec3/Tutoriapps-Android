@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#EBF4D5"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="#D3E8A3"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" >
+
+        <TextView
+            android:id="@+id/tvNameLV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="Name"
+            android:textColor="#000000"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tvFechaLV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvNameLV"
+            android:layout_alignParentRight="true"
+            android:text="Fecha"
+            android:textColor="#000000"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvTextLV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNameLV"
+            android:padding="2.5dp"
+            android:text="Text"
+            android:textColor="#000000"
+            android:textSize="11dp" />
+    </RelativeLayout>
+
+</LinearLayout>

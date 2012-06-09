@@ -129,7 +129,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			response = httpclient.execute(httppost);
 
-			if (response.getStatusLine().getStatusCode() == 200)
+			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 		} catch (Exception e) {
 			e.printStackTrace();

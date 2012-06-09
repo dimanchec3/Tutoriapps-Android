@@ -23,15 +23,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class TutsActivity extends Activity implements OnClickListener {
+public class TutsActivity extends Activity implements OnClickListener, TextWatcher {
 
 	EditText etUser, etPass;
 	Button bLogin, bLogOut;
@@ -78,6 +79,8 @@ public class TutsActivity extends Activity implements OnClickListener {
 		etUser.setTypeface(font);
 		etPass.setTypeface(font);
 		tvWarning.setTypeface(font);
+		etUser.addTextChangedListener(this);
+		etPass.addTextChangedListener(this);
 	}
 
 	@Override
@@ -85,7 +88,7 @@ public class TutsActivity extends Activity implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bSubmit:
-
+			tvWarning.setVisibility(View.VISIBLE);
 			submit();
 			i = 1;
 			break;
@@ -184,5 +187,24 @@ public class TutsActivity extends Activity implements OnClickListener {
 			return "";
 		}
 		return token;
+	}
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		tvWarning.setVisibility(View.INVISIBLE);
 	}
 }

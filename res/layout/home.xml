@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -30,7 +30,7 @@
             android:layout_weight=".5"
             android:background="#000000"
             android:gravity="center_vertical"
-            android:text=" " />
+            android:text="" />
 
         <Button
             android:id="@+id/bCrearPost"
@@ -46,8 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#D3E8A3"
-        android:divider="#ffffff"
-        android:dividerHeight="1px"
+        android:divider="#FFFFFF"
+        android:dividerHeight="1dp"
         android:paddingLeft="6dp"
         android:paddingRight="6dp" >
     </ListView>
@@ -55,8 +55,11 @@
     <ListView
         android:id="@+id/lvPosts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:paddingLeft="6dp"
+                android:background="#D3E8A3"
+        android:divider="#D3E8A3"
+        android:dividerHeight="1dp"
         android:paddingRight="6dp" >
     </ListView>
 

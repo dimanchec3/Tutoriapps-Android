@@ -2,5 +2,8 @@
 <resources>
 
     <string name="app_name">Tutoriapps</string>
+    <string name="hint_comentario">Escribe tu comentario&#8230;</string>
+    <string name="btn_Responder">Responder</string>
+    <string name="separador">·</string>
 
 </resources>

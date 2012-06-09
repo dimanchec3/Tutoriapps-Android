@@ -3,13 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" 
-    android:background="#ffffff">
+    android:background="#D3E8A3">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2.5dp"
-        android:background="#D3E8A3"
+        android:layout_marginLeft="2.5dp"
+        android:layout_marginRight="2.5dp"
+        android:background="#ffffff"
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
@@ -62,6 +63,16 @@
             android:text="Text"
             android:textColor="#000000"
             android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/tvIdPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvName"
+            android:layout_alignParentTop="true"
+            android:text="TextView"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </LinearLayout>
