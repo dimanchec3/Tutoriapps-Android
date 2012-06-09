@@ -9,9 +9,12 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class SinglePost extends Activity implements OnClickListener {
+public class SinglePost extends Activity implements OnClickListener, TextWatcher {
 
 	Bundle extras;
 	TextView tvName, tvText, tvDate, tvGroup;
@@ -36,6 +38,8 @@ public class SinglePost extends Activity implements OnClickListener {
 	ListView lvComentarios;
 	EditText etComentario;
 	Typeface font;
+	int i = 0;
+	private ProgressDialog pDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,8 @@ public class SinglePost extends Activity implements OnClickListener {
 		tvText.setTypeface(font);
 		tvDate.setTypeface(font);
 		tvGroup.setTypeface(font);
+		bResponder.setEnabled(false);
+		etComentario.addTextChangedListener(this);
 	}
 
 	@Override
@@ -88,14 +94,23 @@ public class SinglePost extends Activity implements OnClickListener {
 		switch (item.getItemId()) {
 
 		case R.id.logOut:
-
+			pDialog = ProgressDialog.show(this, "Cerrando sesión", "Cargando...");
 			deleteFile(FILENAME);
 			borrarToken(token);
 			setResult(RESULT_OK, null);
 			startActivity(new Intent(this, TutsActivity.class));
+			i = 1;
 			finish();
 		}
 		return false;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (i == 1)
+			pDialog.dismiss();
 	}
 
 	private void borrarToken(String token) {
@@ -146,6 +161,27 @@ public class SinglePost extends Activity implements OnClickListener {
 
 			break;
 		}
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+		if (s == null || s.length() == 0)
+		bResponder.setEnabled(false);
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+		if (s == null || s.length() == 0)
+		bResponder.setEnabled(false);
+	}
+
+	@Override
+	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		bResponder.setEnabled(true);
 	}
 
 }

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -36,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener {
@@ -56,7 +56,8 @@ public class Home extends Activity implements OnClickListener,
 	FancyAdapter aa = null;
 	FancyAdapter2 fancy2 = null;
 	Typeface font;
-	// static ArrayList<String> resultRow, gruposRow;
+	int i = 0;
+	private ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
 
@@ -253,7 +254,6 @@ public class Home extends Activity implements OnClickListener,
 			finish();
 		else
 			aa.notifyDataSetChanged();
-			
 	}
 
 	@Override
@@ -271,9 +271,11 @@ public class Home extends Activity implements OnClickListener,
 		switch (item.getItemId()) {
 
 		case R.id.logOut:
-			startActivity(new Intent(this, TutsActivity.class));
+			pDialog = ProgressDialog.show(this, "Cerrando sesión", "Cargando...");
 			deleteFile(FILENAME);
 			borrarToken(token);
+			startActivity(new Intent(this, TutsActivity.class));
+			i = 1;
 			finish();
 			break;
 		case R.id.refresh:
@@ -283,6 +285,15 @@ public class Home extends Activity implements OnClickListener,
 		}
 		return false;
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (i == 1)
+			pDialog.dismiss();
+	}
+
 
 	private void borrarToken(String token) {
 		// TODO Auto-generated method stub

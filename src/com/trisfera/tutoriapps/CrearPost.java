@@ -15,6 +15,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -24,11 +26,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 public class CrearPost extends Activity implements OnItemSelectedListener,
-		OnClickListener {
+		OnClickListener, TextWatcher {
 	EditText etCrearPost;
 	Button bPostear;
 	String PostData, token, gruposId;
@@ -80,6 +81,9 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		gid = extras.getStringArray("gid");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		etCrearPost.setTypeface(font);
+		
+		bPostear.setEnabled(false);
+		etCrearPost.addTextChangedListener(this);
 	}
 
 	@Override
@@ -127,7 +131,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 
 			if (response.getStatusLine().getStatusCode() == 200)
 				entity = response.getEntity();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,6 +146,27 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+		if (s == null || s.length() == 0)
+			bPostear.setEnabled(false);
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+		if (s == null || s.length() == 0)
+			bPostear.setEnabled(false);
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		bPostear.setEnabled(true);
 	}
 
 }
