@@ -21,7 +21,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.R.string;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -41,7 +40,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener {
@@ -56,7 +54,7 @@ public class Home extends Activity implements OnClickListener,
 	public TextView tvId = null;
 	Bundle extras;
 	TextView tvHeader;
-	String token, id, FILENAME;
+	String token, id, FILENAME, horaAgo;
 	Intent iCrearPost, iArray;
 	FancyAdapter aa = null;
 	FancyAdapter2 fancy2 = null;
@@ -125,7 +123,6 @@ public class Home extends Activity implements OnClickListener,
 		myListView2.setVerticalFadingEdgeEnabled(false);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		FILENAME = extras.getString("filename");
-		mStartTime = System.currentTimeMillis();
 
 	}
 
@@ -157,8 +154,6 @@ public class Home extends Activity implements OnClickListener,
 						JSONObject json_data = jArray.getJSONObject(i);
 						Post resultRow = new Post();
 						resultRow.id = json_data.getString("id");
-						// resultRow.created_at =
-						// json_data.getString("created_at");
 
 						String creado = json_data.getString("created_at");
 
@@ -166,14 +161,50 @@ public class Home extends Activity implements OnClickListener,
 
 						fechaformato[i] = creado;
 
-						SimpleDateFormat curFormater = new SimpleDateFormat(
-								"yyyy-MM-dd'T'hh:mm:ss'Z'");
-						Date dateObj = curFormater.parse(fechaformato[i]);
-						SimpleDateFormat postFormater = new SimpleDateFormat(
-								"dd/MMM/yyyy");
-						String newDateStr = postFormater.format(dateObj);
+						long currentTime = System.currentTimeMillis();
 
-						resultRow.created_at = newDateStr;
+						String eventTime = new String(creado);
+
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd'T'hh:mm:ss'Z'");
+						Date date = sdf.parse(eventTime);
+						long eventTimelong = date.getTime();
+						long diff = currentTime - eventTimelong;
+
+						long segundoslong = diff / 1000;
+						long minutoslong = diff / 60000; // 60 por 1000
+						long horaslong = diff / 3600000; // 60 por 60 por 1000
+						long diaslong = horaslong / 24;
+						long meseslong = diaslong / 31;
+						long añolong = meseslong / 12;
+
+						if (añolong == 1)
+							horaAgo = "hace " + añolong + " año ";
+						else if (añolong > 1)
+							horaAgo = "hace " + añolong + " años ";
+						else if (meseslong == 1)
+							horaAgo = "hace " + meseslong + " mes ";
+						else if (meseslong > 1)
+							horaAgo = "hace " + meseslong + " meses ";
+						else if (diaslong == 1)
+							horaAgo = "hace " + diaslong + " día ";
+						else if (diaslong > 1)
+							horaAgo = "hace " + diaslong + " días ";
+						else if (horaslong == 1)
+							horaAgo = "hace " + horaslong + " hora ";
+						else if (horaslong > 1)
+							horaAgo = "hace " + horaslong + " horas ";
+						else if (minutoslong == 1)
+							horaAgo = "hace " + minutoslong + " minuto ";
+						else if (minutoslong > 1)
+							horaAgo = "hace " + minutoslong + " minutos ";
+						else if (segundoslong == 1)
+							horaAgo = "hace " + segundoslong + " segundo ";
+						else if (segundoslong > 1)
+							horaAgo = "hace " + segundoslong + " segundos ";
+						else if (segundoslong == 0)
+							horaAgo = "justo ahora";
+						resultRow.created_at = horaAgo;
 
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
@@ -280,6 +311,18 @@ public class Home extends Activity implements OnClickListener,
 
 		if (resultCode == RESULT_OK)
 			finish();
+		else {
+			aa.clear();
+			try {
+				getdata();
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ConnectionClosedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -306,8 +349,16 @@ public class Home extends Activity implements OnClickListener,
 			finish();
 			break;
 		case R.id.refresh:
-			// finish();
-			// startActivity(getIntent());
+			aa.clear();
+			try {
+				getdata();
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ConnectionClosedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 		return false;

@@ -2,15 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
-    android:background="#D3E8A3">
+    android:background="#D3E8A3"
+    android:orientation="vertical"
+    android:paddingBottom="10dp" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2.5dp"
         android:layout_marginRight="2.5dp"
-        android:background="#ffffff"
+        android:background="@drawable/custom_shape"
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
@@ -19,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="#000000"
+            android:textColor="#5BBF21"
             android:textSize="12dp" />
 
         <TextView
@@ -29,7 +30,7 @@
             android:layout_alignBottom="@+id/tvName"
             android:layout_toLeftOf="@+id/tvSeparador"
             android:text="Group"
-            android:textColor="#000000"
+            android:textColor="#BDBDBD"
             android:textSize="10dp" />
 
         <TextView
@@ -40,8 +41,8 @@
             android:layout_toLeftOf="@+id/tvFecha"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:textColor="#000000"
             android:text="·"
+            android:textColor="#BDBDBD"
             android:textSize="10dp" />
 
         <TextView
@@ -51,7 +52,7 @@
             android:layout_alignBottom="@+id/tvName"
             android:layout_alignParentRight="true"
             android:text="Fecha"
-            android:textColor="#000000"
+            android:textColor="#BDBDBD"
             android:textSize="10dp" />
 
         <TextView
@@ -72,7 +73,34 @@
             android:layout_alignParentTop="true"
             android:text="TextView"
             android:visibility="invisible" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2.5dp"
+        android:layout_marginRight="2.5dp"
+        android:background="#BBD768" >
+
+        <TextView
+            android:id="@+id/tvNadaAun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tvlikes"
+            android:padding="2dp"
+            android:text="likes"
+            android:textColor="#5BBF21"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvlikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="10dp" />
     </RelativeLayout>
 
 </LinearLayout>

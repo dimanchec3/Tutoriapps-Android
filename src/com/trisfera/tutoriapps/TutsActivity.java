@@ -32,7 +32,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TutsActivity extends Activity implements OnClickListener, TextWatcher {
+public class TutsActivity extends Activity implements OnClickListener,
+		TextWatcher {
 
 	EditText etUser, etPass;
 	Button bLogin, bLogOut;
@@ -151,7 +152,7 @@ public class TutsActivity extends Activity implements OnClickListener, TextWatch
 
 					}
 
-				} else 
+				} else
 					tvWarning.setText("E-mail o contraseña inválidos.");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -192,14 +193,14 @@ public class TutsActivity extends Activity implements OnClickListener, TextWatch
 	@Override
 	public void afterTextChanged(Editable arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

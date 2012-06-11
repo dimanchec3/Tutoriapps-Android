@@ -49,9 +49,9 @@ public class SinglePost extends Activity implements OnClickListener,
 
 	Bundle extras;
 	TextView tvName, tvText, tvDate, tvGroup;
-
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES;
+	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
+			horaAgo;
 	Button bCrearPost, bResponder;
 	HttpClient client;
 	String[] gid, gnombre, gtext, fechaformato;
@@ -67,8 +67,10 @@ public class SinglePost extends Activity implements OnClickListener,
 	HttpEntity entity;
 	ArrayList<NameValuePair> nameValuePairs;
 	private ProgressDialog pDialog;
+	long segundoslong, minutoslong;
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	FancyAdapter aa = null;
+	long Horaloca;
 
 	class Reply {
 		public String created_at;
@@ -83,6 +85,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.singlepost);
+		Horaloca = System.currentTimeMillis();
 		inicializar();
 		getRespuestas();
 
@@ -127,6 +130,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		URL_REPLIES = "http://10.0.2.2:3000/api/v1/posts/" + sIdPost
 				+ "/replies.json?auth_token=";
 		myListView = (ListView) findViewById(R.id.lvComentarios);
+		myListView.setDivider(null);
 
 	}
 
@@ -157,8 +161,6 @@ public class SinglePost extends Activity implements OnClickListener,
 						JSONObject json_data = jArray.getJSONObject(i);
 						Reply resultRow = new Reply();
 						resultRow.id = json_data.getString("id");
-						// resultRow.created_at =
-						// json_data.getString("created_at");
 
 						String creado = json_data.getString("created_at");
 
@@ -166,15 +168,51 @@ public class SinglePost extends Activity implements OnClickListener,
 
 						fechaformato[i] = creado;
 
-						SimpleDateFormat curFormater = new SimpleDateFormat(
+						long currentTime = System.currentTimeMillis();
+
+						String eventTime = new String(creado);
+
+						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'hh:mm:ss'Z'");
-						Date dateObj = curFormater.parse(fechaformato[i]);
-						SimpleDateFormat postFormater = new SimpleDateFormat(
-								"dd/MMM/yyyy");
-						String newDateStr = postFormater.format(dateObj);
+						Date date = sdf.parse(eventTime);
+						long eventTimelong = date.getTime();
 
-						resultRow.created_at = newDateStr;
+						long diff = currentTime - eventTimelong;
 
+						long segundoslong = diff / 1000;
+						long minutoslong = diff / (60 * 1000);
+						long horaslong = diff / (60 * 60 * 1000);
+						long diaslong = horaslong / 24;
+						long meseslong = diaslong / 31;
+						long añolong = meseslong / 12;
+
+						if (añolong == 1)
+							horaAgo = "hace " + añolong + " año ";
+						else if (añolong > 1)
+							horaAgo = "hace " + añolong + " años ";
+						else if (meseslong == 1)
+							horaAgo = "hace " + meseslong + " mes ";
+						else if (meseslong > 1)
+							horaAgo = "hace " + meseslong + " meses ";
+						else if (diaslong == 1)
+							horaAgo = "hace " + diaslong + " día ";
+						else if (diaslong > 1)
+							horaAgo = "hace " + diaslong + " días ";
+						else if (horaslong == 1)
+							horaAgo = "hace " + horaslong + " hora ";
+						else if (horaslong > 1)
+							horaAgo = "hace " + horaslong + " horas ";
+						else if (minutoslong == 1)
+							horaAgo = "hace " + minutoslong + " minuto ";
+						else if (minutoslong > 1)
+							horaAgo = "hace " + minutoslong + " minutos ";
+						else if (segundoslong == 1)
+							horaAgo = "hace " + segundoslong + " segundo ";
+						else if (segundoslong > 1)
+							horaAgo = "hace " + segundoslong + " segundos ";
+						else if (segundoslong == 0)
+							horaAgo = "justo ahora";
+						resultRow.created_at = horaAgo;
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
@@ -209,6 +247,10 @@ public class SinglePost extends Activity implements OnClickListener,
 			startActivity(new Intent(this, TutsActivity.class));
 			i = 1;
 			finish();
+		case R.id.refresh:
+			aa.clear();
+			getRespuestas();
+			break;
 		}
 		return false;
 	}
@@ -266,6 +308,22 @@ public class SinglePost extends Activity implements OnClickListener,
 			break;
 
 		case R.id.bResponder:
+
+			/*
+			 * StringTokenizer separar = new
+			 * StringTokenizer(tvDate.getText().toString(), " ");
+			 * 
+			 * String first = separar.nextToken(); String second =
+			 * separar.nextToken(); String third = separar.nextToken(); long
+			 * total, segundos; long Horaloca2 = System.currentTimeMillis();
+			 * 
+			 * 
+			 * String totalTexto; if (third.equals("segundos")){ segundos =
+			 * Long.parseLong(second); total = segundos + ((Horaloca2 -
+			 * Horaloca) / 1000); totalTexto = String.valueOf(total);
+			 * tvDate.setText("hace "+ totalTexto + " segundos");}
+			 */
+
 			aa.clear();
 			postResponder();
 			getRespuestas();

@@ -81,7 +81,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		gid = extras.getStringArray("gid");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		etCrearPost.setTypeface(font);
-		
+
 		bPostear.setEnabled(false);
 		etCrearPost.addTextChangedListener(this);
 	}

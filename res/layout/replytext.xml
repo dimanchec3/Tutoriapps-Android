@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#EBF4D5"
+    android:background="#D3E8A3"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:background="#D3E8A3"
+        android:background="@drawable/custom_shape_reply"
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:text="Name"
-            android:textColor="#000000"
+            android:textColor="#5BBF21"
             android:textSize="12dp" />
 
         <TextView
@@ -29,7 +29,7 @@
             android:layout_alignBottom="@+id/tvNameLV"
             android:layout_alignParentRight="true"
             android:text="Fecha"
-            android:textColor="#000000"
+            android:textColor="#8B8B8B"
             android:textSize="10dp" />
 
         <TextView
