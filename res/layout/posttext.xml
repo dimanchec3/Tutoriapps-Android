@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="#5BBF21"
+            android:textColor="#1CCE28"
             android:textSize="12dp" />
 
         <TextView
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvName"
             android:layout_alignParentTop="true"
-            android:text="TextView"
+            android:text=""
             android:visibility="invisible" />
     </RelativeLayout>
 
@@ -83,24 +83,24 @@
         android:background="#BBD768" >
 
         <TextView
-            android:id="@+id/tvNadaAun"
+            android:id="@+id/tvComentarios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/tvlikes"
+            android:layout_toLeftOf="@+id/tvReply_Count"
             android:padding="2dp"
-            android:text="likes"
+            android:text="comentarios"
             android:textColor="#5BBF21"
             android:textSize="10dp" />
 
         <TextView
-            android:id="@+id/tvlikes"
+            android:id="@+id/tvReply_Count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvComentarios"
             android:layout_alignParentRight="true"
             android:padding="2dp"
-            android:text="0"
             android:textColor="#FFFFFF"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
     </RelativeLayout>
 
 </LinearLayout>

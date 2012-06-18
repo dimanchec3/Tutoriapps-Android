@@ -23,7 +23,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,33 +39,35 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener {
-
 	static String URL;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	String[] gid, gnombre, fechaformato;
-	Button bCrearPost;
+	Button bCrearPost, bInicio, bPizarra, bLibros;
 	HttpClient client, client2;
-	ListView myListView, myListView2;
+	ListView myListView;
 	public TextView tvId = null;
 	Bundle extras;
 	TextView tvHeader;
 	String token, id, FILENAME, horaAgo;
-	Intent iCrearPost, iArray;
+	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
-	FancyAdapter2 fancy2 = null;
 	Typeface font;
 	long mStartTime;
-	int i = 0;
-	private ProgressDialog pDialog;
+	int contador = 0;
+	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
+	Gallery myHorizontalListView;
+	MyAdapter myAdapter;
 
 	class Post {
 		public String id;
@@ -71,6 +75,7 @@ public class Home extends Activity implements OnClickListener,
 		public String created_at;
 		public String name;
 		public String group;
+		public String reply_count;
 	}
 
 	class Grupos {
@@ -84,16 +89,14 @@ public class Home extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.home);
-
 		try {
-			initialiseHome();
-		} catch (ParseException e1) {
+			initialize();
+			getData();
+			arregloGrupos();
+			idGrupos();
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			getdata();
-			getGrupos();
+			e.printStackTrace();
 		} catch (ConnectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,32 +106,100 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	private void initialiseHome() throws ParseException {
+	private void idGrupos() {
+		// TODO Auto-generated method stub
+		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				URL = "http://10.0.2.2:3000/api/v1/groups/"
+						+ gid[position].toString() + "/posts.json?auth_token=";
+				aa.clear();
+				try {
+					getData();
+				} catch (ConnectException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ConnectionClosedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
+	public class MyAdapter extends BaseAdapter {
+		Context context;
+		
+		MyAdapter(Context c) {
+			context = c;
+		}
+		
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			int lo = arrayGrupos.size();
+			return lo;
+		}
+		
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return gnombre[position];
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			View rowView = LayoutInflater.from(parent.getContext()).inflate(
+					R.layout.row, null);
+			TextView listTextView = (TextView) rowView
+					.findViewById(R.id.itemtext);
+			listTextView.setText(gnombre[position]);
+			return rowView;
+		}
+	}
+
+	private void initialize() throws ParseException {
 		client = new DefaultHttpClient();
 		client2 = new DefaultHttpClient();
 		bCrearPost = (Button) findViewById(R.id.bCrearPost);
+		bInicio = (Button) findViewById(R.id.bInicio);
+		bPizarra = (Button) findViewById(R.id.bPizarra);
+		bLibros = (Button) findViewById(R.id.bLibros);
+		bInicio = (Button) findViewById(R.id.bInicio);
+		bPizarra.setOnClickListener(this);
 		bCrearPost.setOnClickListener(this);
+		bLibros.setOnClickListener(this);
 		myListView = (ListView) findViewById(R.id.lvPosts);
-		myListView2 = (ListView) findViewById(R.id.lvGrupos);
 		myListView.setOnItemClickListener(this);
-		myListView2.setOnItemClickListener(this);
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		extras = getIntent().getExtras();
 		token = extras.getString("token");
 		URL = "http://10.0.2.2:3000/api/v1/groups/home/posts.json?auth_token=";
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
-		// myListView.setDivider(null);
-		myListView2.setVerticalFadingEdgeEnabled(false);
+		bInicio.setTypeface(font, 1);
+		bPizarra.setTypeface(font, 1);
+		bLibros.setTypeface(font, 1);
+		bInicio.setBackgroundColor(Color.rgb(211, 232, 163));
 		myListView.setVerticalFadingEdgeEnabled(false);
 		FILENAME = extras.getString("filename");
-
+		getGrupos();
+		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
+		myAdapter = new MyAdapter(this);
+		myHorizontalListView.setAdapter(myAdapter);
 	}
 
-	private void getdata() throws ConnectException, ConnectionClosedException {
+	private void getData() throws ConnectException, ConnectionClosedException {
 		// TODO Auto-generated method stub
-
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL);
@@ -154,30 +225,24 @@ public class Home extends Activity implements OnClickListener,
 						JSONObject json_data = jArray.getJSONObject(i);
 						Post resultRow = new Post();
 						resultRow.id = json_data.getString("id");
-
+						resultRow.reply_count = json_data
+								.getString("reply_count");
 						String creado = json_data.getString("created_at");
-
 						fechaformato = new String[jArray.length()];
-
 						fechaformato[i] = creado;
-
 						long currentTime = System.currentTimeMillis();
-
 						String eventTime = new String(creado);
-
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'hh:mm:ss'Z'");
 						Date date = sdf.parse(eventTime);
 						long eventTimelong = date.getTime();
 						long diff = currentTime - eventTimelong;
-
 						long segundoslong = diff / 1000;
 						long minutoslong = diff / 60000; // 60 por 1000
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
 						long añolong = meseslong / 12;
-
 						if (añolong == 1)
 							horaAgo = "hace " + añolong + " año ";
 						else if (añolong > 1)
@@ -205,7 +270,6 @@ public class Home extends Activity implements OnClickListener,
 						else if (segundoslong == 0)
 							horaAgo = "justo ahora";
 						resultRow.created_at = horaAgo;
-
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
@@ -217,16 +281,12 @@ public class Home extends Activity implements OnClickListener,
 					Log.e("log_tag",
 							"Error convirtiendo el resultado" + e1.toString());
 				}
-
 				aa = new FancyAdapter();
-
 				myListView.setAdapter(aa);
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void getGrupos() {
@@ -237,7 +297,6 @@ public class Home extends Activity implements OnClickListener,
 			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client2.execute(get);
-
 			int status = r.getStatusLine().getStatusCode();
 			if (status == 200) {
 				HttpEntity e = r.getEntity();
@@ -256,20 +315,14 @@ public class Home extends Activity implements OnClickListener,
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Grupos gruposRow = new Grupos();
-
 						gruposRow.name = json_data.getString("name");
 						gruposRow.id = json_data.getString("id");
-
 						arrayGrupos.add(gruposRow);
-
 					}
 				} catch (Exception e1) {
 					Log.e("log_tag",
 							"Error convirtiendo el resultado" + e1.toString());
 				}
-
-				fancy2 = new FancyAdapter2();
-				myListView2.setAdapter(fancy2);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -278,26 +331,39 @@ public class Home extends Activity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bCrearPost:
-
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
+			iCrearPost.putExtra("filename", FILENAME);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			iCrearPost.putExtras(extras);
 			startActivityForResult(iCrearPost, 0);
+			break;
+			
+		case R.id.bPizarra:
+			iPizarra = new Intent(getBaseContext(), Pizarra.class);
+			iPizarra.putExtra("token", token);
+			iPizarra.putExtra("filename", FILENAME);
+			startActivityForResult(iPizarra, 0);
+			break;
+			
+		case R.id.bLibros:
+			iLibros = new Intent(getBaseContext(), Libros.class);
+			iLibros.putExtra("token", token);
+			iLibros.putExtra("filename", FILENAME);
+			startActivityForResult(iLibros, 0);
+			break;
 		}
 	}
 
-	private void arregloGrupos() {
+	public void arregloGrupos() {
 		// TODO Auto-generated method stub
 		gid = new String[arrayGrupos.size()];
 		gnombre = new String[arrayGrupos.size()];
-
 		for (int i = 0; i < arrayGrupos.size(); i++) {
 			gid[i] = arrayGrupos.get(i).id;
 			gnombre[i] = arrayGrupos.get(i).name;
@@ -308,13 +374,12 @@ public class Home extends Activity implements OnClickListener,
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-
 		if (resultCode == RESULT_OK)
 			finish();
 		else {
 			aa.clear();
 			try {
-				getdata();
+				getData();
 			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -338,27 +403,27 @@ public class Home extends Activity implements OnClickListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-
 		case R.id.logOut:
+			//setResult(RESULT_OK, null);//hace que se cierre el activity de pizarra al hacer log out
 			pDialog = ProgressDialog.show(this, "Cerrando sesión",
 					"Cargando...");
 			deleteFile(FILENAME);
 			borrarToken(token);
 			startActivity(new Intent(this, TutsActivity.class));
-			i = 1;
+			contador = 1;
 			finish();
 			break;
 		case R.id.refresh:
-			aa.clear();
+			/*aa.clear();
 			try {
-				getdata();
+				getData();
 			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ConnectionClosedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			break;
 		}
 		return false;
@@ -368,61 +433,25 @@ public class Home extends Activity implements OnClickListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (i == 1)
+		if (contador == 1)
 			pDialog.dismiss();
 	}
 
 	private void borrarToken(String token) {
 		// TODO Auto-generated method stub
-
 		StringBuilder url = new StringBuilder(URL_TOKEN);
 		url.append(token + ".json");
-		HttpDelete get = new HttpDelete(url.toString());
+		HttpDelete delete = new HttpDelete(url.toString());
 		try {
-			HttpResponse r = client.execute(get);
+			HttpResponse r = client.execute(delete);
 			if (r.getStatusLine().getStatusCode() == 200)
 				r.getEntity();
-
 		} catch (ClientProtocolException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-	}
-
-	class FancyAdapter2 extends ArrayAdapter<Grupos> {
-		FancyAdapter2() {
-			super(Home.this, android.R.layout.simple_list_item_1, arrayGrupos);
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder2 holder;
-			if (convertView == null) {
-				LayoutInflater inflater = getLayoutInflater();
-				convertView = inflater.inflate(R.layout.grupos, null);
-				holder = new ViewHolder2(convertView);
-				convertView.setTag(holder);
-			} else
-				holder = (ViewHolder2) convertView.getTag();
-			holder.populateGrupos(arrayGrupos.get(position));
-			return (convertView);
-		}
-	}
-
-	class ViewHolder2 {
-		public TextView tvGrupos = null;
-
-		ViewHolder2(View row) {
-			tvGrupos = (TextView) row.findViewById(R.id.tvGrupos);
-			tvId = (TextView) row.findViewById(R.id.tvId);
-		}
-
-		void populateGrupos(Grupos r) {
-			tvGrupos.setText(r.name);
-			tvId.setText(r.id);
-			tvGrupos.setTypeface(font);
 		}
 	}
 
@@ -452,6 +481,7 @@ public class Home extends Activity implements OnClickListener,
 		public TextView tvFecha = null;
 		public TextView tvGroup = null;
 		public TextView tvIdPost = null;
+		public TextView tvReply_count = null;
 
 		ViewHolder(View row) {
 			tvName = (TextView) row.findViewById(R.id.tvName);
@@ -459,6 +489,7 @@ public class Home extends Activity implements OnClickListener,
 			tvFecha = (TextView) row.findViewById(R.id.tvFecha);
 			tvGroup = (TextView) row.findViewById(R.id.tvGroup);
 			tvIdPost = (TextView) row.findViewById(R.id.tvIdPost);
+			tvReply_count = (TextView) row.findViewById(R.id.tvReply_Count);
 		}
 
 		void populateFrom(Post r) {
@@ -467,6 +498,8 @@ public class Home extends Activity implements OnClickListener,
 			tvFecha.setText(r.created_at);
 			tvGroup.setText(r.group);
 			tvIdPost.setText(r.id);
+			tvReply_count.setText(r.reply_count);
+			tvReply_count.setTypeface(font);
 			tvName.setTypeface(font, 1);
 			tvText.setTypeface(font, 0);
 			tvFecha.setTypeface(font);
@@ -500,26 +533,8 @@ public class Home extends Activity implements OnClickListener,
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
-
 			iSingle.putExtras(extras);
-
 			startActivityForResult(iSingle, 0);
-			break;
-		case R.id.lvGrupos:
-
-			id = ((TextView) arg1.findViewById(R.id.tvId)).getText().toString();
-			URL = "http://10.0.2.2:3000/api/v1/groups/" + id
-					+ "/posts.json?auth_token=";
-			aa.clear();
-			try {
-				getdata();
-			} catch (ConnectException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ConnectionClosedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			break;
 		}
 	}

@@ -31,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TutsActivity extends Activity implements OnClickListener,
 		TextWatcher {
@@ -48,25 +49,23 @@ public class TutsActivity extends Activity implements OnClickListener,
 	FileOutputStream fos;
 	private ProgressDialog pDialog;
 	FileInputStream fis = null;
-	int i = 0;
+	int contador = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		String token = getToken();
 		if (token == "") {
 			setContentView(R.layout.main);
-			initialise();
+			initialize();
 		} else {
 			acasa();
 		}
 	}
 
-	private void initialise() {
+	private void initialize() {
 		// TODO Auto-generated method stub
-
 		etUser = (EditText) findViewById(R.id.etUser);
 		etPass = (EditText) findViewById(R.id.etPass);
 		bLogin = (Button) findViewById(R.id.bSubmit);
@@ -86,12 +85,11 @@ public class TutsActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-
 		switch (v.getId()) {
 		case R.id.bSubmit:
 			tvWarning.setVisibility(View.VISIBLE);
 			submit();
-			i = 1;
+			contador = 1;
 			break;
 		}
 	}
@@ -100,18 +98,16 @@ public class TutsActivity extends Activity implements OnClickListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (i == 1)
+		if (contador == 1)
 			pDialog.dismiss();
 	}
 
 	public void submit() {
-
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost("http://10.0.2.2:3000/api/v1/tokens.json");
 		username = etUser.getText().toString();
 		password = etPass.getText().toString();
 		tvWarning.setText("");
-
 		if (username.equals("") || password.equals("")) {
 			if (username.equals("")) {
 				tvWarning.setText("Favor introducir e-mail.");
@@ -121,37 +117,27 @@ public class TutsActivity extends Activity implements OnClickListener,
 				etPass.requestFocus();
 			}
 		} else {
-
 			try {
-
 				nameValuePairs = new ArrayList<NameValuePair>();
 				nameValuePairs.add(new BasicNameValuePair("email", username));
 				nameValuePairs
 						.add(new BasicNameValuePair("password", password));
-
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				response = httpclient.execute(httppost);
-
 				if (response.getStatusLine().getStatusCode() == 200) {
 					pDialog = ProgressDialog.show(this, "Iniciando sesión",
 							"Cargando...");
 					entity = response.getEntity();
 					if (entity != null) {
-
 						HttpEntity e = response.getEntity();
 						String data = EntityUtils.toString(e);
 						JSONObject json = new JSONObject(data);
 						String token = json.getString("token");
-
-						// guardar
 						fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
 						fos.write(token.getBytes());
 						fos.close();
-
 						acasa();
-
 					}
-
 				} else
 					tvWarning.setText("E-mail o contraseña inválidos.");
 			} catch (Exception e) {
@@ -161,7 +147,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 	}
 
 	private void acasa() {
-
 		// TODO Auto-generated method stub
 		getToken();
 		Intent iHome = new Intent(getBaseContext(), Home.class);
@@ -169,7 +154,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 		iHome.putExtra("filename", FILENAME);
 		startActivity(iHome);
 		finish();
-		// setContentView(R.layout.home);
 	}
 
 	public String getToken() {
@@ -180,7 +164,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 			while (fis.read(dataArray) != -1) {
 				token = new String(dataArray);
 			}
-
 			fis.close();
 		} catch (FileNotFoundException e) {
 			return "";
@@ -193,14 +176,12 @@ public class TutsActivity extends Activity implements OnClickListener,
 	@Override
 	public void afterTextChanged(Editable arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

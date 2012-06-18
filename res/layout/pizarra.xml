@@ -33,11 +33,11 @@
             android:text="" />
 
         <Button
-            android:id="@+id/bCrearPost"
+            android:id="@+id/bCrearPic"
             android:layout_width="34dp"
             android:layout_height="fill_parent"
             android:layout_weight="5"
-            android:background="@drawable/custom_crear"
+            android:background="@drawable/custom_crearpic"
             android:paddingBottom="24dp" />
     </LinearLayout>
 
@@ -60,7 +60,7 @@
             android:paddingTop="10dp"
             android:text="Inicio"
             android:textColor="#FFFFFF" />
-
+        
         <TextView
             android:id="@+id/tvSeparador"
             android:layout_width="1dp"

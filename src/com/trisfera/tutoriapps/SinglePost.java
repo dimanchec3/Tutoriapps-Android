@@ -29,6 +29,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -48,7 +49,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		TextWatcher {
 
 	Bundle extras;
-	TextView tvName, tvText, tvDate, tvGroup;
+	TextView tvName, tvText, tvDate, tvGroup, tvNameLV, tvFechaLV, tvTextLV;
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
 			horaAgo;
@@ -59,8 +60,7 @@ public class SinglePost extends Activity implements OnClickListener,
 	ListView lvComentarios;
 	EditText etComentario;
 	Typeface font;
-	ListView myListView;
-	int i = 0;
+	int contador = 0;
 	HttpClient httpclient;
 	HttpPost httppost;
 	HttpResponse response;
@@ -70,7 +70,6 @@ public class SinglePost extends Activity implements OnClickListener,
 	long segundoslong, minutoslong;
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	FancyAdapter aa = null;
-	long Horaloca;
 
 	class Reply {
 		public String created_at;
@@ -85,10 +84,8 @@ public class SinglePost extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.singlepost);
-		Horaloca = System.currentTimeMillis();
 		inicializar();
 		getRespuestas();
-
 		tvName.setText(sName);
 		tvText.setText(sText);
 		tvDate.setText(sDate);
@@ -129,9 +126,8 @@ public class SinglePost extends Activity implements OnClickListener,
 		etComentario.addTextChangedListener(this);
 		URL_REPLIES = "http://10.0.2.2:3000/api/v1/posts/" + sIdPost
 				+ "/replies.json?auth_token=";
-		myListView = (ListView) findViewById(R.id.lvComentarios);
-		myListView.setDivider(null);
-
+		lvComentarios.setDivider(null);
+		tvText.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	private void getRespuestas() {
@@ -161,31 +157,22 @@ public class SinglePost extends Activity implements OnClickListener,
 						JSONObject json_data = jArray.getJSONObject(i);
 						Reply resultRow = new Reply();
 						resultRow.id = json_data.getString("id");
-
 						String creado = json_data.getString("created_at");
-
 						fechaformato = new String[jArray.length()];
-
 						fechaformato[i] = creado;
-
 						long currentTime = System.currentTimeMillis();
-
 						String eventTime = new String(creado);
-
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'hh:mm:ss'Z'");
 						Date date = sdf.parse(eventTime);
 						long eventTimelong = date.getTime();
-
 						long diff = currentTime - eventTimelong;
-
 						long segundoslong = diff / 1000;
 						long minutoslong = diff / (60 * 1000);
 						long horaslong = diff / (60 * 60 * 1000);
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
 						long añolong = meseslong / 12;
-
 						if (añolong == 1)
 							horaAgo = "hace " + añolong + " año ";
 						else if (añolong > 1)
@@ -222,17 +209,14 @@ public class SinglePost extends Activity implements OnClickListener,
 					Log.e("log_tag",
 							"Error convirtiendo el resultado" + e1.toString());
 				}
-
 				aa = new FancyAdapter();
-
-				myListView.setAdapter(aa);
-
+				lvComentarios.setAdapter(aa);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -245,7 +229,7 @@ public class SinglePost extends Activity implements OnClickListener,
 			borrarToken(token);
 			setResult(RESULT_OK, null);
 			startActivity(new Intent(this, TutsActivity.class));
-			i = 1;
+			contador = 1;
 			finish();
 		case R.id.refresh:
 			aa.clear();
@@ -259,21 +243,19 @@ public class SinglePost extends Activity implements OnClickListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (i == 1)
+		if (contador == 1)
 			pDialog.dismiss();
 	}
 
 	private void borrarToken(String token) {
 		// TODO Auto-generated method stub
-
 		StringBuilder url = new StringBuilder(URL_TOKEN);
 		url.append(token + ".json");
-		HttpDelete get = new HttpDelete(url.toString());
+		HttpDelete delete = new HttpDelete(url.toString());
 		try {
-			HttpResponse r = client.execute(get);
+			HttpResponse r = client.execute(delete);
 			if (r.getStatusLine().getStatusCode() == 200)
 				r.getEntity();
-
 		} catch (ClientProtocolException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -297,33 +279,15 @@ public class SinglePost extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bCrearPost:
-
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			iCrearPost.putExtras(extras);
 			startActivityForResult(iCrearPost, 0);
-
 			break;
-
+			
 		case R.id.bResponder:
-
-			/*
-			 * StringTokenizer separar = new
-			 * StringTokenizer(tvDate.getText().toString(), " ");
-			 * 
-			 * String first = separar.nextToken(); String second =
-			 * separar.nextToken(); String third = separar.nextToken(); long
-			 * total, segundos; long Horaloca2 = System.currentTimeMillis();
-			 * 
-			 * 
-			 * String totalTexto; if (third.equals("segundos")){ segundos =
-			 * Long.parseLong(second); total = segundos + ((Horaloca2 -
-			 * Horaloca) / 1000); totalTexto = String.valueOf(total);
-			 * tvDate.setText("hace "+ totalTexto + " segundos");}
-			 */
-
 			aa.clear();
 			postResponder();
 			getRespuestas();
@@ -334,21 +298,17 @@ public class SinglePost extends Activity implements OnClickListener,
 
 	private void postResponder() {
 		// TODO Auto-generated method stub
-
 		StringBuilder url = new StringBuilder(URL_REPLIES);
 		url.append(token);
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoResponder = etComentario.getText().toString();
-
 		try {
 			nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("reply[text]",
 					contenidoResponder));
-
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			response = httpclient.execute(httppost);
-
 			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 			else if (response.getStatusLine().getStatusCode() == 422)
@@ -413,11 +373,10 @@ public class SinglePost extends Activity implements OnClickListener,
 			tvFechaLV.setText(r.created_at);
 			tvTextLV.setText(r.text);
 			tvNameLV.setText(r.name);
-
 			tvFechaLV.setTypeface(font);
 			tvTextLV.setTypeface(font, 0);
-			tvNameLV.setTypeface(font, 1);
-
+			tvNameLV.setTypeface(font, 0);
+			tvTextLV.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 	}
 

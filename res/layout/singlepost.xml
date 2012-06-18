@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre"
-            android:textColor="#5BBF21"
+            android:textColor="#1CCE28"
             android:textSize="15dip"
             android:textStyle="bold" />
 
@@ -99,6 +99,7 @@
             android:layout_below="@+id/tvName"
             android:padding="2.5dp"
             android:text="TEXTO"
+            android:autoLink="web"
             android:textColor="#000000"
             android:textSize="12dp" />
     </RelativeLayout>

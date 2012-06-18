@@ -33,6 +33,18 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name=".Pizarra"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Libros"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".CrearPic"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="com.trisfera.tutoriapps.CrearPost"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Dialog" >

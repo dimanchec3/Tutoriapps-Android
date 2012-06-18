@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:text="Name"
-            android:textColor="#5BBF21"
+            android:textColor="#1CCE28"
             android:textSize="12dp" />
 
         <TextView
@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvNameLV"
+            android:autoLink="web"
             android:padding="2.5dp"
             android:text="Text"
             android:textColor="#000000"

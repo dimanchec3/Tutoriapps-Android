@@ -1,7 +1,6 @@
 package com.trisfera.tutoriapps;
 
 import java.util.ArrayList;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -32,7 +31,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		OnClickListener, TextWatcher {
 	EditText etCrearPost;
 	Button bPostear;
-	String PostData, token, gruposId;
+	String PostData, token, gruposId, FILENAME;
 	Spinner sGrupos;
 	HttpClient httpclient;
 	HttpPost httppost;
@@ -42,7 +41,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	HttpEntity entity;
 	Bundle extras;
 	Typeface font;
-	int i = 0;
+	int contador = 0;
 	String[] gid, gnombre;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 
@@ -81,9 +80,9 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		gid = extras.getStringArray("gid");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		etCrearPost.setTypeface(font);
-
 		bPostear.setEnabled(false);
 		etCrearPost.addTextChangedListener(this);
+		FILENAME = extras.getString("filename");
 	}
 
 	@Override
@@ -91,13 +90,14 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.bPostear:
-
 			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
 			postData();
-			Intent iHome = new Intent(getBaseContext(), TutsActivity.class);
+			Intent iHome = new Intent(getBaseContext(), Home.class);
+			iHome.putExtra("token", token);
+			iHome.putExtra("filename", FILENAME);
 			setResult(RESULT_OK, null);
 			finish();
-			i = 1;
+			contador = 1;
 			startActivity(iHome);
 			break;
 		}
@@ -107,7 +107,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if (i == 1)
+		if (contador == 1)
 			pDialog.dismiss();
 	}
 
@@ -120,15 +120,12 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoPost = etCrearPost.getText().toString();
-
 		try {
 			nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("post[text]",
 					contenidoPost));
-
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			response = httpclient.execute(httppost);
-
 			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 		} catch (Exception e) {
