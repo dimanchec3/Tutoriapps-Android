@@ -2,8 +2,29 @@
 <resources>
 
     <string name="app_name">Tutoriapps</string>
-    <string name="hint_comentario">Escribe tu comentario&#8230;</string>
+    <string name="slogan">Aprende · Comparte · Enseña</string>
+    <string name="hint_comentario">Escribe tu comentario…</string>
+    <string name="hint_correo">nombre.apellido@utp.ac.pa</string>
+    <string name="hint_contrasena">contraseña</string>
+    <string name="hint_escribir_post">Escribe tu post…</string>
     <string name="btn_Responder">Responder</string>
     <string name="separador">·</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="compartir_imagen">Compartir Imagen</string>
+    <string name="imagen_subir">Imagen a Subir</string>
+    <string name="boton_subir_imagen">Boton Subir Imagen</string>
+    <string name="boton_buscar_imagen">Boton Buscar Imagen</string>
+    <string name="crear">Crear</string>
+    <string name="tab_inicio">Inicio</string>
+    <string name="tab_pizarra">Pizarra</string>
+    <string name="tab_libros">Libros</string>
+    <string name="comentarios">comentarios</string>
+    <string name="name">Name</string>
+    <string name="group">Group</string>
+    <string name="date">Date</string>
+    <string name="class_date">Class_Date</string>
+    <string name="text">Text</string>
+    <string name="post_imagen">Post Imagen</string>
+    <string name="espacio"></string>
 
 </resources>

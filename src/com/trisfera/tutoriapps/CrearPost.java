@@ -31,7 +31,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		OnClickListener, TextWatcher {
 	EditText etCrearPost;
 	Button bPostear;
-	String PostData, token, gruposId, FILENAME;
+	String token, gruposId;
 	Spinner sGrupos;
 	HttpClient httpclient;
 	HttpPost httppost;
@@ -53,7 +53,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		setContentView(R.layout.crearpost);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
 				WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-		initialise();
+		initialize();
 		arreglogrupos();
 	}
 
@@ -67,7 +67,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		sGrupos.setAdapter(adaptador);
 	}
 
-	private void initialise() {
+	private void initialize() {
 		// TODO Auto-generated method stub
 		etCrearPost = (EditText) findViewById(R.id.etCrearPost);
 		bPostear = (Button) findViewById(R.id.bPostear);
@@ -82,7 +82,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		etCrearPost.setTypeface(font);
 		bPostear.setEnabled(false);
 		etCrearPost.addTextChangedListener(this);
-		FILENAME = extras.getString("filename");
 	}
 
 	@Override
@@ -94,7 +93,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 			postData();
 			Intent iHome = new Intent(getBaseContext(), Home.class);
 			iHome.putExtra("token", token);
-			iHome.putExtra("filename", FILENAME);
 			setResult(RESULT_OK, null);
 			finish();
 			contador = 1;

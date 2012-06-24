@@ -12,30 +12,28 @@
         android:layout_weight="0.35"
         android:ems="10"
         android:gravity="top"
-        android:hint="Escribe tu post..."
+        android:hint="@string/hint_escribir_post"
         android:inputType="textMultiLine" >
     </EditText>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#323232"
-        android:orientation="horizontal"
-        android:weightSum="100" >
+        android:orientation="horizontal" >
 
         <Spinner
             android:id="@+id/sGrupos"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="98" />
+            android:layout_width="220dp"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/bPostear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="2"
-            android:text="Crear" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:text="@string/crear" />
+
+    </RelativeLayout>
 
 </LinearLayout>

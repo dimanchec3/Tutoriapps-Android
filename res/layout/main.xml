@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="24dp"
-        android:text="Aprende · Comparte · Enseña"
+        android:text="@string/slogan"
         android:textColor="#ffffff"
         android:textSize="12dp" />
 
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:hint="nombre.apellido@utp.ac.pa"
+        android:hint="@string/hint_correo"
         android:inputType="textEmailAddress"
         android:singleLine="true" />
 
@@ -39,8 +39,8 @@
         android:id="@+id/etPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="contraseña"
-        android:password="true"
+        android:hint="@string/hint_contrasena"
+        android:inputType="textPassword"
         android:singleLine="true" />
 
     <Button
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:background="@drawable/custom"
-        android:text="Iniciar Sesión"
+        android:text="@string/iniciar_sesion"
         android:textColor="#ffffff"
         android:textStyle="bold" />
 

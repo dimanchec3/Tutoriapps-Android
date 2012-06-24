@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#D3E8A3"
+    android:orientation="vertical"
+    android:paddingBottom="10dp" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2.5dp"
+        android:layout_marginRight="2.5dp"
+        android:background="@drawable/custom_shape"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" >
+
+        <TextView
+            android:id="@+id/tvNameBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textColor="#1CCE28"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tvGroupBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvNameBoard"
+            android:layout_toLeftOf="@+id/tvSeparador"
+            android:text="@string/group"
+            android:textColor="#BDBDBD"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvClassDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivImagen"
+            android:layout_centerHorizontal="true"
+            android:text="@string/class_date"
+            android:textColor="#000000"
+            android:textSize="10dp" />
+        
+        <TextView
+            android:id="@+id/tvSeparador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvNameBoard"
+            android:layout_toLeftOf="@+id/tvFechaBoard"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/separador"
+            android:textColor="#BDBDBD"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvFechaBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvNameBoard"
+            android:layout_alignParentRight="true"
+            android:text="@string/date"
+            android:textColor="#BDBDBD"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvIdPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvNameBoard"
+            android:layout_alignParentTop="true"
+            android:text=""
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/ivImagen"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNameBoard"
+            android:contentDescription="@string/post_imagen" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2.5dp"
+        android:layout_marginRight="2.5dp"
+        android:background="#BBD768" >
+
+        <TextView
+            android:id="@+id/tvComentarios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tvReply_Count"
+            android:padding="2dp"
+            android:text="@string/comentarios"
+            android:textColor="#5BBF21"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvReply_Count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvComentarios"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:textColor="#FFFFFF"
+            android:textSize="9dp" />
+    </RelativeLayout>
+
+</LinearLayout>

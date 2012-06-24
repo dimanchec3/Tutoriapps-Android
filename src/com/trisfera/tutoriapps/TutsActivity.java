@@ -31,7 +31,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TutsActivity extends Activity implements OnClickListener,
 		TextWatcher {

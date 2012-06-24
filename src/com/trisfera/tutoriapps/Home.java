@@ -50,24 +50,30 @@ public class Home extends Activity implements OnClickListener,
 	static String URL;
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
+	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	String[] gid, gnombre, fechaformato;
 	Button bCrearPost, bInicio, bPizarra, bLibros;
-	HttpClient client, client2;
+	HttpClient client;
 	ListView myListView;
 	public TextView tvId = null;
 	Bundle extras;
 	TextView tvHeader;
-	String token, id, FILENAME, horaAgo;
+	String token, id, FILENAME, horaAgo, SuperTiempo;
 	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
 	Typeface font;
 	long mStartTime;
-	int contador = 0;
+	int contador = 0, cantidadGrupos;
 	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
+	ArrayList<Tiempo> arrayTime = new ArrayList<Tiempo>();
 	Gallery myHorizontalListView;
 	MyAdapter myAdapter;
+
+	class Tiempo {
+		public String tiempo_string;
+	}
 
 	class Post {
 		public String id;
@@ -91,6 +97,7 @@ public class Home extends Activity implements OnClickListener,
 		setContentView(R.layout.home);
 		try {
 			initialize();
+			getTiempo();
 			getData();
 			arregloGrupos();
 			idGrupos();
@@ -106,10 +113,40 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
+	private void getTiempo() {
+		// TODO Auto-generated method stub
+		try {
+			StringBuilder url = new StringBuilder(URL_TIME);
+			HttpGet get = new HttpGet(url.toString());
+			HttpResponse r = client.execute(get);
+			int status = r.getStatusLine().getStatusCode();
+			if (status == 200) {
+				HttpEntity e = r.getEntity();
+				InputStream webs = e.getContent();
+				try {
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(webs, "iso-8859-1"), 8);
+					StringBuilder sb = new StringBuilder();
+					String line = null;
+					while ((line = reader.readLine()) != null) {
+						sb.append(line + "\n");
+					}
+					webs.close();
+					SuperTiempo = sb.toString();
+				} catch (Exception e1) {
+					Log.e("log_tag",
+							"Error convirtiendo el resultado" + e1.toString());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void idGrupos() {
 		// TODO Auto-generated method stub
 		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
-			
+
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -131,18 +168,18 @@ public class Home extends Activity implements OnClickListener,
 
 	public class MyAdapter extends BaseAdapter {
 		Context context;
-		
+
 		MyAdapter(Context c) {
 			context = c;
 		}
-		
+
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			int lo = arrayGrupos.size();
-			return lo;
+			cantidadGrupos = arrayGrupos.size();
+			return cantidadGrupos;
 		}
-		
+
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
@@ -169,7 +206,6 @@ public class Home extends Activity implements OnClickListener,
 
 	private void initialize() throws ParseException {
 		client = new DefaultHttpClient();
-		client2 = new DefaultHttpClient();
 		bCrearPost = (Button) findViewById(R.id.bCrearPost);
 		bInicio = (Button) findViewById(R.id.bInicio);
 		bPizarra = (Button) findViewById(R.id.bPizarra);
@@ -230,13 +266,15 @@ public class Home extends Activity implements OnClickListener,
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
-						long currentTime = System.currentTimeMillis();
 						String eventTime = new String(creado);
+						String currentTime = new String(SuperTiempo);
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'hh:mm:ss'Z'");
-						Date date = sdf.parse(eventTime);
-						long eventTimelong = date.getTime();
-						long diff = currentTime - eventTimelong;
+						Date eventDate = sdf.parse(eventTime);
+						Date currentDate = sdf.parse(currentTime);
+						long eventTimelong = eventDate.getTime();
+						long currentTimelong = currentDate.getTime();
+						long diff = currentTimelong - eventTimelong;
 						long segundoslong = diff / 1000;
 						long minutoslong = diff / 60000; // 60 por 1000
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
@@ -296,7 +334,7 @@ public class Home extends Activity implements OnClickListener,
 			StringBuilder url = new StringBuilder(URL_GRUPOS);
 			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
-			HttpResponse r = client2.execute(get);
+			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
 			if (status == 200) {
 				HttpEntity e = r.getEntity();
@@ -336,25 +374,30 @@ public class Home extends Activity implements OnClickListener,
 		case R.id.bCrearPost:
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
-			iCrearPost.putExtra("filename", FILENAME);
+			// iCrearPost.putExtra("filename", FILENAME);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			iCrearPost.putExtras(extras);
 			startActivityForResult(iCrearPost, 0);
 			break;
-			
+
 		case R.id.bPizarra:
 			iPizarra = new Intent(getBaseContext(), Pizarra.class);
 			iPizarra.putExtra("token", token);
-			iPizarra.putExtra("filename", FILENAME);
+			// iPizarra.putExtra("filename", FILENAME);
+			arregloGrupos();
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			extras.putInt("cantidadGrupos", cantidadGrupos);
+			iPizarra.putExtras(extras);
 			startActivityForResult(iPizarra, 0);
 			break;
-			
+
 		case R.id.bLibros:
 			iLibros = new Intent(getBaseContext(), Libros.class);
 			iLibros.putExtra("token", token);
-			iLibros.putExtra("filename", FILENAME);
+			// iLibros.putExtra("filename", FILENAME);
 			startActivityForResult(iLibros, 0);
 			break;
 		}
@@ -404,7 +447,8 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.logOut:
-			//setResult(RESULT_OK, null);//hace que se cierre el activity de pizarra al hacer log out
+			// setResult(RESULT_OK, null);//hace que se cierre el activity de
+			// pizarra al hacer log out
 			pDialog = ProgressDialog.show(this, "Cerrando sesión",
 					"Cargando...");
 			deleteFile(FILENAME);
@@ -414,7 +458,7 @@ public class Home extends Activity implements OnClickListener,
 			finish();
 			break;
 		case R.id.refresh:
-			/*aa.clear();
+			aa.clear();
 			try {
 				getData();
 			} catch (ConnectException e) {
@@ -423,7 +467,7 @@ public class Home extends Activity implements OnClickListener,
 			} catch (ConnectionClosedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
 			break;
 		}
 		return false;

@@ -51,17 +51,18 @@ public class SinglePost extends Activity implements OnClickListener,
 	Bundle extras;
 	TextView tvName, tvText, tvDate, tvGroup, tvNameLV, tvFechaLV, tvTextLV;
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
+	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
 			horaAgo;
 	Button bCrearPost, bResponder;
 	HttpClient client;
 	String[] gid, gnombre, gtext, fechaformato;
+	String SuperTiempo;
 	Intent iCrearPost;
 	ListView lvComentarios;
 	EditText etComentario;
 	Typeface font;
 	int contador = 0;
-	HttpClient httpclient;
 	HttpPost httppost;
 	HttpResponse response;
 	HttpEntity entity;
@@ -70,6 +71,10 @@ public class SinglePost extends Activity implements OnClickListener,
 	long segundoslong, minutoslong;
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	FancyAdapter aa = null;
+
+	class Tiempo {
+		public String tiempo_string;
+	}
 
 	class Reply {
 		public String created_at;
@@ -90,6 +95,36 @@ public class SinglePost extends Activity implements OnClickListener,
 		tvText.setText(sText);
 		tvDate.setText(sDate);
 		tvGroup.setText(sGroup);
+	}
+
+	private void getTiempo() {
+		// TODO Auto-generated method stub
+		try {
+			StringBuilder url = new StringBuilder(URL_TIME);
+			HttpGet get = new HttpGet(url.toString());
+			HttpResponse r = client.execute(get);
+			int status = r.getStatusLine().getStatusCode();
+			if (status == 200) {
+				HttpEntity e = r.getEntity();
+				InputStream webs = e.getContent();
+				try {
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(webs, "iso-8859-1"), 8);
+					StringBuilder sb = new StringBuilder();
+					String line = null;
+					while ((line = reader.readLine()) != null) {
+						sb.append(line + "\n");
+					}
+					webs.close();
+					SuperTiempo = sb.toString();
+				} catch (Exception e1) {
+					Log.e("log_tag",
+							"Error convirtiendo el resultado" + e1.toString());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void inicializar() {
@@ -132,7 +167,7 @@ public class SinglePost extends Activity implements OnClickListener,
 
 	private void getRespuestas() {
 		// TODO Auto-generated method stub
-
+		getTiempo();
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_REPLIES);
@@ -160,16 +195,18 @@ public class SinglePost extends Activity implements OnClickListener,
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
-						long currentTime = System.currentTimeMillis();
 						String eventTime = new String(creado);
+						String currentTime = new String(SuperTiempo);
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'hh:mm:ss'Z'");
-						Date date = sdf.parse(eventTime);
-						long eventTimelong = date.getTime();
-						long diff = currentTime - eventTimelong;
+						Date eventDate = sdf.parse(eventTime);
+						Date currentDate = sdf.parse(currentTime);
+						long eventTimelong = eventDate.getTime();
+						long currentTimelong = currentDate.getTime();
+						long diff = currentTimelong - eventTimelong;
 						long segundoslong = diff / 1000;
-						long minutoslong = diff / (60 * 1000);
-						long horaslong = diff / (60 * 60 * 1000);
+						long minutoslong = diff / 60000; // 60 por 1000
+						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
 						long añolong = meseslong / 12;
@@ -216,7 +253,7 @@ public class SinglePost extends Activity implements OnClickListener,
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -286,7 +323,7 @@ public class SinglePost extends Activity implements OnClickListener,
 			iCrearPost.putExtras(extras);
 			startActivityForResult(iCrearPost, 0);
 			break;
-			
+
 		case R.id.bResponder:
 			aa.clear();
 			postResponder();
@@ -300,7 +337,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		StringBuilder url = new StringBuilder(URL_REPLIES);
 		url.append(token);
-		httpclient = new DefaultHttpClient();
+		client = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoResponder = etComentario.getText().toString();
 		try {
@@ -308,7 +345,7 @@ public class SinglePost extends Activity implements OnClickListener,
 			nameValuePairs.add(new BasicNameValuePair("reply[text]",
 					contenidoResponder));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			response = httpclient.execute(httppost);
+			response = client.execute(httppost);
 			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 			else if (response.getStatusLine().getStatusCode() == 422)
