@@ -76,10 +76,21 @@
 
         <ImageView
             android:id="@+id/ivImagen"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvNameBoard"
-            android:contentDescription="@string/post_imagen" />
+            android:contentDescription="@string/post_imagen"
+            android:layout_margin="5dp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/tvURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvClassDate"
+            android:layout_centerHorizontal="true" 
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
     <RelativeLayout

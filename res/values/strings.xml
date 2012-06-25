@@ -28,5 +28,6 @@
     <string name="cambiar_fecha">Cambiar Fecha</string>
     <string name="fecha_pizarra">Fecha: </string>
     <string name="espacio"></string>
+    <string name="single_image">Single Image</string>
 
 </resources>

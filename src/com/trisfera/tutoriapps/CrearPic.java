@@ -28,6 +28,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -62,10 +63,11 @@ public class CrearPic extends Activity implements OnClickListener,
 	ArrayList<NameValuePair> nameValuePairs;
 	String[] gid, gnombre;
 	Integer cantidadGrupos, contador=0;
-	TextView tvVerFecha;
+	TextView tvVerFecha, tvNotaFecha;
 	private int anio, mes, dia;
 	static final int DATE_DIALOG_ID = 1;
 	private ProgressDialog pDialog;
+	Typeface font;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,10 @@ public class CrearPic extends Activity implements OnClickListener,
 		bCambiarFecha = (Button) findViewById(R.id.bCambiarFecha);
 		bCambiarFecha.setOnClickListener(this);
 		tvVerFecha = (TextView) findViewById(R.id.tvVerFecha);
+		tvNotaFecha = (TextView) findViewById(R.id.tvNotaFecha);
+		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
+		tvVerFecha.setTypeface(font);
+		tvNotaFecha.setTypeface(font);
 		bCambiarFecha.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				showDialog(DATE_DIALOG_ID);

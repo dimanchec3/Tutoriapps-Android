@@ -398,6 +398,11 @@ public class Home extends Activity implements OnClickListener,
 			iLibros = new Intent(getBaseContext(), Libros.class);
 			iLibros.putExtra("token", token);
 			// iLibros.putExtra("filename", FILENAME);
+			arregloGrupos();
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			extras.putInt("cantidadGrupos", cantidadGrupos);
+			iLibros.putExtras(extras);
 			startActivityForResult(iLibros, 0);
 			break;
 		}

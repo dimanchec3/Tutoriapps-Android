@@ -81,6 +81,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public String name;
 		public String group;
 		public String thumbnail_url;
+		public String url;
 	}
 
 	@Override
@@ -105,7 +106,6 @@ public class Pizarra extends Activity implements OnClickListener,
 	private void idGrupos() {
 		// TODO Auto-generated method stub
 		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -213,6 +213,10 @@ public class Pizarra extends Activity implements OnClickListener,
 		case R.id.bLibros:
 			Intent iLibros = new Intent(getBaseContext(), Libros.class);
 			iLibros.putExtra("token", token);
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			extras.putInt("cantidadGrupos", cantidadGrupos);
+			iLibros.putExtras(extras);
 			startActivityForResult(iLibros, 0);
 			break;
 
@@ -370,12 +374,12 @@ public class Pizarra extends Activity implements OnClickListener,
 						else if (segundoslong == 0)
 							horaAgo = "justo ahora";
 						resultRow.created_at = horaAgo;
-
 						resultRow.class_date = json_data
 								.getString("class_date");
 						JSONObject imagenes = json_data.getJSONObject("image");
 						resultRow.thumbnail_url = imagenes
 								.getString("thumbnail_url");
+						resultRow.url = imagenes.getString("url");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
 						arregloPizarra.add(resultRow);
@@ -417,6 +421,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public TextView tvFechaBoard = null;
 		public TextView tvGroupBoard = null;
 		public TextView tvThumbnailURL = null;
+		public TextView tvURL = null;
 		public ImageView ivPizarra;
 
 		ViewHolder(View row) {
@@ -424,6 +429,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvClassDate = (TextView) row.findViewById(R.id.tvClassDate);
 			tvFechaBoard = (TextView) row.findViewById(R.id.tvFechaBoard);
 			tvGroupBoard = (TextView) row.findViewById(R.id.tvGroupBoard);
+			tvURL = (TextView) row.findViewById(R.id.tvURL);
 			ivPizarra = (ImageView) row.findViewById(R.id.ivImagen);
 		}
 
@@ -432,6 +438,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvGroupBoard.setText(gnombre[valor]);
 			tvFechaBoard.setText(r.created_at);
 			tvClassDate.setText("Pizarra del día: " + r.class_date);
+			tvURL.setText("http://10.0.2.2:3000" + r.url);
 			try {
 				thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
 				thumb_image = BitmapFactory.decodeStream(thumb_url
@@ -454,6 +461,14 @@ public class Pizarra extends Activity implements OnClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-
+		switch (arg0.getId()) {
+		case R.id.lvPosts:
+			Intent iSingle = new Intent(getBaseContext(), SingleImage.class);
+			String URL = ((TextView) arg1.findViewById(R.id.tvURL)).getText()
+					.toString();
+			iSingle.putExtra("URL", URL);
+			startActivity(iSingle);
+			break;
+		}
 	}
 }

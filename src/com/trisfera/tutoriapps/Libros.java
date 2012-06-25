@@ -21,6 +21,8 @@ public class Libros extends Activity implements OnClickListener {
 	String token = "";
 	Bundle extras;
 	TextView tvHeader;
+	String[] gid, gnombre;
+	Integer cantidadGrupos;
 	Typeface font;
 	ProgressDialog pDialog;
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
@@ -47,7 +49,10 @@ public class Libros extends Activity implements OnClickListener {
 		bPizarra.setOnClickListener(this);
 		bLibros.setOnClickListener(this);
 		extras = getIntent().getExtras();
+		gnombre = extras.getStringArray("gnombre");
+		gid = extras.getStringArray("gid");
 		token = extras.getString("token");
+		cantidadGrupos = extras.getInt("cantidadGrupos");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
 		bInicio.setTypeface(font, 1);
@@ -70,6 +75,10 @@ public class Libros extends Activity implements OnClickListener {
 		case R.id.bPizarra:
 			Intent iPizarra = new Intent(getBaseContext(), Pizarra.class);
 			iPizarra.putExtra("token", token);
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			extras.putInt("cantidadGrupos", cantidadGrupos);
+			iPizarra.putExtras(extras);
 			startActivityForResult(iPizarra, 0);
 			break;
 		}
