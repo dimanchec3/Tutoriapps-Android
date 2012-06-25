@@ -232,6 +232,7 @@ public class Home extends Activity implements OnClickListener,
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
+		aa = new FancyAdapter();
 	}
 
 	private void getData() throws ConnectException, ConnectionClosedException {
@@ -319,7 +320,6 @@ public class Home extends Activity implements OnClickListener,
 					Log.e("log_tag",
 							"Error convirtiendo el resultado" + e1.toString());
 				}
-				aa = new FancyAdapter();
 				myListView.setAdapter(aa);
 			}
 		} catch (Exception e) {

@@ -25,6 +25,8 @@
     <string name="class_date">Class_Date</string>
     <string name="text">Text</string>
     <string name="post_imagen">Post Imagen</string>
+    <string name="cambiar_fecha">Cambiar Fecha</string>
+    <string name="fecha_pizarra">Fecha: </string>
     <string name="espacio"></string>
 
 </resources>

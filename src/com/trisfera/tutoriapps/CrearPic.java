@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -24,6 +23,9 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -37,19 +39,20 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class CrearPic extends Activity implements OnClickListener,
 		OnItemSelectedListener {
 
 	ImageButton ibTomarPic, ibBuscar;
-	Button bPostearPic;
+	Button bPostearPic, bCambiarFecha;
 	ImageView ivReturnedPic;
 	Spinner sGrupos;
-	String token = "", gruposId = "home";
+	String token = "", gruposId = "home", SuperFecha = null;
 	HttpPost httppost;
 	HttpResponse response;
 	MultipartEntity entity;
@@ -58,7 +61,11 @@ public class CrearPic extends Activity implements OnClickListener,
 	HttpClient httpclient;
 	ArrayList<NameValuePair> nameValuePairs;
 	String[] gid, gnombre;
-	Integer cantidadGrupos;
+	Integer cantidadGrupos, contador=0;
+	TextView tvVerFecha;
+	private int anio, mes, dia;
+	static final int DATE_DIALOG_ID = 1;
+	private ProgressDialog pDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +96,56 @@ public class CrearPic extends Activity implements OnClickListener,
 		token = extras.getString("token");
 		cantidadGrupos = extras.getInt("cantidadGrupos");
 		bPostearPic.setEnabled(false);
+		bCambiarFecha = (Button) findViewById(R.id.bCambiarFecha);
+		bCambiarFecha.setOnClickListener(this);
+		tvVerFecha = (TextView) findViewById(R.id.tvVerFecha);
+		bCambiarFecha.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				showDialog(DATE_DIALOG_ID);
+			}
+		});
+		final Calendar c = Calendar.getInstance();
+		anio = c.get(Calendar.YEAR);
+		mes = c.get(Calendar.MONTH);
+		dia = c.get(Calendar.DAY_OF_MONTH);
+		updateDisplay();
 	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DATE_DIALOG_ID:
+			return new DatePickerDialog(this, mDateSetListener, anio, mes, dia);
+		}
+		return null;
+	}
+
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		switch (id) {
+		case DATE_DIALOG_ID:
+			((DatePickerDialog) dialog).updateDate(anio, mes, dia);
+			break;
+		}
+	}
+
+	private void updateDisplay() {
+		tvVerFecha.setText(new StringBuilder()
+				// Hay que agregar +1 a mes porque el sistema cuenta de 0-11
+				.append(anio).append("-").append(mes + 1).append("-")
+				.append(dia));
+		SuperFecha = String.valueOf(anio) + "-" + String.valueOf(mes + 1) + "-"
+				+ String.valueOf(dia);
+	}
+
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			anio = year;
+			mes = monthOfYear;
+			dia = dayOfMonth;
+			updateDisplay();
+		}
+	};
 
 	private void arreglogrupos() {
 		// TODO Auto-generated method stub
@@ -116,6 +172,7 @@ public class CrearPic extends Activity implements OnClickListener,
 
 		case R.id.bPostearPic:
 			Intent iPizarra = new Intent(getBaseContext(), Pizarra.class);
+			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
 			iPizarra.putExtra("token", token);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
@@ -133,6 +190,9 @@ public class CrearPic extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			contador = 1;
+			setResult(RESULT_OK, null);
+			finish();
 			startActivity(iPizarra);
 			break;
 
@@ -141,7 +201,27 @@ public class CrearPic extends Activity implements OnClickListener,
 					android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(iTomar, 0);
 			break;
+
+		case R.id.bCambiarFecha:
+			showDialog(DATE_DIALOG_ID);
+			break;
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (contador == 1)
+			pDialog.dismiss();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (contador == 1)
+			pDialog.dismiss();
 	}
 
 	@Override
@@ -159,8 +239,7 @@ public class CrearPic extends Activity implements OnClickListener,
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				bmp = BitmapFactory
-						.decodeStream(imageStream);
+				bmp = BitmapFactory.decodeStream(imageStream);
 				ivReturnedPic.setImageBitmap(bmp);
 			} else if (requestCode == 0) {
 				Bundle extras = data.getExtras();
@@ -178,26 +257,21 @@ public class CrearPic extends Activity implements OnClickListener,
 		HttpContext localContext = new BasicHttpContext();
 		HttpPost httpPost = new HttpPost("http://10.0.2.2:3000/api/v1/groups/"
 				+ gruposId + "/board_pics.json?auth_token=" + token);
-
 		MultipartEntity entity = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE);
-
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		bmp.compress(CompressFormat.PNG, 100, bos);
 		byte[] data = bos.toByteArray();
-
 		entity.addPart("board_pic[image]", new ByteArrayBody(data, currentTime
 				+ ".png"));
-		entity.addPart("board_pic[class_date]", new StringBody("2012-05-31"));
+		entity.addPart("board_pic[class_date]", new StringBody(SuperFecha));
 		httpPost.setEntity(entity);
 		HttpResponse response = httpClient.execute(httpPost, localContext);
-
+		@SuppressWarnings("unused")
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				response.getEntity().getContent(), "UTF-8"));
-		String sResponse = reader.readLine();
-
-		Toast.makeText(getBaseContext(), sResponse, 10000).show();
-
+		// String sResponse = reader.readLine();
+		// Toast.makeText(getBaseContext(), sResponse, 10000).show();
 	}
 
 	@Override
@@ -205,7 +279,7 @@ public class CrearPic extends Activity implements OnClickListener,
 			long arg3) {
 		// TODO Auto-generated method stub
 		gruposId = gid[pos].toString();
-		if (gruposId.equals("home"))
+		if (gruposId.equals("home") || SuperFecha == null)
 			bPostearPic.setEnabled(false);
 		else
 			bPostearPic.setEnabled(true);

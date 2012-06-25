@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="#1CCE28"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/tvHeader"
@@ -24,8 +24,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_margin="10dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:background="#FFFFFF"
         android:gravity="center_horizontal" >
 
@@ -39,40 +42,77 @@
             android:contentDescription="@string/imagen_subir" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal" >
+        android:layout_height="match_parent" >
 
-        <ImageButton
-            android:id="@+id/ibTomarPic"
-            android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/boton_subir_imagen"
-            android:src="@drawable/camera" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
 
-        <ImageButton
-            android:id="@+id/ibBuscar"
-            android:layout_width="125dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_toRightOf="@+id/ibTomarPic"
-            android:contentDescription="@string/boton_buscar_imagen"
-            android:src="@drawable/search" />
-    </RelativeLayout>
+            <ImageButton
+                android:id="@+id/ibTomarPic"
+                android:layout_width="125dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/boton_subir_imagen"
+                android:src="@drawable/camera" />
 
-    <Spinner
-        android:id="@+id/sGrupos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+            <ImageButton
+                android:id="@+id/ibBuscar"
+                android:layout_width="125dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/ibTomarPic"
+                android:contentDescription="@string/boton_buscar_imagen"
+                android:src="@drawable/search" />
 
-    <Button
-        android:id="@+id/bPostearPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/compartir_imagen" />
+            <Spinner
+                android:id="@+id/sGrupos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ibTomarPic"
+                android:layout_alignRight="@+id/ibBuscar"
+                android:layout_below="@+id/ibBuscar" />
+
+            <Button
+                android:id="@+id/bPostearPic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ibTomarPic"
+                android:layout_alignRight="@+id/ibBuscar"
+                android:layout_below="@+id/bCambiarFecha"
+                android:text="@string/compartir_imagen" />
+
+            <Button
+                android:id="@+id/bCambiarFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/sGrupos"
+                android:layout_below="@+id/sGrupos"
+                android:text="@string/cambiar_fecha" />
+
+            <TextView
+                android:id="@+id/tvVerFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/bCambiarFecha"
+                android:layout_alignBottom="@+id/bCambiarFecha"
+                android:layout_toRightOf="@+id/tvNotaFecha"
+                android:text="@string/espacio"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvNotaFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tvVerFecha"
+                android:layout_alignBottom="@+id/tvVerFecha"
+                android:layout_alignLeft="@+id/sGrupos"
+                android:text="@string/fecha_pizarra"
+                android:textColor="#000000" />
+        </RelativeLayout>
+    </ScrollView>
 
 </LinearLayout>

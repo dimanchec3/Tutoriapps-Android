@@ -113,7 +113,6 @@ public class Pizarra extends Activity implements OnClickListener,
 						+ gid[position].toString()
 						+ "/board_pics.json?auth_token=";
 				valor = position;
-				aa = new FancyAdapter();
 				aa.clear();
 				try {
 					getData();
@@ -196,6 +195,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		myListView = (ListView) findViewById(R.id.lvPosts);
 		myListView.setOnItemClickListener(this);
 		myListView.setVerticalFadingEdgeEnabled(false);
+		aa = new FancyAdapter();
 	}
 
 	@Override
@@ -250,6 +250,18 @@ public class Pizarra extends Activity implements OnClickListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK)
 			finish();
+		else {
+			aa.clear();
+			try {
+				getData();
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ConnectionClosedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void getTiempo() {
