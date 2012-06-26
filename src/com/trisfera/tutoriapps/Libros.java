@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,6 +16,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -27,31 +27,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
-public class Libros extends Activity implements OnClickListener {
+public class Libros extends Activity implements OnClickListener,
+		OnItemClickListener {
 
 	Button bLibros, bInicio, bPizarra;
-	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo;
+	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL;
 	Bundle extras;
 	TextView tvHeader;
 	String[] gid, gnombre, fechaformato;
 	Integer cantidadGrupos;
 	Typeface font;
 	ListView myListView;
+	Gallery myHorizontalListView;
 	ProgressDialog pDialog;
+	Integer valor;
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
 	int contador = 0;
+	MyAdapter myAdapter;
 	ArrayList<Books> arrayBooks = new ArrayList<Books>();
 	FancyAdapter aa = null;
 
 	class Books {
+		public String id;
 		public String title;
 		public String author;
 		public String publisher;
@@ -75,6 +83,7 @@ public class Libros extends Activity implements OnClickListener {
 		initialize();
 		getTiempo();
 		getData();
+		idGrupos();
 	}
 
 	private void initialize() {
@@ -100,7 +109,11 @@ public class Libros extends Activity implements OnClickListener {
 		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token=";
 		myListView = (ListView) findViewById(R.id.lvBooks);
 		myListView.setVerticalFadingEdgeEnabled(false);
+		myListView.setOnItemClickListener(this);
 		aa = new FancyAdapter();
+		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
+		myAdapter = new MyAdapter(this);
+		myHorizontalListView.setAdapter(myAdapter);
 	}
 
 	private void getTiempo() {
@@ -133,6 +146,58 @@ public class Libros extends Activity implements OnClickListener {
 		}
 	}
 
+	private void idGrupos() {
+		// TODO Auto-generated method stub
+		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/"
+						+ gid[position].toString() + "/books.json?auth_token=";
+				aa.clear();
+				getData();
+			}
+		});
+	}
+
+	public class MyAdapter extends BaseAdapter {
+		Context context;
+
+		MyAdapter(Context c) {
+			context = c;
+		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			cantidadGrupos = extras.getInt("cantidadGrupos");
+			return cantidadGrupos;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return gnombre[position];
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			View rowView = LayoutInflater.from(parent.getContext()).inflate(
+					R.layout.row, null);
+			TextView listTextView = (TextView) rowView
+					.findViewById(R.id.itemtext);
+			listTextView.setText(gnombre[position]);
+			return rowView;
+		}
+	}
+
 	private void getData() {
 		// TODO Auto-generated method stub
 		String result = "";
@@ -160,9 +225,9 @@ public class Libros extends Activity implements OnClickListener {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Books resultRow = new Books();
 						String creado = json_data.getString("created_at");
+						resultRow.id = json_data.getString("id");
 						resultRow.title = json_data.getString("title");
 						resultRow.author = json_data.getString("author");
-
 						resultRow.publisher = json_data.getString("publisher");
 						resultRow.additional_info = json_data
 								.getString("additional_info");
@@ -303,6 +368,7 @@ public class Libros extends Activity implements OnClickListener {
 	}
 
 	class ViewHolder {
+		public TextView tvIdBooks = null;
 		public TextView tvNameBooks = null;
 		public TextView tvTitleBooks = null;
 		public TextView tvAuthorBooks = null;
@@ -317,6 +383,7 @@ public class Libros extends Activity implements OnClickListener {
 		public TextView tvPriceBooks = null;
 
 		ViewHolder(View row) {
+			tvIdBooks = (TextView) row.findViewById(R.id.tvIdBooks);
 			tvNameBooks = (TextView) row.findViewById(R.id.tvNameBooks);
 			tvTitleBooks = (TextView) row.findViewById(R.id.tvTitleBooks);
 			tvAuthorBooks = (TextView) row.findViewById(R.id.tvAuthorBooks);
@@ -344,6 +411,7 @@ public class Libros extends Activity implements OnClickListener {
 				oferta = "Regalo";
 			else if (r.offer_type.equals("sale"))
 				oferta = "Venta";
+			tvIdBooks.setText(r.id);
 			tvNameBooks.setText(r.owner_name);
 			tvTitleBooks.setText(r.title);
 			tvAuthorBooks.setText(r.author);
@@ -355,11 +423,11 @@ public class Libros extends Activity implements OnClickListener {
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
 			tvIdBooksGroup.setText(r.group_id);
-			//if (r.price != "0.0") {
-				tvPriceBooks.setVisibility(1);
-				tvPriceBooks.setText(String.format("Precio: $%.2f",
-						Float.valueOf(r.price)));
-			//}
+			// if (r.price != "0.0") {
+			tvPriceBooks.setVisibility(1);
+			tvPriceBooks.setText(String.format("Precio: $%.2f",
+					Float.valueOf(r.price)));
+			// }
 			tvNameBooks.setTypeface(font, 1);
 			tvTitleBooks.setTypeface(font);
 			tvAuthorBooks.setTypeface(font);
@@ -371,6 +439,57 @@ public class Libros extends Activity implements OnClickListener {
 			tvGroupBooks.setTypeface(font);
 			tvIdBooksGroup.setTypeface(font);
 			tvPriceBooks.setTypeface(font);
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.lvBooks:
+
+			Intent iSingleBooks = new Intent(getBaseContext(),
+					SingleBooks.class);
+			String nombre = ((TextView) arg1.findViewById(R.id.tvNameBooks))
+					.getText().toString();
+			String fecha = ((TextView) arg1.findViewById(R.id.tvDateBooks))
+					.getText().toString();
+			String grupo = ((TextView) arg1.findViewById(R.id.tvGroupBooks))
+					.getText().toString();
+			String titulo = ((TextView) arg1.findViewById(R.id.tvTitleBooks))
+					.getText().toString();
+			String autor = ((TextView) arg1.findViewById(R.id.tvAuthorBooks))
+					.getText().toString();
+			String editorial = ((TextView) arg1
+					.findViewById(R.id.tvPublisherBooks)).getText().toString();
+			String info = ((TextView) arg1
+					.findViewById(R.id.tvAditionalInfoBooks)).getText()
+					.toString();
+			String contacto = ((TextView) arg1
+					.findViewById(R.id.tvContactInfoBooks)).getText()
+					.toString();
+			String oferta = ((TextView) arg1
+					.findViewById(R.id.tvOfferTypeBooks)).getText().toString();
+			String precio = ((TextView) arg1.findViewById(R.id.tvPriceBooks))
+					.getText().toString();
+			iSingleBooks.putExtra("nombre", nombre);
+			iSingleBooks.putExtra("fecha", fecha);
+			iSingleBooks.putExtra("grupo", grupo);
+			iSingleBooks.putExtra("titulo", titulo);
+			iSingleBooks.putExtra("autor", autor);
+			iSingleBooks.putExtra("editorial", editorial);
+			iSingleBooks.putExtra("info", info);
+			iSingleBooks.putExtra("contacto", contacto);
+			iSingleBooks.putExtra("oferta", oferta);
+			iSingleBooks.putExtra("precio", precio);
+			// iSingleBooks.putExtra("token", token);
+			// iSingleBooks.putExtra("idPost", idPost);
+			// extras.putStringArray("gid", gid);
+			// extras.putStringArray("gnombre", gnombre);
+			// extras.putInt("cantidadGrupos", cantidadGrupos);
+			// iSingleBooks.putExtras(extras);
+			startActivityForResult(iSingleBooks, 0);
+			break;
 		}
 	}
 }

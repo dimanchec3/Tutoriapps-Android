@@ -69,10 +69,8 @@
             android:id="@+id/tvIdPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tvName"
-            android:layout_alignParentTop="true"
-            android:text=""
-            android:visibility="invisible" />
+            android:layout_toRightOf="@+id/tvName"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
