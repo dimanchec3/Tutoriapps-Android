@@ -192,7 +192,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
 		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token=";
-		myListView = (ListView) findViewById(R.id.lvPosts);
+		myListView = (ListView) findViewById(R.id.lvImages);
 		myListView.setOnItemClickListener(this);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		aa = new FancyAdapter();
@@ -462,7 +462,7 @@ public class Pizarra extends Activity implements OnClickListener,
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
-		case R.id.lvPosts:
+		case R.id.lvImages:
 			Intent iSingle = new Intent(getBaseContext(), SingleImage.class);
 			String URL = ((TextView) arg1.findViewById(R.id.tvURL)).getText()
 					.toString();

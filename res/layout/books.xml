@@ -112,7 +112,7 @@
         android:spacing="10dp" />
 
     <ListView
-        android:id="@+id/lvImages"
+        android:id="@+id/lvBooks"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:background="#D3E8A3"
