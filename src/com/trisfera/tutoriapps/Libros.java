@@ -39,7 +39,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class Libros extends Activity implements OnClickListener,
 		OnItemClickListener {
 
-	Button bLibros, bInicio, bPizarra;
+	Button bLibros, bInicio, bPizarra, bCrearBooks;
 	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL, FILENAME;
 	Bundle extras;
 	TextView tvHeader;
@@ -91,11 +91,13 @@ public class Libros extends Activity implements OnClickListener,
 		bInicio = (Button) findViewById(R.id.bInicio);
 		bPizarra = (Button) findViewById(R.id.bPizarra);
 		bLibros = (Button) findViewById(R.id.bLibros);
+		bCrearBooks = (Button) findViewById(R.id.bCrearBooks);
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		bLibros.setBackgroundColor(Color.rgb(211, 232, 163));
 		bInicio.setOnClickListener(this);
 		bPizarra.setOnClickListener(this);
 		bLibros.setOnClickListener(this);
+		bCrearBooks.setOnClickListener(this);
 		extras = getIntent().getExtras();
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
@@ -323,6 +325,15 @@ public class Libros extends Activity implements OnClickListener,
 			extras.putInt("cantidadGrupos", cantidadGrupos);
 			iPizarra.putExtras(extras);
 			startActivityForResult(iPizarra, 0);
+			break;
+			
+		case R.id.bCrearBooks:
+			Intent iCrearBooks = new Intent (getBaseContext(), CrearBooks.class);
+			iCrearBooks.putExtra("token", token);
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			iCrearBooks.putExtras(extras);
+			startActivityForResult(iCrearBooks, 0);
 			break;
 		}
 	}

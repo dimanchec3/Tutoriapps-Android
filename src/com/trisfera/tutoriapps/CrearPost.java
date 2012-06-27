@@ -18,7 +18,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -48,7 +47,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crearpost);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
@@ -135,7 +134,11 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
+		switch(arg0.getId()){
+		case R.id.sGrupos:
 		gruposId = gid[pos].toString();
+		break;
+		}
 	}
 
 	@Override

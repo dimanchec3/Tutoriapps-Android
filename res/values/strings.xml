@@ -10,11 +10,13 @@
     <string name="btn_Responder">Responder</string>
     <string name="separador">·</string>
     <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="compartir_post">Compartir Post</string>
     <string name="compartir_imagen">Compartir Imagen</string>
+    <string name="compartir_libros">Compartir Libros</string>
     <string name="imagen_subir">Imagen a Subir</string>
     <string name="boton_subir_imagen">Boton Subir Imagen</string>
     <string name="boton_buscar_imagen">Boton Buscar Imagen</string>
-    <string name="crear">Crear</string>
+    <string name="compartir">Compartir</string>
     <string name="tab_inicio">Inicio</string>
     <string name="tab_pizarra">Pizarra</string>
     <string name="tab_libros">Libros</string>
@@ -29,5 +31,11 @@
     <string name="fecha_pizarra">Fecha: </string>
     <string name="espacio"></string>
     <string name="single_image">Single Image</string>
+    <string name="hint_title">Título…</string>
+    <string name="hint_author">Autor…</string>
+    <string name="hint_publisher">Editorial…</string>
+    <string name="hint_info">Información Adicional…</string>
+    <string name="hint_contact">Información de Contacto…</string>
+    <string name="hint_price">Precio…</string>
 
 </resources>

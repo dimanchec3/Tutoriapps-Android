@@ -24,7 +24,7 @@
 
         <Spinner
             android:id="@+id/sGrupos"
-            android:layout_width="220dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content" />
 
         <Button
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/crear" />
+            android:text="@string/compartir" />
 
     </RelativeLayout>
 

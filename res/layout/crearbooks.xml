@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="275dp"
+    android:layout_height="385dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:orientation="vertical" >
+
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hint_title"
+            android:inputType="textMultiLine" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/etAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etTitle"
+            android:ems="10"
+            android:hint="@string/hint_author" />
+
+        <EditText
+            android:id="@+id/etPublisher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etAuthor"
+            android:ems="10"
+            android:hint="@string/hint_publisher" />
+
+        <EditText
+            android:id="@+id/etInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etPublisher"
+            android:ems="10"
+            android:hint="@string/hint_info" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/etContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etInfo"
+            android:ems="10"
+            android:hint="@string/hint_contact" />
+
+        <EditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etContact"
+            android:ems="10"
+            android:hint="@string/hint_price" />
+
+        <Spinner
+            android:id="@+id/sOffer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etPrice" />
+    </RelativeLayout>
+</ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#323232"
+        android:orientation="horizontal" >
+
+        <Spinner
+            android:id="@+id/sGruposBooks"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bPostearBooks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/compartir" />
+    </RelativeLayout>
+
+</LinearLayout>
