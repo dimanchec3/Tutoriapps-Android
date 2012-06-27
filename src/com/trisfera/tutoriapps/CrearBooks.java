@@ -12,6 +12,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +39,8 @@ public class CrearBooks extends Activity implements OnClickListener,
 	ArrayList<NameValuePair> nameValuePairs;
 	HttpResponse response;
 	HttpEntity entity;
+	private ProgressDialog pDialog;
+	int contador = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +94,24 @@ public class CrearBooks extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
 		case R.id.bPostearBooks:
+			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
 			postData();
+			Intent iBooks = new Intent(getBaseContext(), Libros.class);
+			iBooks.putExtra("token", token);
+			setResult(RESULT_OK, null);
+			finish();
+			contador = 1;
+			startActivity(iBooks);
 			break;
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (contador == 1)
+			pDialog.dismiss();
 	}
 
 	private void postData() {

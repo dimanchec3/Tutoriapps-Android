@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -28,6 +29,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -44,7 +46,7 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 			tvSingleOffer, tvSinglePrice;
 	ListView lvComentariosBooks;
 	EditText etComentarioBooks;
-	Button bResponderBooks;
+	Button bResponderBooks, bCrearBooks;
 	Bundle extras;
 	String[] gid, gnombre, fechaformato;
 	String nombre, fecha, grupo, titulo, autor, editorial, info, contacto,
@@ -70,6 +72,7 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.singlebooks);
 		initialize();
 		getTiempo();
@@ -121,6 +124,7 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		lvComentariosBooks = (ListView) findViewById(R.id.lvComentariosBooks);
 		etComentarioBooks = (EditText) findViewById(R.id.etComentarioBooks);
 		bResponderBooks = (Button) findViewById(R.id.bResponderBooks);
+		bCrearBooks = (Button) findViewById(R.id.bCrearBooks);
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		lvComentariosBooks.setVerticalFadingEdgeEnabled(false);
 		lvComentariosBooks.setDivider(null);
@@ -167,6 +171,8 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		bResponderBooks.setEnabled(false);
 		bResponderBooks.setOnClickListener(this);
 		bResponderBooks.setTypeface(font);
+		bCrearBooks.setOnClickListener(this);
+		bCrearBooks.setTypeface(font);
 		etComentarioBooks.addTextChangedListener(this);
 	}
 
@@ -329,6 +335,15 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 			postResponder();
 			getRespuestas();
 			etComentarioBooks.setText(null);
+			break;
+			
+		case R.id.bCrearBooks:
+			Intent iCrearBooks = new Intent (getBaseContext(), CrearBooks.class);
+			iCrearBooks.putExtra("token", token);
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			iCrearBooks.putExtras(extras);
+			startActivityForResult(iCrearBooks, 0);
 			break;
 		}
 	}
