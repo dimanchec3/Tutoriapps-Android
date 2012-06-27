@@ -55,7 +55,6 @@ public class SinglePost extends Activity implements OnClickListener,
 	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
 			horaAgo;
 	Button bCrearPost, bResponder;
-	HttpClient client;
 	String[] gid, gnombre, gtext, fechaformato;
 	String SuperTiempo;
 	Intent iCrearPost;
@@ -63,6 +62,7 @@ public class SinglePost extends Activity implements OnClickListener,
 	EditText etComentario;
 	Typeface font;
 	int contador = 0;
+	HttpClient client;
 	HttpPost httppost;
 	HttpResponse response;
 	HttpEntity entity;
@@ -78,7 +78,6 @@ public class SinglePost extends Activity implements OnClickListener,
 
 	class Reply {
 		public String created_at;
-		public String id;
 		public String name;
 		public String text;
 	}
@@ -191,7 +190,6 @@ public class SinglePost extends Activity implements OnClickListener,
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Reply resultRow = new Reply();
-						resultRow.id = json_data.getString("id");
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;

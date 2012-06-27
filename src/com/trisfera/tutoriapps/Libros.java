@@ -472,6 +472,8 @@ public class Libros extends Activity implements OnClickListener,
 					.findViewById(R.id.tvOfferTypeBooks)).getText().toString();
 			String precio = ((TextView) arg1.findViewById(R.id.tvPriceBooks))
 					.getText().toString();
+			String idPost = ((TextView) arg1.findViewById(R.id.tvIdBooks))
+					.getText().toString();
 			iSingleBooks.putExtra("nombre", nombre);
 			iSingleBooks.putExtra("fecha", fecha);
 			iSingleBooks.putExtra("grupo", grupo);
@@ -482,12 +484,12 @@ public class Libros extends Activity implements OnClickListener,
 			iSingleBooks.putExtra("contacto", contacto);
 			iSingleBooks.putExtra("oferta", oferta);
 			iSingleBooks.putExtra("precio", precio);
-			// iSingleBooks.putExtra("token", token);
-			// iSingleBooks.putExtra("idPost", idPost);
-			// extras.putStringArray("gid", gid);
-			// extras.putStringArray("gnombre", gnombre);
-			// extras.putInt("cantidadGrupos", cantidadGrupos);
-			// iSingleBooks.putExtras(extras);
+			iSingleBooks.putExtra("token", token);
+			iSingleBooks.putExtra("idPost", idPost);
+			extras.putStringArray("gid", gid);
+			extras.putStringArray("gnombre", gnombre);
+			extras.putInt("cantidadGrupos", cantidadGrupos);
+			iSingleBooks.putExtras(extras);
 			startActivityForResult(iSingleBooks, 0);
 			break;
 		}
