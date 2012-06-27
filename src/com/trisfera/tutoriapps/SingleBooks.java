@@ -49,7 +49,6 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 	String[] gid, gnombre, fechaformato;
 	String nombre, fecha, grupo, titulo, autor, editorial, info, contacto,
 			oferta, precio, SuperTiempo, horaAgo, token, idPost, URL_REPLY;
-	int cantidadGrupos;
 	Typeface font;
 	HttpPost httppost;
 	HttpClient client;
@@ -132,7 +131,6 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		idPost = extras.getString("idPost");
 		URL_REPLY = "http://10.0.2.2:3000/api/v1/books/" + idPost
 				+ "/replies.json?auth_token=";
-		cantidadGrupos = extras.getInt("cantidadGrupos");
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
 		nombre = extras.getString("nombre");

@@ -385,7 +385,7 @@ public class Home extends Activity implements OnClickListener,
 		case R.id.bPizarra:
 			iPizarra = new Intent(getBaseContext(), Pizarra.class);
 			iPizarra.putExtra("token", token);
-			// iPizarra.putExtra("filename", FILENAME);
+			iPizarra.putExtra("filename", FILENAME);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
@@ -397,7 +397,7 @@ public class Home extends Activity implements OnClickListener,
 		case R.id.bLibros:
 			iLibros = new Intent(getBaseContext(), Libros.class);
 			iLibros.putExtra("token", token);
-			// iLibros.putExtra("filename", FILENAME);
+			iLibros.putExtra("filename", FILENAME);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);

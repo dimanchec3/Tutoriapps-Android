@@ -40,7 +40,7 @@ public class Libros extends Activity implements OnClickListener,
 		OnItemClickListener {
 
 	Button bLibros, bInicio, bPizarra;
-	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL;
+	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL, FILENAME;
 	Bundle extras;
 	TextView tvHeader;
 	String[] gid, gnombre, fechaformato;
@@ -100,6 +100,7 @@ public class Libros extends Activity implements OnClickListener,
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
 		token = extras.getString("token");
+		FILENAME = extras.getString("filename");
 		cantidadGrupos = extras.getInt("cantidadGrupos");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
@@ -308,6 +309,7 @@ public class Libros extends Activity implements OnClickListener,
 			Intent iHome = new Intent(getBaseContext(), Home.class);
 			pDialog = ProgressDialog.show(this, "", "Cargando...");
 			iHome.putExtra("token", token);
+			iHome.putExtra("filename", FILENAME);
 			contador = 1;
 			startActivityForResult(iHome, 0);
 			break;
@@ -315,6 +317,7 @@ public class Libros extends Activity implements OnClickListener,
 		case R.id.bPizarra:
 			Intent iPizarra = new Intent(getBaseContext(), Pizarra.class);
 			iPizarra.putExtra("token", token);
+			iPizarra.putExtra("filename", FILENAME);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			extras.putInt("cantidadGrupos", cantidadGrupos);

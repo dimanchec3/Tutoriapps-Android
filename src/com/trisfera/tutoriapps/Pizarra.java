@@ -50,7 +50,7 @@ public class Pizarra extends Activity implements OnClickListener,
 
 	static String URL;
 	Button bPizarra, bInicio, bLibros, bCrearPic;
-	String token = "", SuperTiempo, horaAgo;
+	String token = "", SuperTiempo, horaAgo, FILENAME;
 	TextView tvHeader;
 	Typeface font;
 	Bundle extras;
@@ -179,6 +179,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		bCrearPic.setOnClickListener(this);
 		extras = getIntent().getExtras();
 		token = extras.getString("token");
+		FILENAME = extras.getString("filename");
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
 		bInicio.setTypeface(font, 1);
@@ -206,6 +207,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			Intent iHome = new Intent(getBaseContext(), Home.class);
 			pDialog = ProgressDialog.show(this, "", "Cargando...");
 			iHome.putExtra("token", token);
+			iHome.putExtra("filename", FILENAME);
 			contador = 1;
 			startActivityForResult(iHome, 0);
 			break;
@@ -213,6 +215,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		case R.id.bLibros:
 			Intent iLibros = new Intent(getBaseContext(), Libros.class);
 			iLibros.putExtra("token", token);
+			iLibros.putExtra("filename", FILENAME);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			extras.putInt("cantidadGrupos", cantidadGrupos);
