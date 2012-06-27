@@ -15,11 +15,11 @@
 
             <EditText
                 android:id="@+id/etTitle"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/hint_title"
-                android:inputType="textMultiLine" >
+                android:singleLine="true" >
             </EditText>
 
             <EditText
@@ -28,7 +28,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etTitle"
                 android:ems="10"
-                android:hint="@string/hint_author" />
+                android:hint="@string/hint_author"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/etPublisher"
@@ -36,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etAuthor"
                 android:ems="10"
-                android:hint="@string/hint_publisher" />
+                android:hint="@string/hint_publisher"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/etInfo"
@@ -44,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etPublisher"
                 android:ems="10"
-                android:hint="@string/hint_info" >
+                android:hint="@string/hint_info"
+                android:inputType="textMultiLine"
+                android:singleLine="true" >
             </EditText>
 
             <EditText
@@ -53,7 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etInfo"
                 android:ems="10"
-                android:hint="@string/hint_contact" />
+                android:hint="@string/hint_contact"
+                android:inputType="textMultiLine"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/etPrice"
@@ -61,33 +67,30 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etContact"
                 android:ems="10"
-                android:hint="@string/hint_price" />
+                android:hint="@string/hint_price"
+                android:inputType="number"
+                android:singleLine="true" />
 
             <Spinner
                 android:id="@+id/sOffer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etPrice" />
+
+            <Spinner
+                android:id="@+id/sGruposBooks"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sOffer" />
+
+            <Button
+                android:id="@+id/bPostearBooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/sOffer"
+                android:text="@string/compartir" />
         </RelativeLayout>
     </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#323232"
-        android:orientation="horizontal" >
-
-        <Spinner
-            android:id="@+id/sGruposBooks"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/bPostearBooks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/compartir" />
-    </RelativeLayout>
 
 </LinearLayout>
