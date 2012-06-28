@@ -338,7 +338,7 @@ public class Libros extends Activity implements OnClickListener,
 			break;
 		}
 	}
-
+	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -383,7 +383,7 @@ public class Libros extends Activity implements OnClickListener,
 	}
 
 	class ViewHolder {
-		public TextView tvIdBooks = null;
+		public TextView tvIdGroupBook = null;
 		public TextView tvNameBooks = null;
 		public TextView tvTitleBooks = null;
 		public TextView tvAuthorBooks = null;
@@ -394,11 +394,11 @@ public class Libros extends Activity implements OnClickListener,
 		public TextView tvDateBooks = null;
 		public TextView tvGroupBooks = null;
 		public TextView tvReplyCountBooks = null;
-		public TextView tvIdBooksGroup = null;
+		public TextView tvIdPostBook = null;
 		public TextView tvPriceBooks = null;
 
 		ViewHolder(View row) {
-			tvIdBooks = (TextView) row.findViewById(R.id.tvIdBooks);
+			tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
 			tvNameBooks = (TextView) row.findViewById(R.id.tvNameBooks);
 			tvTitleBooks = (TextView) row.findViewById(R.id.tvTitleBooks);
 			tvAuthorBooks = (TextView) row.findViewById(R.id.tvAuthorBooks);
@@ -414,7 +414,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvGroupBooks = (TextView) row.findViewById(R.id.tvGroupBooks);
 			tvReplyCountBooks = (TextView) row
 					.findViewById(R.id.tvReplyCountBooks);
-			tvIdBooksGroup = (TextView) row.findViewById(R.id.tvIdBooksGroup);
+			tvIdPostBook = (TextView) row.findViewById(R.id.tvIdPostBook);
 			tvPriceBooks = (TextView) row.findViewById(R.id.tvPriceBooks);
 		}
 
@@ -428,7 +428,7 @@ public class Libros extends Activity implements OnClickListener,
 				oferta = "Venta";
 			else if (r.offer_type.equals("borrow"))
 				oferta = "Préstamo";
-			tvIdBooks.setText(r.id);
+			tvIdPostBook.setText(r.id);
 			tvNameBooks.setText(r.owner_name);
 			tvTitleBooks.setText(r.title);
 			tvAuthorBooks.setText(r.author);
@@ -438,7 +438,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvDateBooks.setText(r.created_at);
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
-			tvIdBooksGroup.setText(r.group_id);
+			tvIdGroupBook.setText(r.group_id);
 			tvPriceBooks.setVisibility(1);
 			tvPriceBooks.setText(String.format("Precio: $%.2f",
 					Float.valueOf(r.price)));
@@ -452,7 +452,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvOfferTypeBooks.setTypeface(font);
 			tvDateBooks.setTypeface(font);
 			tvGroupBooks.setTypeface(font);
-			tvIdBooksGroup.setTypeface(font);
+			tvIdGroupBook.setTypeface(font);
 			tvPriceBooks.setTypeface(font);
 		}
 	}
@@ -462,7 +462,6 @@ public class Libros extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
 		case R.id.lvBooks:
-
 			Intent iSingleBooks = new Intent(getBaseContext(),
 					SingleBooks.class);
 			String nombre = ((TextView) arg1.findViewById(R.id.tvNameBooks))
@@ -487,7 +486,9 @@ public class Libros extends Activity implements OnClickListener,
 					.findViewById(R.id.tvOfferTypeBooks)).getText().toString();
 			String precio = ((TextView) arg1.findViewById(R.id.tvPriceBooks))
 					.getText().toString();
-			String idPost = ((TextView) arg1.findViewById(R.id.tvIdBooks))
+			String idPost = ((TextView) arg1.findViewById(R.id.tvIdPostBook))
+					.getText().toString();
+			String tvIdBook = ((TextView) arg1.findViewById(R.id.tvIdGroupBook))
 					.getText().toString();
 			iSingleBooks.putExtra("nombre", nombre);
 			iSingleBooks.putExtra("fecha", fecha);
@@ -500,7 +501,7 @@ public class Libros extends Activity implements OnClickListener,
 			iSingleBooks.putExtra("oferta", oferta);
 			iSingleBooks.putExtra("precio", precio);
 			iSingleBooks.putExtra("token", token);
-			iSingleBooks.putExtra("idGrupos", gid[arg2]);
+			iSingleBooks.putExtra("idGrupos", tvIdBook);
 			iSingleBooks.putExtra("idPost", idPost);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);

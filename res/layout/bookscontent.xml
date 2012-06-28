@@ -22,14 +22,22 @@
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="12dp" />
-
+        
         <TextView
-            android:id="@+id/tvIdBooks"
+            android:id="@+id/tvIdGroupBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvNameBooks"
             android:layout_toRightOf="@+id/tvNameBooks"
-            android:visibility="gone" />
+            android:visibility="gone"/>
+        
+        <TextView
+            android:id="@+id/tvIdPostBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvNameBooks"
+            android:layout_toRightOf="@+id/tvIdGroupBook"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tvGroupBooks"

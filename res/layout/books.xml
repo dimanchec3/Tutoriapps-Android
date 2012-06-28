@@ -30,7 +30,7 @@
             android:background="#000000"
             android:gravity="center_vertical"
             android:text="@string/espacio" />
-
+        
         <Button
             android:id="@+id/bCrearBooks"
             android:layout_width="34dp"
@@ -59,7 +59,7 @@
             android:paddingTop="10dp"
             android:text="@string/tab_inicio"
             android:textColor="#FFFFFF" />
-        
+
         <TextView
             android:id="@+id/tvSeparador2"
             android:layout_width="1dp"
