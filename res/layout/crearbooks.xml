@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="275dp"
-    android:layout_height="385dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal|center_vertical"
     android:orientation="vertical" >
 
@@ -44,7 +44,7 @@
                 android:id="@+id/etInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etPublisher"
+                android:layout_below="@+id/etContact"
                 android:ems="10"
                 android:hint="@string/hint_info"
                 android:inputType="textMultiLine"
@@ -55,7 +55,7 @@
                 android:id="@+id/etContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etInfo"
+                android:layout_below="@+id/etPublisher"
                 android:ems="10"
                 android:hint="@string/hint_contact"
                 android:inputType="textMultiLine"
@@ -65,30 +65,31 @@
                 android:id="@+id/etPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etContact"
+                android:layout_below="@+id/sOffer"
                 android:ems="10"
                 android:hint="@string/hint_price"
                 android:inputType="number"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/sOffer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/etPrice" />
+                android:layout_below="@+id/etInfo" />
 
             <Spinner
                 android:id="@+id/sGruposBooks"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/sOffer" />
+                android:layout_below="@+id/etPrice" />
 
             <Button
                 android:id="@+id/bPostearBooks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/sOffer"
+                android:layout_below="@+id/etPrice"
                 android:text="@string/compartir" />
         </RelativeLayout>
     </ScrollView>

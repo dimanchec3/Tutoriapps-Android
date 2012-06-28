@@ -40,7 +40,8 @@ public class Libros extends Activity implements OnClickListener,
 		OnItemClickListener {
 
 	Button bLibros, bInicio, bPizarra, bCrearBooks;
-	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL, FILENAME;
+	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL,
+			FILENAME;
 	Bundle extras;
 	TextView tvHeader;
 	String[] gid, gnombre, fechaformato;
@@ -326,9 +327,9 @@ public class Libros extends Activity implements OnClickListener,
 			iPizarra.putExtras(extras);
 			startActivityForResult(iPizarra, 0);
 			break;
-			
+
 		case R.id.bCrearBooks:
-			Intent iCrearBooks = new Intent (getBaseContext(), CrearBooks.class);
+			Intent iCrearBooks = new Intent(getBaseContext(), CrearBooks.class);
 			iCrearBooks.putExtra("token", token);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
@@ -420,28 +421,28 @@ public class Libros extends Activity implements OnClickListener,
 		void populateFrom(Books r) {
 			String oferta = null;
 			if (r.offer_type.equals("loan"))
-				oferta = "Préstamo";
+				oferta = "Alquiler";
 			else if (r.offer_type.equals("gift"))
 				oferta = "Regalo";
 			else if (r.offer_type.equals("sale"))
 				oferta = "Venta";
+			else if (r.offer_type.equals("borrow"))
+				oferta = "Préstamo";
 			tvIdBooks.setText(r.id);
 			tvNameBooks.setText(r.owner_name);
 			tvTitleBooks.setText(r.title);
 			tvAuthorBooks.setText(r.author);
 			tvPublisherBooks.setText(r.publisher);
-			tvAditionalInfoBooks.setText(r.additional_info);
 			tvContactInfoBooks.setText(r.contact_info);
 			tvOfferTypeBooks.setText(oferta);
 			tvDateBooks.setText(r.created_at);
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
 			tvIdBooksGroup.setText(r.group_id);
-			// if (r.price != "0.0") {
 			tvPriceBooks.setVisibility(1);
 			tvPriceBooks.setText(String.format("Precio: $%.2f",
 					Float.valueOf(r.price)));
-			// }
+			tvAditionalInfoBooks.setText(r.additional_info);
 			tvNameBooks.setTypeface(font, 1);
 			tvTitleBooks.setTypeface(font);
 			tvAuthorBooks.setTypeface(font);

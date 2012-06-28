@@ -14,6 +14,7 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,21 +25,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class CrearBooks extends Activity implements OnClickListener,
-		OnItemSelectedListener{
+		OnItemSelectedListener {
 
 	EditText etTitle, etAuthor, etPublisher, etInfo, etContact, etPrice;
 	Spinner sOffer, sGruposBooks;
 	Button bPostearBooks;
-	String[] gid, gnombre, Tipos = { "Venta", "Préstamo", "Regalo" };
+	String[] gid, gnombre,
+			Tipos = { "Alquiler", "Préstamo", "Regalo", "Venta" };
 	Bundle extras;
-	String token, gruposId, oferta;
+	String token, gruposId, oferta, selected;
 	HttpClient httpclient;
 	HttpPost httppost;
 	ArrayList<NameValuePair> nameValuePairs;
 	HttpResponse response;
 	HttpEntity entity;
+	Typeface font;
 	private ProgressDialog pDialog;
 	int contador = 0;
 
@@ -87,6 +91,14 @@ public class CrearBooks extends Activity implements OnClickListener,
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
 		token = extras.getString("token");
+		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
+		etTitle.setTypeface(font);
+		etAuthor.setTypeface(font);
+		etPublisher.setTypeface(font);
+		etInfo.setTypeface(font);
+		etContact.setTypeface(font);
+		etPrice.setTypeface(font);
+		etPrice.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -94,18 +106,64 @@ public class CrearBooks extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
 		case R.id.bPostearBooks:
-			pDialog = ProgressDialog.show(this, "Creando post", "Cargando...");
-			postData();
-			Intent iBooks = new Intent(getBaseContext(), Libros.class);
-			iBooks.putExtra("token", token);
-			setResult(RESULT_OK, null);
-			finish();
-			contador = 1;
-			startActivity(iBooks);
+			if (etTitle.getText().toString().equals("")
+					|| etAuthor.getText().toString().equals("")
+					|| etPublisher.getText().toString().equals("")
+					|| etContact.getText().toString().equals("")
+					|| (etPrice.getText().toString().equals(""))
+					&& selected == "Alquiler"
+					|| (etPrice.getText().toString().equals(""))
+					&& selected == "Venta") {
+				if (etTitle.getText().toString().equals("")) {
+					etTitle.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Título no puede estar vacío.", Toast.LENGTH_SHORT)
+							.show();
+				} else if (etAuthor.getText().toString().equals("")) {
+					etAuthor.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Autor no puede estar vacío.", Toast.LENGTH_SHORT)
+							.show();
+				} else if (etPublisher.getText().toString().equals("")) {
+					etPublisher.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Editorial no puede estar vacío.",
+							Toast.LENGTH_SHORT).show();
+				} else if (etContact.getText().toString().equals("")) {
+					etContact.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Información de Conctacto no puede estar vacío.",
+							Toast.LENGTH_SHORT).show();
+				} else if (etPrice.getText().toString().equals("")
+						&& selected == "Venta") {
+					etPrice.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Precio de venta no puede estar vacío.",
+							Toast.LENGTH_SHORT).show();
+				} else if (etPrice.getText().toString().equals("")
+						&& selected == "Alquiler") {
+					etPrice.requestFocus();
+					Toast.makeText(getBaseContext(),
+							"Precio de alquiler no puede estar vacío.",
+							Toast.LENGTH_SHORT).show();
+				}
+			} else {
+				pDialog = ProgressDialog.show(this, "Creando post",
+						"Cargando...");
+				postData();
+				Intent iBooks = new Intent(getBaseContext(), Libros.class);
+				iBooks.putExtra("token", token);
+				iBooks.putExtra("gnombre", gnombre);
+				iBooks.putExtra("gid", gid);
+				setResult(RESULT_OK, null);
+				finish();
+				contador = 1;
+				startActivity(iBooks);
+			}
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -155,14 +213,21 @@ public class CrearBooks extends Activity implements OnClickListener,
 			long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
-		
+
 		case R.id.sOffer:
+			selected = sOffer.getItemAtPosition(pos).toString();
+			if (selected == "Venta" || selected == "Alquiler")
+				etPrice.setVisibility(View.VISIBLE);
+			else
+				etPrice.setVisibility(View.GONE);
 			if (Tipos[pos].toString() == "Venta")
 				oferta = "sale";
 			else if (Tipos[pos].toString() == "Préstamo")
-				oferta = "loan";
+				oferta = "borrow";
 			else if (Tipos[pos].toString() == "Regalo")
 				oferta = "gift";
+			else if (Tipos[pos].toString() == "Alquiler")
+				oferta = "loan";
 			break;
 
 		case R.id.sGruposBooks:
