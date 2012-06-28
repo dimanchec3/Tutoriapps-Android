@@ -68,7 +68,7 @@ public class Pizarra extends Activity implements OnClickListener,
 	ListView myListView;
 	URL thumb_url = null;
 	Bitmap thumb_image = null;
-	Integer valor, cantidadGrupos;
+	Integer valor = 0, cantidadGrupos;
 
 	class Tiempo {
 		public String tiempo_string;
@@ -80,6 +80,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public String created_at;
 		public String name;
 		public String group;
+		public String id_groups;
 		public String thumbnail_url;
 		public String url;
 	}
@@ -328,10 +329,6 @@ public class Pizarra extends Activity implements OnClickListener,
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Piz resultRow = new Piz();
-						// resultRow.id = json_data.getString("id");
-						// resultRow.created_at = json_data
-						// .getString("created_at");
-
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
@@ -385,6 +382,9 @@ public class Pizarra extends Activity implements OnClickListener,
 						resultRow.url = imagenes.getString("url");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
+						JSONObject grupos = json_data.getJSONObject("group");
+						resultRow.id_groups = grupos.getString("name");
+						
 						arregloPizarra.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -438,7 +438,7 @@ public class Pizarra extends Activity implements OnClickListener,
 
 		void populateFrom(Piz r) {
 			tvNameBoard.setText(r.name);
-			tvGroupBoard.setText(gnombre[valor]);
+			tvGroupBoard.setText(r.id_groups);
 			tvFechaBoard.setText(r.created_at);
 			tvClassDate.setText("Pizarra del día: " + r.class_date);
 			tvURL.setText("http://10.0.2.2:3000" + r.url);

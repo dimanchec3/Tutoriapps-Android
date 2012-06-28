@@ -53,7 +53,7 @@ public class SinglePost extends Activity implements OnClickListener,
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
-			horaAgo;
+			horaAgo, idGrupos;
 	Button bCrearPost, bResponder;
 	String[] gid, gnombre, gtext, fechaformato;
 	String SuperTiempo;
@@ -70,10 +70,16 @@ public class SinglePost extends Activity implements OnClickListener,
 	private ProgressDialog pDialog;
 	long segundoslong, minutoslong;
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
+	ArrayList<newTiempo> arrayTiempo = new ArrayList<newTiempo>();
 	FancyAdapter aa = null;
 
 	class Tiempo {
 		public String tiempo_string;
+	}
+
+	class newTiempo {
+		public String id;
+		public String created_at;
 	}
 
 	class Reply {
@@ -143,6 +149,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		sDate = extras.getString("fecha");
 		sGroup = extras.getString("grupo");
 		token = extras.getString("token");
+		idGrupos = extras.getString("idGrupos");
 		sIdPost = extras.getString("idPost");
 		FILENAME = extras.getString("filename");
 		gnombre = extras.getStringArray("gnombre");
@@ -326,8 +333,109 @@ public class SinglePost extends Activity implements OnClickListener,
 			aa.clear();
 			postResponder();
 			getRespuestas();
+			getNewTiempo();
 			etComentario.setText(null);
 			break;
+		}
+	}
+
+	private void getNewTiempo() {
+		// TODO Auto-generated method stub
+		String result = "";
+		try {
+			StringBuilder url = new StringBuilder(
+					"http://10.0.2.2:3000/api/v1/groups/" + idGrupos
+							+ "/posts.json?auth_token=");
+			url.append(token);
+			HttpGet get = new HttpGet(url.toString());
+			HttpResponse r = client.execute(get);
+			int status = r.getStatusLine().getStatusCode();
+			if (status == 200) {
+				HttpEntity e = r.getEntity();
+				InputStream webs = e.getContent();
+				try {
+					BufferedReader reader = new BufferedReader(
+							new InputStreamReader(webs, "iso-8859-1"), 8);
+					StringBuilder sb = new StringBuilder();
+					String line = null;
+					while ((line = reader.readLine()) != null) {
+						sb.append(line + "\n");
+					}
+					webs.close();
+					result = sb.toString();
+					JSONArray jArray = new JSONArray(result);
+					for (int i = 0; i < jArray.length(); i++) {
+						JSONObject json_data = jArray.getJSONObject(i);
+						newTiempo resultRow = new newTiempo();
+						resultRow.id = json_data.getString("id");
+
+						String creado = json_data.getString("created_at");
+						fechaformato = new String[jArray.length()];
+						fechaformato[i] = creado;
+						String eventTime = new String(creado);
+						String currentTime = new String(SuperTiempo);
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd'T'hh:mm:ss'Z'");
+						Date eventDate = sdf.parse(eventTime);
+						Date currentDate = sdf.parse(currentTime);
+						long eventTimelong = eventDate.getTime();
+						long currentTimelong = currentDate.getTime();
+						long diff = currentTimelong - eventTimelong;
+						long segundoslong = diff / 1000;
+						long minutoslong = diff / 60000; // 60 por 1000
+						long horaslong = diff / 3600000; // 60 por 60 por 1000
+						long diaslong = horaslong / 24;
+						long meseslong = diaslong / 31;
+						long añolong = meseslong / 12;
+						if (añolong == 1)
+							horaAgo = "hace " + añolong + " año ";
+						else if (añolong > 1)
+							horaAgo = "hace " + añolong + " años ";
+						else if (meseslong == 1)
+							horaAgo = "hace " + meseslong + " mes ";
+						else if (meseslong > 1)
+							horaAgo = "hace " + meseslong + " meses ";
+						else if (diaslong == 1)
+							horaAgo = "hace " + diaslong + " día ";
+						else if (diaslong > 1)
+							horaAgo = "hace " + diaslong + " días ";
+						else if (horaslong == 1)
+							horaAgo = "hace " + horaslong + " hora ";
+						else if (horaslong > 1)
+							horaAgo = "hace " + horaslong + " horas ";
+						else if (minutoslong == 1)
+							horaAgo = "hace " + minutoslong + " minuto ";
+						else if (minutoslong > 1)
+							horaAgo = "hace " + minutoslong + " minutos ";
+						else if (segundoslong == 1)
+							horaAgo = "hace " + segundoslong + " segundo ";
+						else if (segundoslong > 1)
+							horaAgo = "hace " + segundoslong + " segundos ";
+						else if (segundoslong == 0)
+							horaAgo = "justo ahora";
+						resultRow.created_at = horaAgo;
+						arrayTiempo.add(resultRow);
+						actualizarTiempo();
+					}
+				} catch (Exception e1) {
+					Log.e("log_tag",
+							"Error convirtiendo el resultado" + e1.toString());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void actualizarTiempo() {
+		// TODO Auto-generated method stub
+		String[] nuevoTime = new String[arrayTiempo.size()];
+		String tiempoCadena = null;
+		for (int i = 0; i < arrayTiempo.size(); i++) {
+			nuevoTime[i] = arrayTiempo.get(i).id;
+			if (nuevoTime[i].equals(sIdPost))
+				tiempoCadena = arrayTiempo.get(i).created_at;
+			tvDate.setText(tiempoCadena);
 		}
 	}
 

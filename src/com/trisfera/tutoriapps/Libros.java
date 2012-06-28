@@ -499,6 +499,7 @@ public class Libros extends Activity implements OnClickListener,
 			iSingleBooks.putExtra("oferta", oferta);
 			iSingleBooks.putExtra("precio", precio);
 			iSingleBooks.putExtra("token", token);
+			iSingleBooks.putExtra("idGrupos", gid[arg2]);
 			iSingleBooks.putExtra("idPost", idPost);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);

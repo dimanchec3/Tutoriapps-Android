@@ -62,8 +62,7 @@ public class Home extends Activity implements OnClickListener,
 	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
 	Typeface font;
-	long mStartTime;
-	int contador = 0, cantidadGrupos;
+	int contador = 0, cantidadGrupos, load = 0;
 	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
@@ -374,7 +373,6 @@ public class Home extends Activity implements OnClickListener,
 		case R.id.bCrearPost:
 			iCrearPost = new Intent(getBaseContext(), CrearPost.class);
 			iCrearPost.putExtra("token", token);
-			// iCrearPost.putExtra("filename", FILENAME);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
@@ -577,6 +575,7 @@ public class Home extends Activity implements OnClickListener,
 			iSingle.putExtra("fecha", fecha);
 			iSingle.putExtra("grupo", grupo);
 			iSingle.putExtra("token", token);
+			iSingle.putExtra("idGrupos", gid[arg2]);
 			iSingle.putExtra("filename", FILENAME);
 			iSingle.putExtra("idPost", idPost);
 			arregloGrupos();
