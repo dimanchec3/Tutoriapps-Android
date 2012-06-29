@@ -168,6 +168,7 @@ public final class R {
         public static final int espacio=0x7f04001c;
         public static final int fecha_pizarra=0x7f04001b;
         public static final int group=0x7f040015;
+        public static final int hide_me=0x7f040024;
         public static final int hint_author=0x7f04001f;
         public static final int hint_comentario=0x7f040002;
         public static final int hint_contact=0x7f040022;

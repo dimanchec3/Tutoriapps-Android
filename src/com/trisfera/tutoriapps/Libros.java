@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -338,7 +339,7 @@ public class Libros extends Activity implements OnClickListener,
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -388,11 +389,11 @@ public class Libros extends Activity implements OnClickListener,
 		public TextView tvTitleBooks = null;
 		public TextView tvAuthorBooks = null;
 		public TextView tvPublisherBooks = null;
-		public TextView tvAditionalInfoBooks = null;
 		public TextView tvContactInfoBooks = null;
 		public TextView tvOfferTypeBooks = null;
 		public TextView tvDateBooks = null;
 		public TextView tvGroupBooks = null;
+		public TextView tvAditionalInfoBooks = null;
 		public TextView tvReplyCountBooks = null;
 		public TextView tvIdPostBook = null;
 		public TextView tvPriceBooks = null;
@@ -430,19 +431,25 @@ public class Libros extends Activity implements OnClickListener,
 				oferta = "Préstamo";
 			tvIdPostBook.setText(r.id);
 			tvNameBooks.setText(r.owner_name);
-			tvTitleBooks.setText(r.title);
-			tvAuthorBooks.setText(r.author);
-			tvPublisherBooks.setText(r.publisher);
-			tvContactInfoBooks.setText(r.contact_info);
-			tvOfferTypeBooks.setText(oferta);
+			tvTitleBooks.setText(Html.fromHtml("<b>" + "Título: " + " </b>"
+					+ r.title));
+			tvAuthorBooks.setText(Html.fromHtml("<b>" + "Autor: " + " </b>"
+					+ r.author));
+			tvPublisherBooks.setText(Html.fromHtml("<b>" + "Editorial: "
+					+ " </b>" + r.publisher));
+			tvContactInfoBooks.setText(Html.fromHtml("<b>"
+					+ "Información de Contacto: " + " </b>" + r.contact_info));
+			tvOfferTypeBooks.setText(Html.fromHtml("<b>" + "Para: " + "</b>"
+					+ oferta));
 			tvDateBooks.setText(r.created_at);
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
 			tvIdGroupBook.setText(r.group_id);
-			tvPriceBooks.setVisibility(1);
-			tvPriceBooks.setText(String.format("Precio: $%.2f",
-					Float.valueOf(r.price)));
-			tvAditionalInfoBooks.setText(r.additional_info);
+			tvPriceBooks.setText(Html.fromHtml(String.format("<b>"
+					+ "Precio: " + "</b>" + "$%.2f", Float.valueOf(r.price))));
+			tvAditionalInfoBooks.setText(Html.fromHtml("<b>"
+					+ "Información Adicional: " + "</b>" + r.additional_info));
+			verificarEmpty();
 			tvNameBooks.setTypeface(font, 1);
 			tvTitleBooks.setTypeface(font);
 			tvAuthorBooks.setTypeface(font);
@@ -454,6 +461,19 @@ public class Libros extends Activity implements OnClickListener,
 			tvGroupBooks.setTypeface(font);
 			tvIdGroupBook.setTypeface(font);
 			tvPriceBooks.setTypeface(font);
+		}
+
+		private void verificarEmpty() {
+			// TODO Auto-generated method stub
+			if (tvAditionalInfoBooks.getText().toString()
+					.equals("Información Adicional: "))
+				tvAditionalInfoBooks.setVisibility(View.GONE);
+			else
+				tvAditionalInfoBooks.setVisibility(View.VISIBLE);
+			if (tvPriceBooks.getText().toString().equals("Precio: $0.00"))
+				tvPriceBooks.setVisibility(View.GONE);
+			else
+				tvPriceBooks.setVisibility(View.VISIBLE);
 		}
 	}
 

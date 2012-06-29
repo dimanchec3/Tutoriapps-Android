@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -39,7 +41,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SingleBooks extends Activity implements TextWatcher, OnClickListener {
+public class SingleBooks extends Activity implements TextWatcher,
+		OnClickListener {
 
 	TextView tvNameBooks, tvDateBooks, tvGroupBooks, tvSingleTitle,
 			tvSingleAuthor, tvSingleEditorial, tvSingleInfo, tvSingleContact,
@@ -50,7 +53,11 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 	Bundle extras;
 	String[] gid, gnombre, fechaformato;
 	String nombre, fecha, grupo, titulo, autor, editorial, info, contacto,
-			oferta, precio, SuperTiempo, horaAgo, token, idPost, URL_REPLY, idGrupos;
+			oferta, precio, SuperTiempo, horaAgo, token, idPost, URL_REPLY,
+			idGrupos, firstTitulo, secondAutor, firstAutor, secondTitulo,
+			firstEditorial, secondEditorial, firstInfo, secondInfo,
+			firstContacto, secondContacto, firstOferta, secondOferta,
+			firstPrecio, secondPrecio;
 	Typeface font;
 	HttpPost httppost;
 	HttpClient client;
@@ -68,12 +75,12 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		public String created_at;
 		public String name;
 	}
-	
+
 	class newTiempo {
 		public String id;
 		public String created_at;
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -154,16 +161,25 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		contacto = extras.getString("contacto");
 		oferta = extras.getString("oferta");
 		precio = extras.getString("precio");
+		splitter();
 		tvNameBooks.setText(nombre);
 		tvDateBooks.setText(fecha);
 		tvGroupBooks.setText(grupo);
-		tvSingleTitle.setText(titulo);
-		tvSingleAuthor.setText(autor);
-		tvSingleEditorial.setText(editorial);
-		tvSingleInfo.setText(info);
-		tvSingleContact.setText(contacto);
-		tvSingleOffer.setText(oferta);
-		tvSinglePrice.setText(precio);
+		tvSingleTitle.setText(Html.fromHtml("<b>" + firstTitulo + ":" + "</b>"
+				+ secondTitulo));
+		tvSingleAuthor.setText(Html.fromHtml("<b>" + firstAutor + ":" + "</b>"
+				+ secondAutor));
+		tvSingleEditorial.setText(Html.fromHtml("<b>" + firstEditorial + ":" + "</b>"
+				+ secondEditorial));
+		tvSingleInfo.setText((Html.fromHtml("<b>" + firstInfo + ":" + "</b>"
+				+ secondInfo)));
+		tvSingleContact.setText(Html.fromHtml("<b>" + firstContacto + ":" + "</b>"
+				+ secondContacto));
+		tvSingleOffer.setText(Html.fromHtml("<b>" + firstOferta + ":" + "</b>"
+				+ secondOferta));
+		tvSinglePrice.setText(Html.fromHtml("<b>" + firstPrecio + ":" + "</b>"
+				+ secondPrecio));
+		verificarEmpty();
 		tvNameBooks.setTypeface(font);
 		tvDateBooks.setTypeface(font);
 		tvGroupBooks.setTypeface(font);
@@ -181,6 +197,44 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 		bCrearBooks.setOnClickListener(this);
 		bCrearBooks.setTypeface(font);
 		etComentarioBooks.addTextChangedListener(this);
+	}
+
+	private void splitter() {
+		// TODO Auto-generated method stub
+		StringTokenizer titulos = new StringTokenizer(titulo, ":");
+		firstTitulo = titulos.nextToken();
+		secondTitulo = titulos.nextToken();
+		StringTokenizer autores = new StringTokenizer(autor, ":");
+		firstAutor = autores.nextToken();
+		secondAutor = autores.nextToken();
+		StringTokenizer editoriales = new StringTokenizer(editorial, ":");
+		firstEditorial = editoriales.nextToken();
+		secondEditorial = editoriales.nextToken();
+		StringTokenizer infos = new StringTokenizer(info, ":");
+		firstInfo = infos.nextToken();
+		secondInfo = infos.nextToken();
+		StringTokenizer contactos = new StringTokenizer(contacto, ":");
+		firstContacto = contactos.nextToken();
+		secondContacto = contactos.nextToken();
+		StringTokenizer ofertas = new StringTokenizer(oferta, ":");
+		firstOferta = ofertas.nextToken();
+		secondOferta = ofertas.nextToken();
+		StringTokenizer precios = new StringTokenizer(precio, ":");
+		firstPrecio = precios.nextToken();
+		secondPrecio = precios.nextToken();
+	}
+	
+	private void verificarEmpty() {
+		// TODO Auto-generated method stub
+		if (tvSingleInfo.getText().toString()
+				.equals("Información Adicional: "))
+			tvSingleInfo.setVisibility(View.GONE);
+		else
+			tvSingleInfo.setVisibility(View.VISIBLE);
+		if (tvSinglePrice.getText().toString().equals("Precio: $0.00"))
+			tvSinglePrice.setVisibility(View.GONE);
+		else
+			tvSinglePrice.setVisibility(View.VISIBLE);
 	}
 
 	private void getRespuestas() {
@@ -320,8 +374,7 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 	}
 
 	@Override
-	public void beforeTextChanged(CharSequence s, int arg1, int arg2,
-			int arg3) {
+	public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponderBooks.setEnabled(false);
@@ -336,7 +389,7 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		switch (v.getId()){
+		switch (v.getId()) {
 		case R.id.bResponderBooks:
 			aa.clear();
 			postResponder();
@@ -344,9 +397,9 @@ public class SingleBooks extends Activity implements TextWatcher, OnClickListene
 			getNewTiempo();
 			etComentarioBooks.setText(null);
 			break;
-			
+
 		case R.id.bCrearBooks:
-			Intent iCrearBooks = new Intent (getBaseContext(), CrearBooks.class);
+			Intent iCrearBooks = new Intent(getBaseContext(), CrearBooks.class);
 			iCrearBooks.putExtra("token", token);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
