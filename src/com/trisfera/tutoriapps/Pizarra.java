@@ -35,8 +35,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -44,13 +46,14 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Pizarra extends Activity implements OnClickListener,
-		OnItemClickListener {
+		OnItemClickListener, OnScrollListener {
 
 	static String URL;
 	Button bPizarra, bInicio, bLibros, bCrearPic;
-	String token = "", SuperTiempo, horaAgo, FILENAME;
+	String token = "", SuperTiempo, horaAgo, FILENAME, posicionid = "home";
 	TextView tvHeader;
 	Typeface font;
 	Bundle extras;
@@ -59,7 +62,9 @@ public class Pizarra extends Activity implements OnClickListener,
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
-	int contador = 0;
+	int contador = 0, ultimoItem = 0, posicion, currentFirstVisibleItem,
+			currentVisibleItemCount, currentScrollState, totalItem, superTotal,
+			first;
 	Gallery myHorizontalListView;
 	ArrayList<Piz> arregloPizarra = new ArrayList<Piz>();
 	ArrayList<Tiempo> arrayTime = new ArrayList<Tiempo>();
@@ -113,6 +118,8 @@ public class Pizarra extends Activity implements OnClickListener,
 				URL = "http://10.0.2.2:3000/api/v1/groups/"
 						+ gid[position].toString()
 						+ "/board_pics.json?auth_token=";
+				posicionid = gid[position].toString();
+				first = 0;
 				valor = position;
 				aa.clear();
 				try {
@@ -198,6 +205,8 @@ public class Pizarra extends Activity implements OnClickListener,
 		myListView.setOnItemClickListener(this);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		aa = new FancyAdapter();
+		myListView.setOnScrollListener(this);
+		first = 0;
 	}
 
 	@Override
@@ -384,7 +393,7 @@ public class Pizarra extends Activity implements OnClickListener,
 						resultRow.name = usuarios.getString("name");
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.id_groups = grupos.getString("name");
-						
+
 						arregloPizarra.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -392,6 +401,11 @@ public class Pizarra extends Activity implements OnClickListener,
 							"Error convirtiendo el resultado" + e1.toString());
 				}
 				myListView.setAdapter(aa);
+				if (ultimoItem == 1) {
+					myListView.setSelection(superTotal);
+					superTotal += superTotal;
+				}
+				ultimoItem = 0;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -473,5 +487,26 @@ public class Pizarra extends Activity implements OnClickListener,
 			startActivity(iSingle);
 			break;
 		}
+	}
+
+	@Override
+	public void onScroll(AbsListView arg0, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		currentFirstVisibleItem = firstVisibleItem;
+		currentVisibleItemCount = visibleItemCount;
+		totalItem = totalItemCount;
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+		// TODO Auto-generated method stub
+		currentScrollState = scrollState;
+		isScrollCompleted();
+	}
+
+	private void isScrollCompleted() {
+		Toast.makeText(getBaseContext(), "No funciona aún el loading...", 1000)
+				.show();
 	}
 }

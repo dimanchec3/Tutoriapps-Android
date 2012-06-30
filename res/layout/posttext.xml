@@ -102,6 +102,13 @@
             android:layout_toRightOf="@+id/ivProfile"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/tvGroupidPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:layout_toRightOf="@+id/ivProfile"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout

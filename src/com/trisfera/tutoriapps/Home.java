@@ -39,6 +39,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -50,8 +52,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener,
-		OnItemClickListener {
-	static String URL;
+		OnItemClickListener, OnScrollListener {
 	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
@@ -62,11 +63,14 @@ public class Home extends Activity implements OnClickListener,
 	public TextView tvId = null;
 	Bundle extras;
 	TextView tvHeader;
-	String token, id, FILENAME, horaAgo, SuperTiempo;
+	String token, id, FILENAME, horaAgo, SuperTiempo, URL, URL_OLDER,
+			posicionid = "home";
 	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
 	Typeface font;
-	int contador = 0, cantidadGrupos, load = 0;
+	int contador = 0, cantidadGrupos, ultimoItem = 0, posicion,
+			currentFirstVisibleItem, currentVisibleItemCount,
+			currentScrollState, totalItem;
 	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
@@ -88,6 +92,7 @@ public class Home extends Activity implements OnClickListener,
 		public String profile_pic;
 		public String group;
 		public String reply_count;
+		public String group_id;
 	}
 
 	class Grupos {
@@ -101,6 +106,7 @@ public class Home extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.home);
+
 		try {
 			initialize();
 			getTiempo();
@@ -158,6 +164,8 @@ public class Home extends Activity implements OnClickListener,
 					int position, long id) {
 				URL = "http://10.0.2.2:3000/api/v1/groups/"
 						+ gid[position].toString() + "/posts.json?auth_token=";
+				posicionid = gid[position].toString();
+				posicion = 5;
 				aa.clear();
 				try {
 					getData();
@@ -233,12 +241,14 @@ public class Home extends Activity implements OnClickListener,
 		bLibros.setTypeface(font, 1);
 		bInicio.setBackgroundColor(Color.rgb(211, 232, 163));
 		myListView.setVerticalFadingEdgeEnabled(false);
+		myListView.setOnScrollListener(this);
 		FILENAME = extras.getString("filename");
 		getGrupos();
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
 		aa = new FancyAdapter();
+		posicion = 5;
 	}
 
 	private void getData() throws ConnectException, ConnectionClosedException {
@@ -324,6 +334,7 @@ public class Home extends Activity implements OnClickListener,
 								.getString("thumbnail_url");
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.group = grupos.getString("name");
+						resultRow.group_id = grupos.getString("id");
 						arrayOfWebData.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -331,6 +342,11 @@ public class Home extends Activity implements OnClickListener,
 							"Error convirtiendo el resultado" + e1.toString());
 				}
 				myListView.setAdapter(aa);
+				if (ultimoItem == 1) {
+					myListView.setSelection(posicion);
+					posicion += 5;
+				}
+				ultimoItem = 0;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -546,6 +562,7 @@ public class Home extends Activity implements OnClickListener,
 		public TextView tvIdPost = null;
 		public TextView tvReply_count = null;
 		public TextView tvURLPic = null;
+		public TextView tvGroupidPost = null;
 		public ImageView ivProfile;
 
 		ViewHolder(View row) {
@@ -556,6 +573,7 @@ public class Home extends Activity implements OnClickListener,
 			tvIdPost = (TextView) row.findViewById(R.id.tvIdPost);
 			tvReply_count = (TextView) row.findViewById(R.id.tvReply_Count);
 			tvURLPic = (TextView) row.findViewById(R.id.tvURLPic);
+			tvGroupidPost = (TextView) row.findViewById(R.id.tvGroupidPost);
 			ivProfile = (ImageView) row.findViewById(R.id.ivProfile);
 		}
 
@@ -567,6 +585,7 @@ public class Home extends Activity implements OnClickListener,
 			tvIdPost.setText(r.id);
 			tvReply_count.setText(r.reply_count);
 			tvURLPic.setText(r.profile_pic);
+			tvGroupidPost.setText(r.group_id);
 			tvReply_count.setTypeface(font);
 			tvName.setTypeface(font, 1);
 			tvText.setTypeface(font, 0);
@@ -597,12 +616,14 @@ public class Home extends Activity implements OnClickListener,
 					.getText().toString();
 			String URL_Pic = ((TextView) arg1.findViewById(R.id.tvURLPic))
 					.getText().toString();
+			String GrupoId = ((TextView) arg1.findViewById(R.id.tvGroupidPost))
+					.getText().toString();
 			iSingle.putExtra("nombre", nombre);
 			iSingle.putExtra("texto", texto);
 			iSingle.putExtra("fecha", fecha);
 			iSingle.putExtra("grupo", grupo);
 			iSingle.putExtra("token", token);
-			iSingle.putExtra("idGrupos", gid[arg2]);
+			iSingle.putExtra("idGrupos", GrupoId);
 			iSingle.putExtra("filename", FILENAME);
 			iSingle.putExtra("idPost", idPost);
 			iSingle.putExtra("URL_Pic", URL_Pic);
@@ -612,6 +633,44 @@ public class Home extends Activity implements OnClickListener,
 			iSingle.putExtras(extras);
 			startActivityForResult(iSingle, 0);
 			break;
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView arg0, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		currentFirstVisibleItem = firstVisibleItem;
+		currentVisibleItemCount = visibleItemCount;
+		totalItem = totalItemCount;
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+		// TODO Auto-generated method stub
+		currentScrollState = scrollState;
+		isScrollCompleted();
+	}
+
+	private void isScrollCompleted() {
+		int lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+		int min = (arrayOfWebData.size() + 5) / posicion;
+		int values = arrayOfWebData.size() / posicion * 4;
+		if (min >= 1 && lastitem == totalItem
+				&& currentScrollState == SCROLL_STATE_IDLE) {
+			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
+					+ "/posts.json?auth_token=" + token + "&older_than="
+					+ fechaformato[values] + "&count=5";
+			try {
+				ultimoItem = 1;
+				getData();
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ConnectionClosedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

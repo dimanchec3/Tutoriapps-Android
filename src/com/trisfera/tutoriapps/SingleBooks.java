@@ -1,8 +1,11 @@
 package com.trisfera.tutoriapps;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +25,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,12 +36,13 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,11 +75,13 @@ public class SingleBooks extends Activity implements TextWatcher,
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	ArrayList<newTiempo> arrayTiempo = new ArrayList<newTiempo>();
 	FancyAdapter aa = null;
-
+	URL thumb_url;
+	Bitmap thumb_image;
 	class Reply {
 		public String text;
 		public String created_at;
 		public String name;
+		public String thumbnail_url;
 	}
 
 	class newTiempo {
@@ -311,6 +319,8 @@ public class SingleBooks extends Activity implements TextWatcher,
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
+						JSONObject profile_pic = usuarios.getJSONObject("profile_pic");
+						resultRow.thumbnail_url = profile_pic.getString("thumbnail_url");
 						arrayReply.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -340,7 +350,12 @@ public class SingleBooks extends Activity implements TextWatcher,
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
-			holder.populateFrom(arrayReply.get(position));
+			try {
+				holder.populateFrom(arrayReply.get(position));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return (convertView);
 		}
 	}
@@ -348,14 +363,16 @@ public class SingleBooks extends Activity implements TextWatcher,
 	class ViewHolder {
 
 		public TextView tvTextLV = null, tvNameLV = null, tvFechaLV = null;
-
+		public ImageView ivReplyPic;
+		
 		ViewHolder(View row) {
 			tvFechaLV = (TextView) row.findViewById(R.id.tvFechaLV);
 			tvTextLV = (TextView) row.findViewById(R.id.tvTextLV);
 			tvNameLV = (TextView) row.findViewById(R.id.tvNameLV);
+			ivReplyPic = (ImageView) row.findViewById(R.id.ivReplyPic);
 		}
 
-		void populateFrom(Reply r) {
+		void populateFrom(Reply r) throws IOException {
 			tvFechaLV.setText(r.created_at);
 			tvTextLV.setText(r.text);
 			tvNameLV.setText(r.name);
@@ -363,6 +380,10 @@ public class SingleBooks extends Activity implements TextWatcher,
 			tvTextLV.setTypeface(font, 0);
 			tvNameLV.setTypeface(font, 0);
 			tvTextLV.setMovementMethod(LinkMovementMethod.getInstance());
+			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
+			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+					.getInputStream());
+			ivReplyPic.setImageBitmap(thumb_image);
 		}
 	}
 

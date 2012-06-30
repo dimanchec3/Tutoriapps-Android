@@ -438,7 +438,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvPublisherBooks.setText(Html.fromHtml("<b>" + "Editorial: "
 					+ " </b>" + r.publisher));
 			tvContactInfoBooks.setText(Html.fromHtml("<b>"
-					+ "Información de Contacto: " + " </b>" + r.contact_info));
+					+ "Contacto: " + " </b>" + r.contact_info));
 			tvOfferTypeBooks.setText(Html.fromHtml("<b>" + "Para: " + "</b>"
 					+ oferta));
 			tvDateBooks.setText(r.created_at);

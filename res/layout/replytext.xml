@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ivReplyPic"
             android:autoLink="web"
+            android:paddingTop="2.5dp"
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="12dp" />
