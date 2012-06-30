@@ -118,7 +118,7 @@
         <ListView
             android:id="@+id/lvPosts"
             android:layout_width="match_parent"
-            android:layout_height="349dp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/horizontallistview"
             android:background="#D3E8A3"
             android:divider="#D3E8A3"

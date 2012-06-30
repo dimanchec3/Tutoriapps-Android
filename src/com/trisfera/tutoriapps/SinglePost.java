@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,12 +38,13 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +57,7 @@ public class SinglePost extends Activity implements OnClickListener,
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	String token, FILENAME, sName, sText, sDate, sGroup, sIdPost, URL_REPLIES,
-			horaAgo, idGrupos;
+			horaAgo, idGrupos, URL_Pic;
 	Button bCrearPost, bResponder;
 	String[] gid, gnombre, gtext, fechaformato;
 	String SuperTiempo;
@@ -72,6 +76,9 @@ public class SinglePost extends Activity implements OnClickListener,
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	ArrayList<newTiempo> arrayTiempo = new ArrayList<newTiempo>();
 	FancyAdapter aa = null;
+	ImageView ivProfileSinglePost;
+	URL thumb_url;
+	Bitmap thumb_image;
 
 	class Tiempo {
 		public String tiempo_string;
@@ -86,6 +93,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		public String created_at;
 		public String name;
 		public String text;
+		public String profile_pic;
 	}
 
 	@Override
@@ -94,12 +102,13 @@ public class SinglePost extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.singlepost);
-		inicializar();
+		try {
+			inicializar();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		getRespuestas();
-		tvName.setText(sName);
-		tvText.setText(sText);
-		tvDate.setText(sDate);
-		tvGroup.setText(sGroup);
 	}
 
 	private void getTiempo() {
@@ -132,7 +141,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		}
 	}
 
-	private void inicializar() {
+	private void inicializar() throws IOException {
 		// TODO Auto-generated method stub
 		tvName = (TextView) findViewById(R.id.tvName);
 		tvText = (TextView) findViewById(R.id.tvText);
@@ -151,9 +160,14 @@ public class SinglePost extends Activity implements OnClickListener,
 		token = extras.getString("token");
 		idGrupos = extras.getString("idGrupos");
 		sIdPost = extras.getString("idPost");
+		URL_Pic = extras.getString("URL_Pic");
 		FILENAME = extras.getString("filename");
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
+		tvName.setText(sName);
+		tvText.setText(sText);
+		tvDate.setText(sDate);
+		tvGroup.setText(sGroup);
 		lvComentarios = (ListView) findViewById(R.id.lvComentarios);
 		lvComentarios.setVerticalFadingEdgeEnabled(false);
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
@@ -169,6 +183,11 @@ public class SinglePost extends Activity implements OnClickListener,
 				+ "/replies.json?auth_token=";
 		lvComentarios.setDivider(null);
 		tvText.setMovementMethod(LinkMovementMethod.getInstance());
+		ivProfileSinglePost = (ImageView) findViewById(R.id.ivProfileSinglePost);
+		thumb_url = new URL("http://10.0.2.2:3000" + URL_Pic);
+		thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+				.getInputStream());
+		ivProfileSinglePost.setImageBitmap(thumb_image);
 	}
 
 	private void getRespuestas() {
@@ -245,6 +264,8 @@ public class SinglePost extends Activity implements OnClickListener,
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
+						JSONObject profile_pic = usuarios.getJSONObject("profile_pic");
+						resultRow.profile_pic = profile_pic.getString("thumbnail_url");
 						arrayReply.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -497,7 +518,12 @@ public class SinglePost extends Activity implements OnClickListener,
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
-			holder.populateFrom(arrayReply.get(position));
+			try {
+				holder.populateFrom(arrayReply.get(position));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return (convertView);
 		}
 	}
@@ -505,17 +531,23 @@ public class SinglePost extends Activity implements OnClickListener,
 	class ViewHolder {
 
 		public TextView tvTextLV = null, tvNameLV = null, tvFechaLV = null;
+		public ImageView ivReplyPic;
 
 		ViewHolder(View row) {
 			tvFechaLV = (TextView) row.findViewById(R.id.tvFechaLV);
 			tvTextLV = (TextView) row.findViewById(R.id.tvTextLV);
 			tvNameLV = (TextView) row.findViewById(R.id.tvNameLV);
+			ivReplyPic = (ImageView) row.findViewById(R.id.ivReplyPic);
 		}
 
-		void populateFrom(Reply r) {
+		void populateFrom(Reply r) throws IOException {
 			tvFechaLV.setText(r.created_at);
 			tvTextLV.setText(r.text);
 			tvNameLV.setText(r.name);
+			thumb_url = new URL("http://10.0.2.2:3000" + r.profile_pic);
+			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+					.getInputStream());
+			ivReplyPic.setImageBitmap(thumb_image);
 			tvFechaLV.setTypeface(font);
 			tvTextLV.setTypeface(font, 0);
 			tvNameLV.setTypeface(font, 0);

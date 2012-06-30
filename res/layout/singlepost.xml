@@ -52,16 +52,27 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivProfileSinglePost"
+            android:paddingTop="2.5dp"
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="15dip"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/ivProfileSinglePost"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:contentDescription="@string/imagen_perfil"
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="2.5dp" />
+
         <TextView
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvName"
+            android:layout_alignBaseline="@+id/tvName"
             android:layout_alignParentRight="true"
             android:text="@string/date"
             android:textColor="#BDBDBD"
@@ -71,11 +82,10 @@
             android:id="@+id/tvSeparador2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvDate"
-            android:layout_alignBottom="@+id/tvDate"
+            android:layout_alignBaseline="@+id/tvName"
             android:layout_toLeftOf="@+id/tvDate"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:text="@string/separador"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -84,8 +94,7 @@
             android:id="@+id/tvGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvSeparador2"
-            android:layout_alignBottom="@+id/tvSeparador2"
+            android:layout_alignBaseline="@+id/tvName"
             android:layout_toLeftOf="@+id/tvSeparador2"
             android:text="@string/group"
             android:textColor="#BDBDBD"
@@ -95,12 +104,15 @@
             android:id="@+id/tvText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
+            android:layout_below="@+id/ivProfileSinglePost"
             android:autoLink="web"
-            android:padding="2.5dp"
+            android:paddingBottom="2.5dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2.5dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp" />
+
     </RelativeLayout>
 
     <ListView

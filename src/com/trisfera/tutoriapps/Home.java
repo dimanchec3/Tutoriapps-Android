@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -42,6 +45,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,6 +73,8 @@ public class Home extends Activity implements OnClickListener,
 	ArrayList<Tiempo> arrayTime = new ArrayList<Tiempo>();
 	Gallery myHorizontalListView;
 	MyAdapter myAdapter;
+	URL thumb_url;
+	Bitmap thumb_image;
 
 	class Tiempo {
 		public String tiempo_string;
@@ -79,6 +85,7 @@ public class Home extends Activity implements OnClickListener,
 		public String text;
 		public String created_at;
 		public String name;
+		public String profile_pic;
 		public String group;
 		public String reply_count;
 	}
@@ -311,6 +318,10 @@ public class Home extends Activity implements OnClickListener,
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
+						JSONObject propic = usuarios
+								.getJSONObject("profile_pic");
+						resultRow.profile_pic = propic
+								.getString("thumbnail_url");
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.group = grupos.getString("name");
 						arrayOfWebData.add(resultRow);
@@ -517,7 +528,12 @@ public class Home extends Activity implements OnClickListener,
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
-			holder.populateFrom(arrayOfWebData.get(position));
+			try {
+				holder.populateFrom(arrayOfWebData.get(position));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return (convertView);
 		}
 	}
@@ -529,6 +545,8 @@ public class Home extends Activity implements OnClickListener,
 		public TextView tvGroup = null;
 		public TextView tvIdPost = null;
 		public TextView tvReply_count = null;
+		public TextView tvURLPic = null;
+		public ImageView ivProfile;
 
 		ViewHolder(View row) {
 			tvName = (TextView) row.findViewById(R.id.tvName);
@@ -537,20 +555,27 @@ public class Home extends Activity implements OnClickListener,
 			tvGroup = (TextView) row.findViewById(R.id.tvGroup);
 			tvIdPost = (TextView) row.findViewById(R.id.tvIdPost);
 			tvReply_count = (TextView) row.findViewById(R.id.tvReply_Count);
+			tvURLPic = (TextView) row.findViewById(R.id.tvURLPic);
+			ivProfile = (ImageView) row.findViewById(R.id.ivProfile);
 		}
 
-		void populateFrom(Post r) {
+		void populateFrom(Post r) throws IOException {
 			tvName.setText(r.name);
 			tvText.setText(r.text);
 			tvFecha.setText(r.created_at);
 			tvGroup.setText(r.group);
 			tvIdPost.setText(r.id);
 			tvReply_count.setText(r.reply_count);
+			tvURLPic.setText(r.profile_pic);
 			tvReply_count.setTypeface(font);
 			tvName.setTypeface(font, 1);
 			tvText.setTypeface(font, 0);
 			tvFecha.setTypeface(font);
 			tvGroup.setTypeface(font);
+			thumb_url = new URL("http://10.0.2.2:3000" + r.profile_pic);
+			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+					.getInputStream());
+			ivProfile.setImageBitmap(thumb_image);
 		}
 	}
 
@@ -570,6 +595,8 @@ public class Home extends Activity implements OnClickListener,
 					.getText().toString();
 			String idPost = ((TextView) arg1.findViewById(R.id.tvIdPost))
 					.getText().toString();
+			String URL_Pic = ((TextView) arg1.findViewById(R.id.tvURLPic))
+					.getText().toString();
 			iSingle.putExtra("nombre", nombre);
 			iSingle.putExtra("texto", texto);
 			iSingle.putExtra("fecha", fecha);
@@ -578,6 +605,7 @@ public class Home extends Activity implements OnClickListener,
 			iSingle.putExtra("idGrupos", gid[arg2]);
 			iSingle.putExtra("filename", FILENAME);
 			iSingle.putExtra("idPost", idPost);
+			iSingle.putExtra("URL_Pic", URL_Pic);
 			arregloGrupos();
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);

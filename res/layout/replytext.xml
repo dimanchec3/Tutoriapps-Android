@@ -13,10 +13,20 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
+        <ImageView
+            android:id="@+id/ivReplyPic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/imagen_reply"
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="2.5dp" />
+
         <TextView
             android:id="@+id/tvNameLV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivReplyPic"
             android:autoLink="web"
             android:text="@string/name"
             android:textColor="#1CCE28"
@@ -36,9 +46,11 @@
             android:id="@+id/tvTextLV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvNameLV"
+            android:layout_below="@+id/ivReplyPic"
             android:autoLink="web"
-            android:padding="2.5dp"
+            android:paddingBottom="2.5dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2.5dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="11dp" />
