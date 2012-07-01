@@ -54,7 +54,7 @@ public class CrearPic extends Activity implements OnClickListener,
 	Button bPostearPic, bCambiarFecha;
 	ImageView ivReturnedPic;
 	Spinner sGrupos;
-	String token = "", gruposId = "home", SuperFecha = null;
+	String token = "", gruposId = "home", SuperFecha = null, imageName;
 	HttpPost httppost;
 	HttpResponse response;
 	MultipartEntity entity;
@@ -63,7 +63,7 @@ public class CrearPic extends Activity implements OnClickListener,
 	HttpClient httpclient;
 	ArrayList<NameValuePair> nameValuePairs;
 	String[] gid, gnombre, newgid, newgnombre;
-	Integer cantidadGrupos, contador=0;
+	Integer cantidadGrupos, contador = 0;
 	TextView tvVerFecha, tvNotaFecha;
 	private int anio, mes, dia;
 	static final int DATE_DIALOG_ID = 1;
@@ -118,6 +118,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		mes = c.get(Calendar.MONTH);
 		dia = c.get(Calendar.DAY_OF_MONTH);
 		updateDisplay();
+		bPostearPic.setEnabled(false);
 	}
 
 	@Override
@@ -224,7 +225,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		if (contador == 1)
 			pDialog.dismiss();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -250,10 +251,14 @@ public class CrearPic extends Activity implements OnClickListener,
 				}
 				bmp = BitmapFactory.decodeStream(imageStream);
 				ivReturnedPic.setImageBitmap(bmp);
+				if (ivReturnedPic.getDrawable() != null)
+					bPostearPic.setEnabled(true);
 			} else if (requestCode == 0) {
 				Bundle extras = data.getExtras();
 				bmp = (Bitmap) extras.get("data");
 				ivReturnedPic.setImageBitmap(bmp);
+				if (ivReturnedPic.getDrawable() != null)
+					bPostearPic.setEnabled(true);
 			}
 		}
 	}
@@ -288,7 +293,7 @@ public class CrearPic extends Activity implements OnClickListener,
 			long arg3) {
 		// TODO Auto-generated method stub
 		gruposId = newgid[pos].toString();
-		if (SuperFecha == null)
+		if (SuperFecha == null || ivReturnedPic.getDrawable() == null)
 			bPostearPic.setEnabled(false);
 		else
 			bPostearPic.setEnabled(true);

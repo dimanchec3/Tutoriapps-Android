@@ -198,7 +198,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
-		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token=";
+		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token=" + token;
 		myListView = (ListView) findViewById(R.id.lvImages);
 		myListView.setOnItemClickListener(this);
 		myListView.setVerticalFadingEdgeEnabled(false);
@@ -316,7 +316,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();

@@ -53,7 +53,7 @@ import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener, OnScrollListener {
-	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
+	static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	String[] gid, gnombre, fechaformato;
@@ -68,9 +68,9 @@ public class Home extends Activity implements OnClickListener,
 	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
 	Typeface font;
-	int contador = 0, cantidadGrupos, ultimoItem = 0, posicion,
+	int contador = 0, cantidadGrupos, ultimoItem = 0,
 			currentFirstVisibleItem, currentVisibleItemCount,
-			currentScrollState, totalItem;
+			currentScrollState, totalItem, superTotal, nuevo = 0, valorUltimo;
 	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
@@ -165,9 +165,11 @@ public class Home extends Activity implements OnClickListener,
 				URL = "http://10.0.2.2:3000/api/v1/groups/"
 						+ gid[position].toString() + "/posts.json?auth_token=";
 				posicionid = gid[position].toString();
-				posicion = 5;
+				valorUltimo = 0;
+				nuevo = 0;
 				aa.clear();
 				try {
+					getTiempo();
 					getData();
 				} catch (ConnectException e) {
 					// TODO Auto-generated catch block
@@ -233,7 +235,8 @@ public class Home extends Activity implements OnClickListener,
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		extras = getIntent().getExtras();
 		token = extras.getString("token");
-		URL = "http://10.0.2.2:3000/api/v1/groups/home/posts.json?auth_token=";
+		URL = "http://10.0.2.2:3000/api/v1/groups/home/posts.json?auth_token=" + token;
+		URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=" + token;
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
 		bInicio.setTypeface(font, 1);
@@ -248,7 +251,8 @@ public class Home extends Activity implements OnClickListener,
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
 		aa = new FancyAdapter();
-		posicion = 5;
+		valorUltimo = 0;
+		nuevo = 0;
 	}
 
 	private void getData() throws ConnectException, ConnectionClosedException {
@@ -256,7 +260,6 @@ public class Home extends Activity implements OnClickListener,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
@@ -274,6 +277,10 @@ public class Home extends Activity implements OnClickListener,
 					webs.close();
 					result = sb.toString();
 					JSONArray jArray = new JSONArray(result);
+					if (jArray.length() == 0) {
+						valorUltimo = 1;
+						return;
+					}
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Post resultRow = new Post();
@@ -343,8 +350,8 @@ public class Home extends Activity implements OnClickListener,
 				}
 				myListView.setAdapter(aa);
 				if (ultimoItem == 1) {
-					myListView.setSelection(posicion);
-					posicion += 5;
+					myListView.setSelection(superTotal);
+					nuevo = nuevo + superTotal;
 				}
 				ultimoItem = 0;
 			}
@@ -358,7 +365,6 @@ public class Home extends Activity implements OnClickListener,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_GRUPOS);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
@@ -649,28 +655,28 @@ public class Home extends Activity implements OnClickListener,
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
 		currentScrollState = scrollState;
-		isScrollCompleted();
+		try {
+			isScrollCompleted();
+		} catch (ConnectionClosedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	private void isScrollCompleted() {
-		int lastitem = currentFirstVisibleItem + currentVisibleItemCount;
-		int min = (arrayOfWebData.size() + 5) / posicion;
-		int values = arrayOfWebData.size() / posicion * 4;
+	private void isScrollCompleted() throws IOException, ConnectionClosedException {
+		int min, lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+		superTotal = lastitem + nuevo;
+		min = (arrayOfWebData.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
 				&& currentScrollState == SCROLL_STATE_IDLE) {
 			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
 					+ "/posts.json?auth_token=" + token + "&older_than="
-					+ fechaformato[values] + "&count=5";
-			try {
-				ultimoItem = 1;
-				getData();
-			} catch (ConnectException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ConnectionClosedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+					+ fechaformato[fechaformato.length - 1] + "&count=5";
+			ultimoItem = 1;
+			getData();
 		}
 	}
 }

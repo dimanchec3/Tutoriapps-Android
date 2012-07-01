@@ -115,7 +115,7 @@ public class Libros extends Activity implements OnClickListener,
 		bInicio.setTypeface(font, 1);
 		bPizarra.setTypeface(font, 1);
 		bLibros.setTypeface(font, 1);
-		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token=";
+		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token=" + token;
 		myListView = (ListView) findViewById(R.id.lvBooks);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		myListView.setOnItemClickListener(this);
@@ -218,7 +218,6 @@ public class Libros extends Activity implements OnClickListener,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_BOOKS);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
@@ -236,6 +235,10 @@ public class Libros extends Activity implements OnClickListener,
 					webs.close();
 					result = sb.toString();
 					JSONArray jArray = new JSONArray(result);
+					if (jArray.length() == 0) {
+						valorUltimo = 1;
+						return;
+					}
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Books resultRow = new Books();

@@ -76,6 +76,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 	FancyAdapter aa = null;
 	URL thumb_url;
 	Bitmap thumb_image;
+
 	class Reply {
 		public String text;
 		public String created_at;
@@ -155,7 +156,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		idGrupos = extras.getString("idGrupos");
 		idPost = extras.getString("idPost");
 		URL_REPLY = "http://10.0.2.2:3000/api/v1/books/" + idPost
-				+ "/replies.json?auth_token=";
+				+ "/replies.json?auth_token=" + token;
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
 		nombre = extras.getString("nombre");
@@ -176,12 +177,12 @@ public class SingleBooks extends Activity implements TextWatcher,
 				+ secondTitulo));
 		tvSingleAuthor.setText(Html.fromHtml("<b>" + firstAutor + ":" + "</b>"
 				+ secondAutor));
-		tvSingleEditorial.setText(Html.fromHtml("<b>" + firstEditorial + ":" + "</b>"
-				+ secondEditorial));
+		tvSingleEditorial.setText(Html.fromHtml("<b>" + firstEditorial + ":"
+				+ "</b>" + secondEditorial));
 		tvSingleInfo.setText((Html.fromHtml("<b>" + firstInfo + ":" + "</b>"
 				+ secondInfo)));
-		tvSingleContact.setText(Html.fromHtml("<b>" + firstContacto + ":" + "</b>"
-				+ secondContacto));
+		tvSingleContact.setText(Html.fromHtml("<b>" + firstContacto + ":"
+				+ "</b>" + secondContacto));
 		tvSingleOffer.setText(Html.fromHtml("<b>" + firstOferta + ":" + "</b>"
 				+ secondOferta));
 		tvSinglePrice.setText(Html.fromHtml("<b>" + firstPrecio + ":" + "</b>"
@@ -230,11 +231,10 @@ public class SingleBooks extends Activity implements TextWatcher,
 		firstPrecio = precios.nextToken();
 		secondPrecio = precios.nextToken();
 	}
-	
+
 	private void verificarEmpty() {
 		// TODO Auto-generated method stub
-		if (tvSingleInfo.getText().toString()
-				.equals("Información Adicional: "))
+		if (tvSingleInfo.getText().toString().equals("Información Adicional: "))
 			tvSingleInfo.setVisibility(View.GONE);
 		else
 			tvSingleInfo.setVisibility(View.VISIBLE);
@@ -250,7 +250,6 @@ public class SingleBooks extends Activity implements TextWatcher,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_REPLY);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			if (r.getStatusLine().getStatusCode() == 200) {
@@ -318,8 +317,10 @@ public class SingleBooks extends Activity implements TextWatcher,
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
-						JSONObject profile_pic = usuarios.getJSONObject("profile_pic");
-						resultRow.thumbnail_url = profile_pic.getString("thumbnail_url");
+						JSONObject profile_pic = usuarios
+								.getJSONObject("profile_pic");
+						resultRow.thumbnail_url = profile_pic
+								.getString("thumbnail_url");
 						arrayReply.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -363,7 +364,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 
 		public TextView tvTextLV = null, tvNameLV = null, tvFechaLV = null;
 		public ImageView ivReplyPic;
-		
+
 		ViewHolder(View row) {
 			tvFechaLV = (TextView) row.findViewById(R.id.tvFechaLV);
 			tvTextLV = (TextView) row.findViewById(R.id.tvTextLV);
@@ -435,8 +436,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		try {
 			StringBuilder url = new StringBuilder(
 					"http://10.0.2.2:3000/api/v1/groups/" + idGrupos
-							+ "/books.json?auth_token=");
-			url.append(token);
+							+ "/books.json?auth_token=" + token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
@@ -458,7 +458,6 @@ public class SingleBooks extends Activity implements TextWatcher,
 						JSONObject json_data = jArray.getJSONObject(i);
 						newTiempo resultRow = new newTiempo();
 						resultRow.id = json_data.getString("id");
-
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
@@ -532,7 +531,6 @@ public class SingleBooks extends Activity implements TextWatcher,
 	private void postResponder() {
 		// TODO Auto-generated method stub
 		StringBuilder url = new StringBuilder(URL_REPLY);
-		url.append(token);
 		client = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoResponder = etComentarioBooks.getText().toString();

@@ -109,7 +109,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 			if (etTitle.getText().toString().equals("")
 					|| etAuthor.getText().toString().equals("")
 					|| etPublisher.getText().toString().equals("")
-					|| etContact.getText().toString().equals("")
 					|| (etPrice.getText().toString().equals(""))
 					&& selected == "Alquiler"
 					|| (etPrice.getText().toString().equals(""))
@@ -128,11 +127,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 					etPublisher.requestFocus();
 					Toast.makeText(getBaseContext(),
 							"Editorial no puede estar vacío.",
-							Toast.LENGTH_SHORT).show();
-				} else if (etContact.getText().toString().equals("")) {
-					etContact.requestFocus();
-					Toast.makeText(getBaseContext(),
-							"Información de Conctacto no puede estar vacío.",
 							Toast.LENGTH_SHORT).show();
 				} else if (etPrice.getText().toString().equals("")
 						&& selected == "Venta") {
@@ -175,9 +169,8 @@ public class CrearBooks extends Activity implements OnClickListener,
 	private void postData() {
 		// TODO Auto-generated method stub
 		String url_books = "http://10.0.2.2:3000/api/v1/groups/" + gruposId
-				+ "/books.json?auth_token=";
+				+ "/books.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_books);
-		url.append(token);
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String titulo = etTitle.getText().toString();

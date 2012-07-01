@@ -180,7 +180,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		bResponder.setEnabled(false);
 		etComentario.addTextChangedListener(this);
 		URL_REPLIES = "http://10.0.2.2:3000/api/v1/posts/" + sIdPost
-				+ "/replies.json?auth_token=";
+				+ "/replies.json?auth_token=" + token;
 		lvComentarios.setDivider(null);
 		tvText.setMovementMethod(LinkMovementMethod.getInstance());
 		ivProfileSinglePost = (ImageView) findViewById(R.id.ivProfileSinglePost);
@@ -196,7 +196,6 @@ public class SinglePost extends Activity implements OnClickListener,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_REPLIES);
-			url.append(token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			if (r.getStatusLine().getStatusCode() == 200) {
@@ -366,8 +365,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		try {
 			StringBuilder url = new StringBuilder(
 					"http://10.0.2.2:3000/api/v1/groups/" + idGrupos
-							+ "/posts.json?auth_token=");
-			url.append(token);
+							+ "/posts.json?auth_token=" + token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);
 			int status = r.getStatusLine().getStatusCode();
@@ -389,7 +387,6 @@ public class SinglePost extends Activity implements OnClickListener,
 						JSONObject json_data = jArray.getJSONObject(i);
 						newTiempo resultRow = new newTiempo();
 						resultRow.id = json_data.getString("id");
-
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
@@ -463,7 +460,6 @@ public class SinglePost extends Activity implements OnClickListener,
 	private void postResponder() {
 		// TODO Auto-generated method stub
 		StringBuilder url = new StringBuilder(URL_REPLIES);
-		url.append(token);
 		client = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoResponder = etComentario.getText().toString();

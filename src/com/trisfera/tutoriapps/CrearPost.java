@@ -42,7 +42,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	Typeface font;
 	int contador = 0;
 	String[] gid, gnombre;
-	final static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +110,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	private void postData() {
 		// TODO Auto-generated method stub
 		String url_post = "http://10.0.2.2:3000/api/v1/groups/" + gruposId
-				+ "/posts.json?auth_token=";
+				+ "/posts.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_post);
-		url.append(token);
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
 		String contenidoPost = etCrearPost.getText().toString();
