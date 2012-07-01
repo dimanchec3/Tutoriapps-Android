@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -28,6 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -38,11 +41,11 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class Libros extends Activity implements OnClickListener,
-		OnItemClickListener {
+		OnItemClickListener, OnScrollListener {
 
 	Button bLibros, bInicio, bPizarra, bCrearBooks;
-	String token = "", URL_BOOKS, idGrupo = "home", horaAgo, SuperTiempo, URL,
-			FILENAME;
+	String token = "", URL_BOOKS, horaAgo, SuperTiempo,
+			FILENAME, posicionId = "home";
 	Bundle extras;
 	TextView tvHeader;
 	String[] gid, gnombre, fechaformato;
@@ -55,7 +58,8 @@ public class Libros extends Activity implements OnClickListener,
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
-	int contador = 0;
+	int contador = 0, currentFirstVisibleItem, currentVisibleItemCount,
+			totalItem, currentScrollState, valorUltimo, superTotal, nuevo = 0, ultimoItem;
 	MyAdapter myAdapter;
 	ArrayList<Books> arrayBooks = new ArrayList<Books>();
 	FancyAdapter aa = null;
@@ -119,6 +123,9 @@ public class Libros extends Activity implements OnClickListener,
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
+		valorUltimo = 0;
+		nuevo = 0;
+		myListView.setOnScrollListener(this);
 	}
 
 	private void getTiempo() {
@@ -159,6 +166,9 @@ public class Libros extends Activity implements OnClickListener,
 					int position, long id) {
 				URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/"
 						+ gid[position].toString() + "/books.json?auth_token=";
+				posicionId = gid[position].toString();
+				valorUltimo = 0;
+				nuevo = 0;
 				aa.clear();
 				getData();
 			}
@@ -299,6 +309,11 @@ public class Libros extends Activity implements OnClickListener,
 							"Error convirtiendo el resultado" + e1.toString());
 				}
 				myListView.setAdapter(aa);
+				if (ultimoItem == 1) {
+					myListView.setSelection(superTotal);
+					nuevo = nuevo + superTotal;
+				}
+				ultimoItem = 0;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -437,16 +452,16 @@ public class Libros extends Activity implements OnClickListener,
 					+ r.author));
 			tvPublisherBooks.setText(Html.fromHtml("<b>" + "Editorial: "
 					+ " </b>" + r.publisher));
-			tvContactInfoBooks.setText(Html.fromHtml("<b>"
-					+ "Contacto: " + " </b>" + r.contact_info));
+			tvContactInfoBooks.setText(Html.fromHtml("<b>" + "Contacto: "
+					+ " </b>" + r.contact_info));
 			tvOfferTypeBooks.setText(Html.fromHtml("<b>" + "Para: " + "</b>"
 					+ oferta));
 			tvDateBooks.setText(r.created_at);
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
 			tvIdGroupBook.setText(r.group_id);
-			tvPriceBooks.setText(Html.fromHtml(String.format("<b>"
-					+ "Precio: " + "</b>" + "$%.2f", Float.valueOf(r.price))));
+			tvPriceBooks.setText(Html.fromHtml(String.format("<b>" + "Precio: "
+					+ "</b>" + "$%.2f", Float.valueOf(r.price))));
 			tvAditionalInfoBooks.setText(Html.fromHtml("<b>"
 					+ "Información Adicional: " + "</b>" + r.additional_info));
 			verificarEmpty();
@@ -529,6 +544,39 @@ public class Libros extends Activity implements OnClickListener,
 			iSingleBooks.putExtras(extras);
 			startActivityForResult(iSingleBooks, 0);
 			break;
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView arg0, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		currentFirstVisibleItem = firstVisibleItem;
+		currentVisibleItemCount = visibleItemCount;
+		totalItem = totalItemCount;
+
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+		// TODO Auto-generated method stub
+		currentScrollState = scrollState;
+		if (valorUltimo <= 0)
+			isScrollCompleted();
+	}
+
+	private void isScrollCompleted() {
+		// TODO Auto-generated method stub
+		int min, lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+		superTotal = lastitem + nuevo;
+		min = (arrayBooks.size() + superTotal) / superTotal;
+		if (min >= 1 && lastitem == totalItem
+				&& currentScrollState == SCROLL_STATE_IDLE) {
+			URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/" + posicionId
+					+ "/books.json?auth_token=" + token + "&older_than="
+					+ fechaformato[fechaformato.length - 1] + "&count=5";
+			ultimoItem = 1;
+			getData();
 		}
 	}
 }

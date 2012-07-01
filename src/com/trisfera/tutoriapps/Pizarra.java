@@ -61,7 +61,7 @@ public class Pizarra extends Activity implements OnClickListener,
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
-	int contador = 0, ultimoItem = 0, posicion, currentFirstVisibleItem,
+	int contador = 0, ultimoItem = 0, currentFirstVisibleItem,
 			currentVisibleItemCount, currentScrollState, totalItem, superTotal,
 			nuevo = 0, cantidadGrupos, valorUltimo;
 	Gallery myHorizontalListView;
@@ -515,8 +515,7 @@ public class Pizarra extends Activity implements OnClickListener,
 	}
 
 	private void isScrollCompleted() {
-		int min;
-		int lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+		int min, lastitem = currentFirstVisibleItem + currentVisibleItemCount;
 		superTotal = lastitem + nuevo;
 		min = (arregloPizarra.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
