@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,8 +69,9 @@ public class Pizarra extends Activity implements OnClickListener,
 	MyAdapter myAdapter;
 	FancyAdapter aa = null;
 	ListView myListView;
-	URL thumb_url = null;
-	Bitmap thumb_image = null;
+	URL thumb_url = null, url_profile;
+	Bitmap thumb_image = null, image_profile;
+	ImageView ivProfileBoard;
 
 	class Tiempo {
 		public String tiempo_string;
@@ -86,6 +86,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public String id_groups;
 		public String thumbnail_url;
 		public String url;
+		public String thumbnail_profile;
 	}
 
 	@Override
@@ -178,6 +179,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		bLibros = (Button) findViewById(R.id.bLibros);
 		bCrearPic = (Button) findViewById(R.id.bCrearPic);
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
+		ivProfileBoard = (ImageView) findViewById(R.id.ivProfileBoard);
 		bPizarra.setBackgroundColor(Color.rgb(211, 232, 163));
 		bInicio.setOnClickListener(this);
 		bPizarra.setOnClickListener(this);
@@ -198,7 +200,8 @@ public class Pizarra extends Activity implements OnClickListener,
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
-		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token=" + token;
+		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token="
+				+ token;
 		myListView = (ListView) findViewById(R.id.lvImages);
 		myListView.setOnItemClickListener(this);
 		myListView.setVerticalFadingEdgeEnabled(false);
@@ -398,6 +401,11 @@ public class Pizarra extends Activity implements OnClickListener,
 						resultRow.name = usuarios.getString("name");
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.id_groups = grupos.getString("name");
+						JSONObject owner = json_data.getJSONObject("owner");
+						JSONObject profile_pic = owner
+								.getJSONObject("profile_pic");
+						resultRow.thumbnail_profile = profile_pic
+								.getString("thumbnail_url");
 						arregloPizarra.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -431,7 +439,12 @@ public class Pizarra extends Activity implements OnClickListener,
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
-			holder.populateFrom(arregloPizarra.get(position));
+			try {
+				holder.populateFrom(arregloPizarra.get(position));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return (convertView);
 		}
 	}
@@ -443,7 +456,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public TextView tvGroupBoard = null;
 		public TextView tvThumbnailURL = null;
 		public TextView tvURL = null;
-		public ImageView ivPizarra;
+		public ImageView ivPizarra, ivProfileBoard;
 		public TextView tvComentarios = null;
 
 		ViewHolder(View row) {
@@ -454,26 +467,23 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvURL = (TextView) row.findViewById(R.id.tvURL);
 			tvComentarios = (TextView) row.findViewById(R.id.tvComentarios);
 			ivPizarra = (ImageView) row.findViewById(R.id.ivImagen);
+			ivProfileBoard = (ImageView) row.findViewById(R.id.ivProfileBoard);
 		}
 
-		void populateFrom(Piz r) {
+		void populateFrom(Piz r) throws IOException {
 			tvNameBoard.setText(r.name);
 			tvGroupBoard.setText(r.id_groups);
 			tvFechaBoard.setText(r.created_at);
 			tvClassDate.setText("Pizarra del día: " + r.class_date);
 			tvURL.setText("http://10.0.2.2:3000" + r.url);
-			try {
-				thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
-				thumb_image = BitmapFactory.decodeStream(thumb_url
-						.openConnection().getInputStream());
-			} catch (MalformedURLException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
+			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+					.getInputStream());
 			ivPizarra.setImageBitmap(thumb_image);
+			url_profile = new URL("http://10.0.2.2:3000" + r.thumbnail_profile);
+			image_profile = BitmapFactory.decodeStream(url_profile
+					.openConnection().getInputStream());
+			ivProfileBoard.setImageBitmap(image_profile);
 			tvNameBoard.setTypeface(font, 1);
 			tvClassDate.setTypeface(font);
 			tvFechaBoard.setTypeface(font);
@@ -521,7 +531,7 @@ public class Pizarra extends Activity implements OnClickListener,
 				&& currentScrollState == SCROLL_STATE_IDLE) {
 			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
 					+ "/board_pics.json?auth_token=" + token + "&older_than="
-					+ fechaclase[fechaclase.length-1] + "T00:00:00Z&count=5";
+					+ fechaclase[fechaclase.length - 1] + "T00:00:00Z&count=5";
 			try {
 				ultimoItem = 1;
 				getData();

@@ -48,10 +48,21 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
+        <ImageView
+            android:id="@+id/ivProfileSingleBooks"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:contentDescription="@string/imagen_perfil"
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="2.5dp" />
+
         <TextView
             android:id="@+id/tvNameBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivProfileSingleBooks"
+            android:paddingTop="2.5dp"
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="15dip"
@@ -61,22 +72,9 @@
             android:id="@+id/tvDateBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameBooks"
-            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvNameBooks"
+            android:layout_toRightOf="@+id/ivProfileSingleBooks"
             android:text="@string/date"
-            android:textColor="#BDBDBD"
-            android:textSize="10dp" />
-
-        <TextView
-            android:id="@+id/tvSeparador2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvDateBooks"
-            android:layout_alignBottom="@+id/tvDateBooks"
-            android:layout_toLeftOf="@+id/tvDateBooks"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/separador"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
 
@@ -84,9 +82,9 @@
             android:id="@+id/tvGroupBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tvSeparador2"
-            android:layout_alignBottom="@+id/tvSeparador2"
-            android:layout_toLeftOf="@+id/tvSeparador2"
+            android:layout_alignBaseline="@+id/tvNameBooks"
+            android:layout_alignParentRight="true"
+            android:paddingRight="2.5dp"
             android:text="@string/group"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -95,9 +93,9 @@
             android:id="@+id/tvSingleTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvNameBooks"
+            android:layout_below="@+id/ivProfileSingleBooks"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:paddingTop="2.5dp"
             android:text="@string/text"
             android:textColor="#000000"
@@ -109,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSingleTitle"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp" />
@@ -120,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSingleAuthor"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp" />
@@ -131,7 +129,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSingleEditorial"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp"
@@ -143,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSingleInfo"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp" />
@@ -154,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvSingleContact"
             android:autoLink="web"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp" />
@@ -166,7 +164,7 @@
             android:layout_below="@+id/tvSingleOffer"
             android:autoLink="web"
             android:paddingBottom="2.5dp"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/text"
             android:textColor="#000000"
             android:textSize="12dp"

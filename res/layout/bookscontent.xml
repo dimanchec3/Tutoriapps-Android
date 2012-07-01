@@ -15,36 +15,48 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
+        <ImageView
+            android:id="@+id/ivProfileBooks"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/imagen_perfil"
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="2.5dp" />
+
         <TextView
             android:id="@+id/tvNameBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivProfileBooks"
+            android:paddingTop="2.5dp"
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="12dp" />
-        
+
         <TextView
             android:id="@+id/tvIdGroupBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvNameBooks"
             android:layout_toRightOf="@+id/tvNameBooks"
-            android:visibility="gone"/>
-        
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvIdPostBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvNameBooks"
             android:layout_toRightOf="@+id/tvIdGroupBook"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvGroupBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvNameBooks"
-            android:layout_toLeftOf="@+id/tvSeparador"
+            android:layout_alignParentRight="true"
+            android:paddingRight="2.5dp"
             android:text="@string/group"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -53,8 +65,8 @@
             android:id="@+id/tvTitleBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvNameBooks"
-            android:paddingLeft="2.5dp"
+            android:layout_below="@+id/ivProfileBooks"
+            android:paddingLeft="10dp"
             android:paddingTop="2.5dp"
             android:text="@string/class_date"
             android:textColor="#000000"
@@ -65,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvTitleBooks"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp" />
@@ -75,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvAuthorBooks"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp" />
@@ -85,29 +97,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvPublisherBooks"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:textColor="#000000"
             android:textSize="10dp"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/tvSeparador"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameBooks"
-            android:layout_toLeftOf="@+id/tvDateBooks"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="@string/separador"
-            android:textColor="#BDBDBD"
-            android:textSize="10dp" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvDateBooks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameBooks"
-            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvNameBooks"
+            android:layout_toRightOf="@+id/ivProfileBooks"
             android:text="@string/date"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvAditionalInfoBooks"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp" />
@@ -136,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvContactInfoBooks"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp" />
@@ -147,10 +147,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvOfferTypeBooks"
             android:paddingBottom="2.5dp"
-            android:paddingLeft="2.5dp"
+            android:paddingLeft="10dp"
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvSingleURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvIdBooksGroup"
+            android:layout_alignLeft="@+id/tvIdBooksGroup"
             android:visibility="gone" />
     </RelativeLayout>
 

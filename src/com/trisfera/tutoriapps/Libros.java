@@ -1,8 +1,10 @@
 package com.trisfera.tutoriapps;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,33 +21,38 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class Libros extends Activity implements OnClickListener,
 		OnItemClickListener, OnScrollListener {
 
 	Button bLibros, bInicio, bPizarra, bCrearBooks;
-	String token = "", URL_BOOKS, horaAgo, SuperTiempo,
-			FILENAME, posicionId = "home";
+	String token = "", URL_BOOKS, horaAgo, SuperTiempo, FILENAME,
+			posicionId = "home";
 	Bundle extras;
 	TextView tvHeader;
 	String[] gid, gnombre, fechaformato;
@@ -59,10 +66,13 @@ public class Libros extends Activity implements OnClickListener,
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
 	int contador = 0, currentFirstVisibleItem, currentVisibleItemCount,
-			totalItem, currentScrollState, valorUltimo, superTotal, nuevo = 0, ultimoItem;
+			totalItem, currentScrollState, valorUltimo, superTotal, nuevo = 0,
+			ultimoItem;
 	MyAdapter myAdapter;
 	ArrayList<Books> arrayBooks = new ArrayList<Books>();
 	FancyAdapter aa = null;
+	URL thumb_url;
+	Bitmap thumb_image;
 
 	class Books {
 		public String id;
@@ -78,6 +88,7 @@ public class Libros extends Activity implements OnClickListener,
 		public String owner_name;
 		public String group_id;
 		public String price;
+		public String thumbnail_url;
 	}
 
 	@Override
@@ -115,7 +126,8 @@ public class Libros extends Activity implements OnClickListener,
 		bInicio.setTypeface(font, 1);
 		bPizarra.setTypeface(font, 1);
 		bLibros.setTypeface(font, 1);
-		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token=" + token;
+		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token="
+				+ token;
 		myListView = (ListView) findViewById(R.id.lvBooks);
 		myListView.setVerticalFadingEdgeEnabled(false);
 		myListView.setOnItemClickListener(this);
@@ -305,6 +317,11 @@ public class Libros extends Activity implements OnClickListener,
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.group_name = grupos.getString("name");
 						resultRow.group_id = grupos.getString("id");
+						JSONObject owner = json_data.getJSONObject("owner");
+						JSONObject profile_pic = owner
+								.getJSONObject("profile_pic");
+						resultRow.thumbnail_url = profile_pic
+								.getString("thumbnail_url");
 						arrayBooks.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -396,7 +413,12 @@ public class Libros extends Activity implements OnClickListener,
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
-			holder.populateFrom(arrayBooks.get(position));
+			try {
+				holder.populateFrom(arrayBooks.get(position));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return (convertView);
 		}
 	}
@@ -415,6 +437,8 @@ public class Libros extends Activity implements OnClickListener,
 		public TextView tvReplyCountBooks = null;
 		public TextView tvIdPostBook = null;
 		public TextView tvPriceBooks = null;
+		public TextView tvSingleURL = null;
+		public ImageView ivProfileBooks = null;
 
 		ViewHolder(View row) {
 			tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
@@ -435,9 +459,11 @@ public class Libros extends Activity implements OnClickListener,
 					.findViewById(R.id.tvReplyCountBooks);
 			tvIdPostBook = (TextView) row.findViewById(R.id.tvIdPostBook);
 			tvPriceBooks = (TextView) row.findViewById(R.id.tvPriceBooks);
+			tvSingleURL = (TextView) row.findViewById(R.id.tvSingleURL);
+			ivProfileBooks = (ImageView) row.findViewById(R.id.ivProfileBooks);
 		}
 
-		void populateFrom(Books r) {
+		void populateFrom(Books r) throws IOException {
 			String oferta = null;
 			if (r.offer_type.equals("loan"))
 				oferta = "Alquiler";
@@ -463,11 +489,16 @@ public class Libros extends Activity implements OnClickListener,
 			tvGroupBooks.setText(r.group_name);
 			tvReplyCountBooks.setText(r.reply_count);
 			tvIdGroupBook.setText(r.group_id);
+			tvSingleURL.setText(r.thumbnail_url);
 			tvPriceBooks.setText(Html.fromHtml(String.format("<b>" + "Precio: "
 					+ "</b>" + "$%.2f", Float.valueOf(r.price))));
 			tvAditionalInfoBooks.setText(Html.fromHtml("<b>"
 					+ "Información Adicional: " + "</b>" + r.additional_info));
 			verificarEmpty();
+			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
+			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+					.getInputStream());
+			ivProfileBooks.setImageBitmap(thumb_image);
 			tvNameBooks.setTypeface(font, 1);
 			tvTitleBooks.setTypeface(font);
 			tvAuthorBooks.setTypeface(font);
@@ -483,14 +514,23 @@ public class Libros extends Activity implements OnClickListener,
 
 		private void verificarEmpty() {
 			// TODO Auto-generated method stub
+			if (tvContactInfoBooks.getText().toString()
+					.equals("Contacto: "))
+				tvContactInfoBooks.setVisibility(View.GONE);
+			else
+				tvContactInfoBooks.setVisibility(View.VISIBLE);
 			if (tvAditionalInfoBooks.getText().toString()
 					.equals("Información Adicional: "))
 				tvAditionalInfoBooks.setVisibility(View.GONE);
 			else
 				tvAditionalInfoBooks.setVisibility(View.VISIBLE);
-			if (tvPriceBooks.getText().toString().equals("Precio: $0.00"))
+			if (tvPriceBooks.getText().toString().equals("Precio: $0.00")) {
 				tvPriceBooks.setVisibility(View.GONE);
-			else
+				Resources resources = tvPriceBooks.getResources();
+			    DisplayMetrics metrics = resources.getDisplayMetrics();
+			    float px = 10 * (metrics.densityDpi/160f);
+				tvOfferTypeBooks.setPadding((int) px, 0, 0, 0);
+			} else
 				tvPriceBooks.setVisibility(View.VISIBLE);
 		}
 	}
@@ -528,6 +568,8 @@ public class Libros extends Activity implements OnClickListener,
 					.getText().toString();
 			String tvIdBook = ((TextView) arg1.findViewById(R.id.tvIdGroupBook))
 					.getText().toString();
+			String SingleURL = ((TextView) arg1.findViewById(R.id.tvSingleURL))
+					.getText().toString();
 			iSingleBooks.putExtra("nombre", nombre);
 			iSingleBooks.putExtra("fecha", fecha);
 			iSingleBooks.putExtra("grupo", grupo);
@@ -541,6 +583,7 @@ public class Libros extends Activity implements OnClickListener,
 			iSingleBooks.putExtra("token", token);
 			iSingleBooks.putExtra("idGrupos", tvIdBook);
 			iSingleBooks.putExtra("idPost", idPost);
+			iSingleBooks.putExtra("SingleURL", SingleURL);
 			extras.putStringArray("gid", gid);
 			extras.putStringArray("gnombre", gnombre);
 			extras.putInt("cantidadGrupos", cantidadGrupos);

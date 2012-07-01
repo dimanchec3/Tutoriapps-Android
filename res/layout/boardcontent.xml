@@ -15,10 +15,21 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
 
+        <ImageView
+            android:id="@+id/ivProfileBoard"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/imagen_perfil"
+            android:paddingLeft="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingTop="2.5dp" />
+
         <TextView
             android:id="@+id/tvNameBoard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivProfileBoard"
+            android:paddingTop="2.5dp"
             android:text="@string/name"
             android:textColor="#1CCE28"
             android:textSize="12dp" />
@@ -28,7 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tvNameBoard"
-            android:layout_toLeftOf="@+id/tvSeparador"
+            android:layout_alignParentRight="true"
+            android:paddingRight="2.5dp"
             android:text="@string/group"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -42,25 +54,13 @@
             android:text="@string/class_date"
             android:textColor="#000000"
             android:textSize="10dp" />
-        
-        <TextView
-            android:id="@+id/tvSeparador"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameBoard"
-            android:layout_toLeftOf="@+id/tvFechaBoard"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="@string/separador"
-            android:textColor="#BDBDBD"
-            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/tvFechaBoard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameBoard"
-            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvNameBoard"
+            android:layout_toRightOf="@+id/ivProfileBoard"
             android:text="@string/date"
             android:textColor="#BDBDBD"
             android:textSize="10dp" />
@@ -78,19 +78,18 @@
             android:id="@+id/ivImagen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvNameBoard"
-            android:contentDescription="@string/post_imagen"
+            android:layout_below="@+id/ivProfileBoard"
+            android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
-            android:layout_centerHorizontal="true"/>
+            android:contentDescription="@string/post_imagen" />
 
         <TextView
             android:id="@+id/tvURL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvClassDate"
-            android:layout_centerHorizontal="true" 
-            android:visibility="gone"/>
-
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout

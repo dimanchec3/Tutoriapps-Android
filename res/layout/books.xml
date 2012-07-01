@@ -36,7 +36,7 @@
             android:layout_width="34dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
-            android:background="@drawable/custom_crearpic"
+            android:background="@drawable/custom_crear"
             android:paddingBottom="24dp" />
     </RelativeLayout>
 

@@ -37,10 +37,10 @@
             android:id="@+id/tvFechaLV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvNameLV"
-            android:layout_alignParentRight="true"
             android:text="@string/date"
             android:textColor="#8B8B8B"
+            android:layout_toRightOf="@+id/ivReplyPic"
+            android:layout_below="@+id/tvNameLV"
             android:textSize="10dp" />
 
         <TextView

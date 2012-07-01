@@ -62,7 +62,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 			idGrupos, firstTitulo, secondAutor, firstAutor, secondTitulo,
 			firstEditorial, secondEditorial, firstInfo, secondInfo,
 			firstContacto, secondContacto, firstOferta, secondOferta,
-			firstPrecio, secondPrecio;
+			firstPrecio, secondPrecio, SingleURL;
 	Typeface font;
 	HttpPost httppost;
 	HttpClient client;
@@ -76,6 +76,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 	FancyAdapter aa = null;
 	URL thumb_url;
 	Bitmap thumb_image;
+	ImageView ivProfileSingleBooks;
 
 	class Reply {
 		public String text;
@@ -95,7 +96,12 @@ public class SingleBooks extends Activity implements TextWatcher,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.singlebooks);
-		initialize();
+		try {
+			initialize();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		getTiempo();
 		getRespuestas();
 	}
@@ -130,7 +136,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		}
 	}
 
-	private void initialize() {
+	private void initialize() throws IOException {
 		// TODO Auto-generated method stub
 		tvNameBooks = (TextView) findViewById(R.id.tvNameBooks);
 		tvDateBooks = (TextView) findViewById(R.id.tvDateBooks);
@@ -146,6 +152,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		etComentarioBooks = (EditText) findViewById(R.id.etComentarioBooks);
 		bResponderBooks = (Button) findViewById(R.id.bResponderBooks);
 		bCrearBooks = (Button) findViewById(R.id.bCrearBooks);
+		ivProfileSingleBooks = (ImageView) findViewById(R.id.ivProfileSingleBooks);
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		lvComentariosBooks.setVerticalFadingEdgeEnabled(false);
 		lvComentariosBooks.setDivider(null);
@@ -155,6 +162,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		token = extras.getString("token");
 		idGrupos = extras.getString("idGrupos");
 		idPost = extras.getString("idPost");
+		SingleURL = extras.getString("SingleURL");
 		URL_REPLY = "http://10.0.2.2:3000/api/v1/books/" + idPost
 				+ "/replies.json?auth_token=" + token;
 		gnombre = extras.getStringArray("gnombre");
@@ -205,6 +213,10 @@ public class SingleBooks extends Activity implements TextWatcher,
 		bCrearBooks.setOnClickListener(this);
 		bCrearBooks.setTypeface(font);
 		etComentarioBooks.addTextChangedListener(this);
+		thumb_url = new URL("http://10.0.2.2:3000" + SingleURL);
+		thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
+				.getInputStream());
+		ivProfileSingleBooks.setImageBitmap(thumb_image);
 	}
 
 	private void splitter() {
@@ -234,6 +246,10 @@ public class SingleBooks extends Activity implements TextWatcher,
 
 	private void verificarEmpty() {
 		// TODO Auto-generated method stub
+		if (tvSingleContact.getText().toString().equals("Contacto: "))
+			tvSingleContact.setVisibility(View.GONE);
+		else
+			tvSingleContact.setVisibility(View.VISIBLE);
 		if (tvSingleInfo.getText().toString().equals("Información Adicional: "))
 			tvSingleInfo.setVisibility(View.GONE);
 		else
