@@ -46,7 +46,6 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Pizarra extends Activity implements OnClickListener,
 		OnItemClickListener, OnScrollListener {
@@ -58,13 +57,13 @@ public class Pizarra extends Activity implements OnClickListener,
 	Typeface font;
 	Bundle extras;
 	ProgressDialog pDialog;
-	String[] gid, gnombre, fechaformato;
+	String[] gid, gnombre, fechaformato, fechaclase;
 	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
 	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
 	int contador = 0, ultimoItem = 0, posicion, currentFirstVisibleItem,
 			currentVisibleItemCount, currentScrollState, totalItem, superTotal,
-			first;
+			nuevo = 0, cantidadGrupos, valorUltimo;
 	Gallery myHorizontalListView;
 	ArrayList<Piz> arregloPizarra = new ArrayList<Piz>();
 	ArrayList<Tiempo> arrayTime = new ArrayList<Tiempo>();
@@ -73,7 +72,6 @@ public class Pizarra extends Activity implements OnClickListener,
 	ListView myListView;
 	URL thumb_url = null;
 	Bitmap thumb_image = null;
-	Integer valor = 0, cantidadGrupos;
 
 	class Tiempo {
 		public String tiempo_string;
@@ -119,8 +117,8 @@ public class Pizarra extends Activity implements OnClickListener,
 						+ gid[position].toString()
 						+ "/board_pics.json?auth_token=";
 				posicionid = gid[position].toString();
-				first = 0;
-				valor = position;
+				nuevo = 0;
+				valorUltimo = 0;
 				aa.clear();
 				try {
 					getData();
@@ -206,7 +204,8 @@ public class Pizarra extends Activity implements OnClickListener,
 		myListView.setVerticalFadingEdgeEnabled(false);
 		aa = new FancyAdapter();
 		myListView.setOnScrollListener(this);
-		first = 0;
+		nuevo = 0;
+		valorUltimo = 0;
 	}
 
 	@Override
@@ -335,12 +334,19 @@ public class Pizarra extends Activity implements OnClickListener,
 					webs.close();
 					result = sb.toString();
 					JSONArray jArray = new JSONArray(result);
+					if (jArray.length() == 0) {
+						valorUltimo = 1;
+						return;
+					}
 					for (int i = 0; i < jArray.length(); i++) {
 						JSONObject json_data = jArray.getJSONObject(i);
 						Piz resultRow = new Piz();
 						String creado = json_data.getString("created_at");
 						fechaformato = new String[jArray.length()];
 						fechaformato[i] = creado;
+						String clasefecha = json_data.getString("class_date");
+						fechaclase = new String[jArray.length()];
+						fechaclase[i] = clasefecha;
 						String eventTime = new String(creado);
 						String currentTime = new String(SuperTiempo);
 						SimpleDateFormat sdf = new SimpleDateFormat(
@@ -393,7 +399,6 @@ public class Pizarra extends Activity implements OnClickListener,
 						resultRow.name = usuarios.getString("name");
 						JSONObject grupos = json_data.getJSONObject("group");
 						resultRow.id_groups = grupos.getString("name");
-
 						arregloPizarra.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -403,7 +408,7 @@ public class Pizarra extends Activity implements OnClickListener,
 				myListView.setAdapter(aa);
 				if (ultimoItem == 1) {
 					myListView.setSelection(superTotal);
-					superTotal += superTotal;
+					nuevo = nuevo + superTotal;
 				}
 				ultimoItem = 0;
 			}
@@ -440,6 +445,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		public TextView tvThumbnailURL = null;
 		public TextView tvURL = null;
 		public ImageView ivPizarra;
+		public TextView tvComentarios = null;
 
 		ViewHolder(View row) {
 			tvNameBoard = (TextView) row.findViewById(R.id.tvNameBoard);
@@ -447,6 +453,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvFechaBoard = (TextView) row.findViewById(R.id.tvFechaBoard);
 			tvGroupBoard = (TextView) row.findViewById(R.id.tvGroupBoard);
 			tvURL = (TextView) row.findViewById(R.id.tvURL);
+			tvComentarios = (TextView) row.findViewById(R.id.tvComentarios);
 			ivPizarra = (ImageView) row.findViewById(R.id.ivImagen);
 		}
 
@@ -472,6 +479,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvClassDate.setTypeface(font);
 			tvFechaBoard.setTypeface(font);
 			tvGroupBoard.setTypeface(font);
+			tvComentarios.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -502,11 +510,30 @@ public class Pizarra extends Activity implements OnClickListener,
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
 		currentScrollState = scrollState;
-		isScrollCompleted();
+		if (valorUltimo <= 0)
+			isScrollCompleted();
 	}
 
 	private void isScrollCompleted() {
-		Toast.makeText(getBaseContext(), "No funciona aún el loading...", 1000)
-				.show();
+		int min;
+		int lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+		superTotal = lastitem + nuevo;
+		min = (arregloPizarra.size() + superTotal) / superTotal;
+		if (min >= 1 && lastitem == totalItem
+				&& currentScrollState == SCROLL_STATE_IDLE) {
+			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
+					+ "/board_pics.json?auth_token=" + token + "&older_than="
+					+ fechaclase[fechaclase.length-1] + "T00:00:00Z&count=5";
+			try {
+				ultimoItem = 1;
+				getData();
+			} catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ConnectionClosedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
