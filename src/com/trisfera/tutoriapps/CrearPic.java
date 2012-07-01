@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
@@ -61,7 +62,7 @@ public class CrearPic extends Activity implements OnClickListener,
 	Bitmap bmp;
 	HttpClient httpclient;
 	ArrayList<NameValuePair> nameValuePairs;
-	String[] gid, gnombre;
+	String[] gid, gnombre, newgid, newgnombre;
 	Integer cantidadGrupos, contador=0;
 	TextView tvVerFecha, tvNotaFecha;
 	private int anio, mes, dia;
@@ -95,6 +96,8 @@ public class CrearPic extends Activity implements OnClickListener,
 		extras = getIntent().getExtras();
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
+		newgid = Arrays.copyOfRange(gid, 1, gid.length);
+		newgnombre = Arrays.copyOfRange(gnombre, 1, gnombre.length);
 		token = extras.getString("token");
 		cantidadGrupos = extras.getInt("cantidadGrupos");
 		bPostearPic.setEnabled(false);
@@ -157,7 +160,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		ArrayAdapter adaptador = new ArrayAdapter(this,
-				android.R.layout.simple_spinner_item, gnombre);
+				android.R.layout.simple_spinner_item, newgnombre);
 		adaptador
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sGrupos.setAdapter(adaptador);
@@ -284,8 +287,8 @@ public class CrearPic extends Activity implements OnClickListener,
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
-		gruposId = gid[pos].toString();
-		if (gruposId.equals("home") || SuperFecha == null)
+		gruposId = newgid[pos].toString();
+		if (SuperFecha == null)
 			bPostearPic.setEnabled(false);
 		else
 			bPostearPic.setEnabled(true);
