@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -32,6 +33,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,9 +256,14 @@ public class SingleBooks extends Activity implements TextWatcher,
 			tvSingleInfo.setVisibility(View.GONE);
 		else
 			tvSingleInfo.setVisibility(View.VISIBLE);
-		if (tvSinglePrice.getText().toString().equals("Precio: $0.00"))
+		if (tvSinglePrice.getText().toString().equals("Precio: $0.00")) {
 			tvSinglePrice.setVisibility(View.GONE);
-		else
+			Resources resources = tvSinglePrice.getResources();
+			DisplayMetrics metrics = resources.getDisplayMetrics();
+			float px = 10 * (metrics.densityDpi / 160f);
+			float px2 = (float) (2.5 * (metrics.densityDpi / 160f));
+			tvSingleOffer.setPadding((int) px, 0, 0, (int) px2);
+		} else
 			tvSinglePrice.setVisibility(View.VISIBLE);
 	}
 

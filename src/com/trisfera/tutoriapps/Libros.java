@@ -514,8 +514,7 @@ public class Libros extends Activity implements OnClickListener,
 
 		private void verificarEmpty() {
 			// TODO Auto-generated method stub
-			if (tvContactInfoBooks.getText().toString()
-					.equals("Contacto: "))
+			if (tvContactInfoBooks.getText().toString().equals("Contacto: "))
 				tvContactInfoBooks.setVisibility(View.GONE);
 			else
 				tvContactInfoBooks.setVisibility(View.VISIBLE);
@@ -527,9 +526,10 @@ public class Libros extends Activity implements OnClickListener,
 			if (tvPriceBooks.getText().toString().equals("Precio: $0.00")) {
 				tvPriceBooks.setVisibility(View.GONE);
 				Resources resources = tvPriceBooks.getResources();
-			    DisplayMetrics metrics = resources.getDisplayMetrics();
-			    float px = 10 * (metrics.densityDpi/160f);
-				tvOfferTypeBooks.setPadding((int) px, 0, 0, 0);
+				DisplayMetrics metrics = resources.getDisplayMetrics();
+				float px = 10 * (metrics.densityDpi / 160f);
+				float px2 = (float) (2.5 * (metrics.densityDpi / 160f));
+				tvOfferTypeBooks.setPadding((int) px, 0, 0, (int) px2);
 			} else
 				tvPriceBooks.setVisibility(View.VISIBLE);
 		}
