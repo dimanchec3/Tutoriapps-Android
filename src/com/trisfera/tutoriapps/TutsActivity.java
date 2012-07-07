@@ -188,4 +188,11 @@ public class TutsActivity extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		tvWarning.setVisibility(View.INVISIBLE);
 	}
+	
+	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  // TODO Auto-generated method stub
+	  super.onActivityResult(requestCode, resultCode, data);
+	  if (resultCode == RESULT_OK)
+	   finish();
+	 }
 }
