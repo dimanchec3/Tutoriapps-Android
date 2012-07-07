@@ -112,7 +112,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 				tvWarning.setText("Favor introducir e-mail.");
 				etUser.requestFocus();
 			} else {
-				tvWarning.setText("Favor introducir contraseña.");
+				tvWarning.setText("Favor introducir contraseÃ±a.");
 				etPass.requestFocus();
 			}
 		} else {
@@ -124,7 +124,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				response = httpclient.execute(httppost);
 				if (response.getStatusLine().getStatusCode() == 200) {
-					pDialog = ProgressDialog.show(this, "Iniciando sesión",
+					pDialog = ProgressDialog.show(this, "Iniciando sesiÃ³n",
 							"Cargando...");
 					entity = response.getEntity();
 					if (entity != null) {
@@ -138,7 +138,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 						acasa();
 					}
 				} else
-					tvWarning.setText("E-mail o contraseña inválidos.");
+					tvWarning.setText("E-mail o contraseÃ±a invÃ¡lidos.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

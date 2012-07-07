@@ -34,7 +34,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 	Spinner sOffer, sGruposBooks;
 	Button bPostearBooks;
 	String[] gid, gnombre,
-			Tipos = { "Alquiler", "Préstamo", "Regalo", "Venta" };
+			Tipos = { "Alquiler", "PrÃ©stamo", "Regalo", "Venta" };
 	Bundle extras;
 	String token, gruposId, oferta, selected;
 	HttpClient httpclient;
@@ -116,29 +116,29 @@ public class CrearBooks extends Activity implements OnClickListener,
 				if (etTitle.getText().toString().equals("")) {
 					etTitle.requestFocus();
 					Toast.makeText(getBaseContext(),
-							"Título no puede estar vacío.", Toast.LENGTH_SHORT)
+							"TÃ­tulo no puede estar vacÃ­o.", Toast.LENGTH_SHORT)
 							.show();
 				} else if (etAuthor.getText().toString().equals("")) {
 					etAuthor.requestFocus();
 					Toast.makeText(getBaseContext(),
-							"Autor no puede estar vacío.", Toast.LENGTH_SHORT)
+							"Autor no puede estar vacÃ­o.", Toast.LENGTH_SHORT)
 							.show();
 				} else if (etPublisher.getText().toString().equals("")) {
 					etPublisher.requestFocus();
 					Toast.makeText(getBaseContext(),
-							"Editorial no puede estar vacío.",
+							"Editorial no puede estar vacÃ­o.",
 							Toast.LENGTH_SHORT).show();
 				} else if (etPrice.getText().toString().equals("")
 						&& selected == "Venta") {
 					etPrice.requestFocus();
 					Toast.makeText(getBaseContext(),
-							"Precio de venta no puede estar vacío.",
+							"Precio de venta no puede estar vacÃ­o.",
 							Toast.LENGTH_SHORT).show();
 				} else if (etPrice.getText().toString().equals("")
 						&& selected == "Alquiler") {
 					etPrice.requestFocus();
 					Toast.makeText(getBaseContext(),
-							"Precio de alquiler no puede estar vacío.",
+							"Precio de alquiler no puede estar vacÃ­o.",
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
@@ -215,7 +215,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 				etPrice.setVisibility(View.GONE);
 			if (Tipos[pos].toString() == "Venta")
 				oferta = "sale";
-			else if (Tipos[pos].toString() == "Préstamo")
+			else if (Tipos[pos].toString() == "PrÃ©stamo")
 				oferta = "borrow";
 			else if (Tipos[pos].toString() == "Regalo")
 				oferta = "gift";

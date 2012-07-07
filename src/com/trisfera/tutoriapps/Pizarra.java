@@ -367,19 +367,19 @@ public class Pizarra extends Activity implements OnClickListener,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -559,7 +559,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvNameBoard.setText(r.name);
 			tvGroupBoard.setText(r.id_groups);
 			tvFechaBoard.setText(r.created_at);
-			tvClassDate.setText("Pizarra del día: " + r.class_date);
+			tvClassDate.setText("Pizarra del dÃ­a: " + r.class_date);
 			tvURL.setText(r.url);
 			tvNameBoard.setTypeface(font, 1);
 			tvClassDate.setTypeface(font);

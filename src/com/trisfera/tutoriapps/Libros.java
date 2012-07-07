@@ -290,19 +290,19 @@ public class Libros extends Activity implements OnClickListener,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -538,10 +538,10 @@ public class Libros extends Activity implements OnClickListener,
 			else if (r.offer_type.equals("sale"))
 				oferta = "Venta";
 			else if (r.offer_type.equals("borrow"))
-				oferta = "Préstamo";
+				oferta = "PrÃ©stamo";
 			tvIdPostBook.setText(r.id);
 			tvNameBooks.setText(r.owner_name);
-			tvTitleBooks.setText(Html.fromHtml("<b>" + "Título: " + " </b>"
+			tvTitleBooks.setText(Html.fromHtml("<b>" + "TÃ­tulo: " + " </b>"
 					+ r.title));
 			tvAuthorBooks.setText(Html.fromHtml("<b>" + "Autor: " + " </b>"
 					+ r.author));
@@ -559,7 +559,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvPriceBooks.setText(Html.fromHtml(String.format("<b>" + "Precio: "
 					+ "</b>" + "$%.2f", Float.valueOf(r.price))));
 			tvAditionalInfoBooks.setText(Html.fromHtml("<b>"
-					+ "Información Adicional: " + "</b>" + r.additional_info));
+					+ "InformaciÃ³n Adicional: " + "</b>" + r.additional_info));
 			verificarEmpty();
 
 			tvNameBooks.setTypeface(font, 1);
@@ -582,7 +582,7 @@ public class Libros extends Activity implements OnClickListener,
 			else
 				tvContactInfoBooks.setVisibility(View.VISIBLE);
 			if (tvAditionalInfoBooks.getText().toString()
-					.equals("Información Adicional: "))
+					.equals("InformaciÃ³n Adicional: "))
 				tvAditionalInfoBooks.setVisibility(View.GONE);
 			else
 				tvAditionalInfoBooks.setVisibility(View.VISIBLE);

@@ -260,19 +260,19 @@ public class SinglePost extends Activity implements OnClickListener,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -313,7 +313,7 @@ public class SinglePost extends Activity implements OnClickListener,
 		switch (item.getItemId()) {
 
 		case R.id.logOut:
-			pDialog = ProgressDialog.show(this, "Cerrando sesión",
+			pDialog = ProgressDialog.show(this, "Cerrando sesiÃ³n",
 					"Cargando...");
 			deleteFile(FILENAME);
 			borrarToken(token);
@@ -432,19 +432,19 @@ public class SinglePost extends Activity implements OnClickListener,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -500,7 +500,7 @@ public class SinglePost extends Activity implements OnClickListener,
 			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 			else if (response.getStatusLine().getStatusCode() == 422)
-				Toast.makeText(getBaseContext(), "Comentario vacío.",
+				Toast.makeText(getBaseContext(), "Comentario vacÃ­o.",
 						Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			e.printStackTrace();

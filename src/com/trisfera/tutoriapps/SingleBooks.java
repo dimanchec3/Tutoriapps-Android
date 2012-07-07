@@ -279,7 +279,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 			tvSingleContact.setVisibility(View.GONE);
 		else
 			tvSingleContact.setVisibility(View.VISIBLE);
-		if (tvSingleInfo.getText().toString().equals("Información Adicional: "))
+		if (tvSingleInfo.getText().toString().equals("InformaciÃ³n Adicional: "))
 			tvSingleInfo.setVisibility(View.GONE);
 		else
 			tvSingleInfo.setVisibility(View.VISIBLE);
@@ -336,19 +336,19 @@ public class SingleBooks extends Activity implements TextWatcher,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -565,19 +565,19 @@ public class SingleBooks extends Activity implements TextWatcher,
 						long horaslong = diff / 3600000; // 60 por 60 por 1000
 						long diaslong = horaslong / 24;
 						long meseslong = diaslong / 31;
-						long añolong = meseslong / 12;
-						if (añolong == 1)
-							horaAgo = "hace " + añolong + " año ";
-						else if (añolong > 1)
-							horaAgo = "hace " + añolong + " años ";
+						long aÃ±olong = meseslong / 12;
+						if (aÃ±olong == 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±o ";
+						else if (aÃ±olong > 1)
+							horaAgo = "hace " + aÃ±olong + " aÃ±os ";
 						else if (meseslong == 1)
 							horaAgo = "hace " + meseslong + " mes ";
 						else if (meseslong > 1)
 							horaAgo = "hace " + meseslong + " meses ";
 						else if (diaslong == 1)
-							horaAgo = "hace " + diaslong + " día ";
+							horaAgo = "hace " + diaslong + " dÃ­a ";
 						else if (diaslong > 1)
-							horaAgo = "hace " + diaslong + " días ";
+							horaAgo = "hace " + diaslong + " dÃ­as ";
 						else if (horaslong == 1)
 							horaAgo = "hace " + horaslong + " hora ";
 						else if (horaslong > 1)
@@ -633,7 +633,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 			if (response.getStatusLine().getStatusCode() == 201)
 				entity = response.getEntity();
 			else if (response.getStatusLine().getStatusCode() == 422)
-				Toast.makeText(getBaseContext(), "Comentario vacío.",
+				Toast.makeText(getBaseContext(), "Comentario vacÃ­o.",
 						Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			e.printStackTrace();
