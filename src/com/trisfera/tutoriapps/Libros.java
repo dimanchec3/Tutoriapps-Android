@@ -92,7 +92,7 @@ public class Libros extends Activity implements OnClickListener,
 		public String thumbnail_url;
 	}
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -177,7 +177,7 @@ public class Libros extends Activity implements OnClickListener,
 	private void idGrupos() {
 		// TODO Auto-generated method stub
 		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
+
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/"
@@ -198,26 +198,26 @@ public class Libros extends Activity implements OnClickListener,
 			context = c;
 		}
 
-		@Override
+
 		public int getCount() {
 			// TODO Auto-generated method stub
 			cantidadGrupos = extras.getInt("cantidadGrupos");
 			return cantidadGrupos;
 		}
 
-		@Override
+
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return gnombre[position];
 		}
 
-		@Override
+
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
 
-		@Override
+
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View rowView = LayoutInflater.from(parent.getContext()).inflate(
@@ -346,7 +346,7 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -381,7 +381,7 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
@@ -389,7 +389,7 @@ public class Libros extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -397,7 +397,7 @@ public class Libros extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-	@Override
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -449,7 +449,7 @@ public class Libros extends Activity implements OnClickListener,
 			new loadImages(holder.pos, holder).execute(arrayBooks.get(position).thumbnail_url);
 			return (convertView);
 		}
-		
+
 		public class loadImages extends AsyncTask<String, Integer, String> {
 			// ImageView ivProfile;
 			int mPosition;
@@ -460,7 +460,7 @@ public class Libros extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-			@Override
+
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
@@ -475,7 +475,7 @@ public class Libros extends Activity implements OnClickListener,
 				return null;
 			}
 
-			@Override
+
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
@@ -598,7 +598,7 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -656,7 +656,7 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onScroll(AbsListView arg0, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
@@ -666,7 +666,7 @@ public class Libros extends Activity implements OnClickListener,
 
 	}
 
-	@Override
+
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
 		currentScrollState = scrollState;

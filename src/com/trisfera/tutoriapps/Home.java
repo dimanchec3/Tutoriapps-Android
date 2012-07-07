@@ -102,7 +102,7 @@ public class Home extends Activity implements OnClickListener,
 		public String id;
 	}
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -161,7 +161,7 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
+
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				URL = "http://tutoriapps.herokuapp.com/api/v1/groups/"
@@ -191,26 +191,26 @@ public class Home extends Activity implements OnClickListener,
 			context = c;
 		}
 
-		@Override
+
 		public int getCount() {
 			// TODO Auto-generated method stub
 			cantidadGrupos = arrayGrupos.size();
 			return cantidadGrupos;
 		}
 
-		@Override
+
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return gnombre[position];
 		}
 
-		@Override
+
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
 
-		@Override
+
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View rowView = LayoutInflater.from(parent.getContext()).inflate(
@@ -408,7 +408,7 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -458,7 +458,7 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -466,7 +466,7 @@ public class Home extends Activity implements OnClickListener,
 			finish();
 	}
 
-	@Override
+
 	public boolean onCreateOptionsMenu(android.view.Menu menu) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu);
@@ -475,7 +475,7 @@ public class Home extends Activity implements OnClickListener,
 		return true;
 	}
 
-	@Override
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
@@ -505,7 +505,7 @@ public class Home extends Activity implements OnClickListener,
 		return false;
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -588,7 +588,7 @@ public class Home extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-			@Override
+
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
@@ -603,7 +603,7 @@ public class Home extends Activity implements OnClickListener,
 				return null;
 			}
 
-			@Override
+
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
@@ -647,7 +647,7 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -685,7 +685,7 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onScroll(AbsListView arg0, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
@@ -694,7 +694,7 @@ public class Home extends Activity implements OnClickListener,
 		totalItem = totalItemCount;
 	}
 
-	@Override
+
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
 		currentScrollState = scrollState;

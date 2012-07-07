@@ -43,7 +43,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	int contador = 0;
 	String[] gid, gnombre;
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,7 +82,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		etCrearPost.addTextChangedListener(this);
 	}
 
-	@Override
+
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -99,7 +99,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		}
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -128,7 +128,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		}
 	}
 
-	@Override
+
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
@@ -139,19 +139,19 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		}
 	}
 
-	@Override
+
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
+
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bPostear.setEnabled(false);
 	}
 
-	@Override
+
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 		// TODO Auto-generated method stub
@@ -159,7 +159,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 			bPostear.setEnabled(false);
 	}
 
-	@Override
+
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// TODO Auto-generated method stub
 		bPostear.setEnabled(true);

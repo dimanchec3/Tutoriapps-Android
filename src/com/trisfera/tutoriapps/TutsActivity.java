@@ -50,7 +50,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 	FileInputStream fis = null;
 	int contador = 0;
 
-	@Override
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,7 +82,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 		etPass.addTextChangedListener(this);
 	}
 
-	@Override
+
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.bSubmit:
@@ -93,7 +93,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -172,18 +172,18 @@ public class TutsActivity extends Activity implements OnClickListener,
 		return token;
 	}
 
-	@Override
+
 	public void afterTextChanged(Editable arg0) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
+
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
+
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		tvWarning.setVisibility(View.INVISIBLE);

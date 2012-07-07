@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class SingleImage extends Activity {
-	
+
 	String URL;
 	Bundle extras;
 	ImageView ivSingleImage;
@@ -21,7 +21,7 @@ public class SingleImage extends Activity {
 	Bitmap image;
 	//WebView wvImage;
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);

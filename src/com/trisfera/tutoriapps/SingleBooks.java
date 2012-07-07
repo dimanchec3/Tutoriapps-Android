@@ -94,7 +94,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		public String created_at;
 	}
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -223,9 +223,9 @@ public class SingleBooks extends Activity implements TextWatcher,
 		ivProfileSingleBooks.setImageResource(R.drawable.unknownuser);
 		new loadImagesMain().execute(SingleURL);
 	}
-	
+
 	public class loadImagesMain extends AsyncTask<String, Integer, String> {
-		@Override
+
 				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					try {
@@ -240,7 +240,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 					return null;
 				}
 
-				@Override
+
 				protected void onPostExecute(String result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
@@ -410,7 +410,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 			new loadImages(holder.pos, holder).execute(arrayReply.get(position).thumbnail_url);
 			return (convertView);
 		}
-		
+
 		public class loadImages extends AsyncTask<String, Integer, String> {
 			// ImageView ivProfile;
 			int mPosition;
@@ -421,7 +421,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 				mHolder = holder;
 			}
 
-			@Override
+
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
@@ -436,7 +436,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 				return null;
 			}
 
-			@Override
+
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
@@ -477,27 +477,27 @@ public class SingleBooks extends Activity implements TextWatcher,
 		}
 	}
 
-	@Override
+
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponderBooks.setEnabled(false);
 	}
 
-	@Override
+
 	public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponderBooks.setEnabled(false);
 	}
 
-	@Override
+
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		bResponderBooks.setEnabled(true);
 	}
 
-	@Override
+
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {

@@ -70,7 +70,7 @@ public class CrearPic extends Activity implements OnClickListener,
 	private ProgressDialog pDialog;
 	Typeface font;
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -119,7 +119,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		bPostearPic.setEnabled(false);
 	}
 
-	@Override
+
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
@@ -165,7 +165,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		sGrupos.setAdapter(adaptador);
 	}
 
-	@Override
+
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -216,7 +216,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -224,7 +224,7 @@ public class CrearPic extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-	@Override
+
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -232,7 +232,7 @@ public class CrearPic extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-	@Override
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -291,7 +291,7 @@ public class CrearPic extends Activity implements OnClickListener,
 		// Toast.makeText(getBaseContext(), sResponse, 10000).show();
 	}
 
-	@Override
+
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
@@ -303,7 +303,7 @@ public class CrearPic extends Activity implements OnClickListener,
 			bPostearPic.setEnabled(true);
 	}
 
-	@Override
+
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 

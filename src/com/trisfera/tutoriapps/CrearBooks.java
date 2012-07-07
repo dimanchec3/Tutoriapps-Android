@@ -46,7 +46,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 	private ProgressDialog pDialog;
 	int contador = 0;
 
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -101,7 +101,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 		etPrice.setVisibility(View.GONE);
 	}
 
-	@Override
+
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -158,7 +158,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -201,7 +201,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
@@ -229,7 +229,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
+
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 
