@@ -168,7 +168,7 @@ public class CrearBooks extends Activity implements OnClickListener,
 
 	private void postData() {
 		// TODO Auto-generated method stub
-		String url_books = "http://10.0.2.2:3000/api/v1/groups/" + gruposId
+		String url_books = "http://tutoriapps.herokuapp.com/api/v1/groups/" + gruposId
 				+ "/books.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_books);
 		httpclient = new DefaultHttpClient();

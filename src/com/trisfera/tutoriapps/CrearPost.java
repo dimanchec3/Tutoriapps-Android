@@ -109,7 +109,7 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 
 	private void postData() {
 		// TODO Auto-generated method stub
-		String url_post = "http://10.0.2.2:3000/api/v1/groups/" + gruposId
+		String url_post = "http://tutoriapps.herokuapp.com/api/v1/groups/" + gruposId
 				+ "/posts.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_post);
 		httpclient = new DefaultHttpClient();

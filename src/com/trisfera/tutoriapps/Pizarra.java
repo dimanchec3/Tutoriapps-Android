@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Pizarra extends Activity implements OnClickListener,
 		OnItemClickListener, OnScrollListener {
@@ -57,8 +59,8 @@ public class Pizarra extends Activity implements OnClickListener,
 	Bundle extras;
 	ProgressDialog pDialog;
 	String[] gid, gnombre, fechaformato, fechaclase;
-	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
+	final static String URL_TOKEN = "http://tutoriapps.herokuapp.com/api/v1/tokens/";
+	final static String URL_TIME = "http://tutoriapps.herokuapp.com/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
 	int contador = 0, ultimoItem = 0, currentFirstVisibleItem,
 			currentVisibleItemCount, currentScrollState, totalItem, superTotal,
@@ -114,7 +116,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				URL = "http://10.0.2.2:3000/api/v1/groups/"
+				URL = "http://tutoriapps.herokuapp.com/api/v1/groups/"
 						+ gid[position].toString()
 						+ "/board_pics.json?auth_token=";
 				posicionid = gid[position].toString();
@@ -200,7 +202,7 @@ public class Pizarra extends Activity implements OnClickListener,
 		myHorizontalListView = (Gallery) findViewById(R.id.horizontallistview);
 		myAdapter = new MyAdapter(this);
 		myHorizontalListView.setAdapter(myAdapter);
-		URL = "http://10.0.2.2:3000/api/v1/groups/home/board_pics.json?auth_token="
+		URL = "http://tutoriapps.herokuapp.com/api/v1/groups/home/board_pics.json?auth_token="
 				+ token;
 		myListView = (ListView) findViewById(R.id.lvImages);
 		myListView.setOnItemClickListener(this);
@@ -316,6 +318,8 @@ public class Pizarra extends Activity implements OnClickListener,
 	private void getData() throws ConnectException, ConnectionClosedException {
 		// TODO Auto-generated method stub
 		getTiempo();
+		if (ultimoItem == 2)
+			aa.clear();
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL);
@@ -441,15 +445,96 @@ public class Pizarra extends Activity implements OnClickListener,
 				holder = (ViewHolder) convertView.getTag();
 			try {
 				holder.populateFrom(arregloPizarra.get(position));
+				holder.ivProfileBoard.setImageResource(R.drawable.unknownuser);
+				holder.ivPizarra.setImageResource(R.drawable.unknownboard);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			new loadImages(holder.pos, holder).execute(arregloPizarra.get(position).thumbnail_profile);
+			new loadPizarra(holder.pos, holder).execute(arregloPizarra.get(position).thumbnail_url);
 			return (convertView);
 		}
+	
+		public class loadImages extends AsyncTask<String, Integer, String> {
+			// ImageView ivProfile;
+			int mPosition;
+			ViewHolder mHolder;
+
+			public loadImages(int position, ViewHolder holder) {
+				mPosition = position;
+				mHolder = holder;
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				try {
+					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL (params[0]);
+					image_profile = BitmapFactory.decodeStream(thumb_urlback
+							.openConnection().getInputStream());
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+
+				if (mHolder.pos == mPosition) {
+					// if (mHolder.ivProfile.getDrawable() == null)
+					mHolder.ivProfileBoard.setImageBitmap(image_profile);
+				}
+			}
+		}
+
+		public class loadPizarra extends AsyncTask<String, Integer, String> {
+			// ImageView ivProfile;
+			int mPosition;
+			ViewHolder mHolder;
+
+			public loadPizarra(int pos, ViewHolder holder) {
+				// TODO Auto-generated constructor stub
+				mPosition = pos;
+				mHolder = holder;
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				try {
+					URL thumb_urlback = null;
+					thumb_urlback = new URL (params[0]);
+					thumb_image = BitmapFactory.decodeStream(thumb_urlback.openConnection().getInputStream());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+
+				if (mHolder.pos == mPosition) {
+					// if (mHolder.ivProfile.getDrawable() == null)
+					mHolder.ivPizarra.setImageBitmap(thumb_image);
+				}
+			}
+		}
+
 	}
 
 	class ViewHolder {
+		public int pos;
 		public TextView tvNameBoard = null;
 		public TextView tvClassDate = null;
 		public TextView tvFechaBoard = null;
@@ -475,15 +560,7 @@ public class Pizarra extends Activity implements OnClickListener,
 			tvGroupBoard.setText(r.id_groups);
 			tvFechaBoard.setText(r.created_at);
 			tvClassDate.setText("Pizarra del día: " + r.class_date);
-			tvURL.setText("http://10.0.2.2:3000" + r.url);
-			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
-			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
-					.getInputStream());
-			ivPizarra.setImageBitmap(thumb_image);
-			url_profile = new URL("http://10.0.2.2:3000" + r.thumbnail_profile);
-			image_profile = BitmapFactory.decodeStream(url_profile
-					.openConnection().getInputStream());
-			ivProfileBoard.setImageBitmap(image_profile);
+			tvURL.setText(r.url);
 			tvNameBoard.setTypeface(font, 1);
 			tvClassDate.setTypeface(font);
 			tvFechaBoard.setTypeface(font);
@@ -519,17 +596,26 @@ public class Pizarra extends Activity implements OnClickListener,
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
 		currentScrollState = scrollState;
-		if (valorUltimo <= 0)
-			isScrollCompleted();
+		try {
+			if (valorUltimo <= 0)
+				isScrollCompleted();
+		} catch (ConnectionClosedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	private void isScrollCompleted() {
+	private void isScrollCompleted() throws IOException,
+			ConnectionClosedException {
 		int min, lastitem = currentFirstVisibleItem + currentVisibleItemCount;
 		superTotal = lastitem + nuevo;
 		min = (arregloPizarra.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
 				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
+			URL = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid
 					+ "/board_pics.json?auth_token=" + token + "&older_than="
 					+ fechaclase[fechaclase.length - 1] + "T00:00:00Z&count=5";
 			try {
@@ -542,6 +628,13 @@ public class Pizarra extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		} /*else if (currentFirstVisibleItem == 0
+				&& currentScrollState == SCROLL_STATE_IDLE) {
+			URL = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid
+					+ "/books.json?auth_token=" + token + "&newer_than="
+					+ fechaclase[fechaclase.length - 1] + "&count=5";
+			ultimoItem = 2;
+			getData();
+		}*/
 	}
 }

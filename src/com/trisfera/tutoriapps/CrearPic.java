@@ -53,7 +53,7 @@ public class CrearPic extends Activity implements OnClickListener,
 	ImageButton ibTomarPic, ibBuscar;
 	Button bPostearPic, bCambiarFecha;
 	ImageView ivReturnedPic;
-	Spinner sGrupos;
+	Spinner sGrupos = null;
 	String token = "", gruposId = "home", SuperFecha = null, imageName;
 	HttpPost httppost;
 	HttpResponse response;
@@ -78,8 +78,6 @@ public class CrearPic extends Activity implements OnClickListener,
 		setContentView(R.layout.crearpic);
 		initialize();
 		arreglogrupos();
-		InputStream is = getResources().openRawResource(R.drawable.ic_launcher);
-		bmp = BitmapFactory.decodeStream(is);
 	}
 
 	private void initialize() {
@@ -251,13 +249,17 @@ public class CrearPic extends Activity implements OnClickListener,
 				}
 				bmp = BitmapFactory.decodeStream(imageStream);
 				ivReturnedPic.setImageBitmap(bmp);
-				if (ivReturnedPic.getDrawable() != null)
+				if (sGrupos.getCount() == 0)
+					bPostearPic.setEnabled(false);
+				else if (ivReturnedPic.getDrawable() != null)
 					bPostearPic.setEnabled(true);
 			} else if (requestCode == 0) {
 				Bundle extras = data.getExtras();
 				bmp = (Bitmap) extras.get("data");
 				ivReturnedPic.setImageBitmap(bmp);
-				if (ivReturnedPic.getDrawable() != null)
+				if (sGrupos.getCount() == 0)
+					bPostearPic.setEnabled(false);
+				else if (ivReturnedPic.getDrawable() != null)
 					bPostearPic.setEnabled(true);
 			}
 		}
@@ -269,8 +271,9 @@ public class CrearPic extends Activity implements OnClickListener,
 		long currentTime = System.currentTimeMillis();
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpContext localContext = new BasicHttpContext();
-		HttpPost httpPost = new HttpPost("http://10.0.2.2:3000/api/v1/groups/"
-				+ gruposId + "/board_pics.json?auth_token=" + token);
+		HttpPost httpPost = new HttpPost(
+				"http://tutoriapps.herokuapp.com/api/v1/groups/" + gruposId
+						+ "/board_pics.json?auth_token=" + token);
 		MultipartEntity entity = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -293,7 +296,8 @@ public class CrearPic extends Activity implements OnClickListener,
 			long arg3) {
 		// TODO Auto-generated method stub
 		gruposId = newgid[pos].toString();
-		if (SuperFecha == null || ivReturnedPic.getDrawable() == null)
+		if (SuperFecha == null || ivReturnedPic.getDrawable() == null
+				|| sGrupos.getCount() == 0)
 			bPostearPic.setEnabled(false);
 		else
 			bPostearPic.setEnabled(true);

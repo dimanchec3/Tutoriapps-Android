@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,10 +54,11 @@ import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener,
 		OnItemClickListener, OnScrollListener {
-	static String URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=";
-	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
-	String[] gid, gnombre, fechaformato;
+	// http://tutoriapps.herokuapp.com
+	static String URL_GRUPOS = "http://tutoriapps.herokuapp.com/api/v1/groups.json?auth_token=";
+	final static String URL_TOKEN = "http://tutoriapps.herokuapp.com/api/v1/tokens/";
+	final static String URL_TIME = "http://tutoriapps.herokuapp.com/api/v1/system_time.json";
+	String[] gid, gnombre, fechaformato, gurl;
 	Button bCrearPost, bInicio, bPizarra, bLibros;
 	HttpClient client;
 	ListView myListView;
@@ -68,9 +70,9 @@ public class Home extends Activity implements OnClickListener,
 	Intent iCrearPost, iArray, iPizarra, iLibros;
 	FancyAdapter aa = null;
 	Typeface font;
-	int contador = 0, cantidadGrupos, ultimoItem = 0,
-			currentFirstVisibleItem, currentVisibleItemCount,
-			currentScrollState, totalItem, superTotal, nuevo = 0, valorUltimo;
+	int contador = 0, cantidadGrupos, ultimoItem = 0, currentFirstVisibleItem,
+			currentVisibleItemCount, currentScrollState, totalItem, superTotal,
+			nuevo = 0, valorUltimo;
 	ProgressDialog pDialog;
 	ArrayList<Post> arrayOfWebData = new ArrayList<Post>();
 	ArrayList<Grupos> arrayGrupos = new ArrayList<Grupos>();
@@ -162,7 +164,7 @@ public class Home extends Activity implements OnClickListener,
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				URL = "http://10.0.2.2:3000/api/v1/groups/"
+				URL = "http://tutoriapps.herokuapp.com/api/v1/groups/"
 						+ gid[position].toString() + "/posts.json?auth_token=";
 				posicionid = gid[position].toString();
 				valorUltimo = 0;
@@ -235,8 +237,10 @@ public class Home extends Activity implements OnClickListener,
 		tvHeader = (TextView) findViewById(R.id.tvHeader);
 		extras = getIntent().getExtras();
 		token = extras.getString("token");
-		URL = "http://10.0.2.2:3000/api/v1/groups/home/posts.json?auth_token=" + token;
-		URL_GRUPOS = "http://10.0.2.2:3000/api/v1/groups.json?auth_token=" + token;
+		URL = "http://tutoriapps.herokuapp.com/api/v1/groups/home/posts.json?auth_token="
+				+ token;
+		URL_GRUPOS = "http://tutoriapps.herokuapp.com/api/v1/groups.json?auth_token="
+				+ token;
 		font = Typeface.createFromAsset(getAssets(), "Helvetica.ttf");
 		tvHeader.setTypeface(font, 1);
 		bInicio.setTypeface(font, 1);
@@ -253,11 +257,16 @@ public class Home extends Activity implements OnClickListener,
 		aa = new FancyAdapter();
 		valorUltimo = 0;
 		nuevo = 0;
+		// / myListView.setCacheColorHint(Color.TRANSPARENT);
+		// //myListView.setFastScrollEnabled(true);
+		// /myListView.setScrollingCacheEnabled(false);
 	}
 
 	private void getData() throws ConnectException, ConnectionClosedException {
 		// TODO Auto-generated method stub
 		String result = "";
+		if (ultimoItem == 2)
+			aa.clear();
 		try {
 			StringBuilder url = new StringBuilder(URL);
 			HttpGet get = new HttpGet(url.toString());
@@ -455,18 +464,6 @@ public class Home extends Activity implements OnClickListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK)
 			finish();
-		else {
-			aa.clear();
-			try {
-				getData();
-			} catch (ConnectException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ConnectionClosedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override
@@ -483,8 +480,7 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.logOut:
-			// setResult(RESULT_OK, null);//hace que se cierre el activity de
-			// pizarra al hacer log out
+			setResult(RESULT_OK, null);
 			pDialog = ProgressDialog.show(this, "Cerrando sesión",
 					"Cargando...");
 			deleteFile(FILENAME);
@@ -546,7 +542,27 @@ public class Home extends Activity implements OnClickListener,
 			if (convertView == null) {
 				LayoutInflater inflater = getLayoutInflater();
 				convertView = inflater.inflate(R.layout.posttext, null);
-				holder = new ViewHolder(convertView);
+				holder = new ViewHolder();
+				holder.tvName = (TextView) convertView
+						.findViewById(R.id.tvName);
+				holder.tvText = (TextView) convertView
+						.findViewById(R.id.tvText);
+				holder.tvFecha = (TextView) convertView
+						.findViewById(R.id.tvFecha);
+				holder.tvGroup = (TextView) convertView
+						.findViewById(R.id.tvGroup);
+				holder.tvIdPost = (TextView) convertView
+						.findViewById(R.id.tvIdPost);
+				holder.tvReply_count = (TextView) convertView
+						.findViewById(R.id.tvReply_Count);
+				holder.tvURLPic = (TextView) convertView
+						.findViewById(R.id.tvURLPic);
+				holder.tvGroupidPost = (TextView) convertView
+						.findViewById(R.id.tvGroupidPost);
+				// holder.tvlol = (TextView) convertView
+				// .findViewById(R.id.tvlol);
+				holder.ivProfile = (ImageView) convertView
+						.findViewById(R.id.ivProfile);
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
@@ -556,11 +572,53 @@ public class Home extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			 holder.ivProfile.setImageResource(R.drawable.unknownuser);
+			// holder.tvlol.setText(String.valueOf(thumb_url));
+			new loadImages(holder.pos, holder).execute(arrayOfWebData.get(position).profile_pic);
 			return (convertView);
+		}
+
+		public class loadImages extends AsyncTask<String, Integer, String> {
+			// ImageView ivProfile;
+			int mPosition;
+			ViewHolder mHolder;
+
+			public loadImages(int position, ViewHolder holder) {
+				mPosition = position;
+				mHolder = holder;
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				try {
+					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL (params[0]);
+					thumb_image = BitmapFactory.decodeStream(thumb_urlback
+							.openConnection().getInputStream());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+
+				if (mHolder.pos == mPosition) {
+					// if (mHolder.ivProfile.getDrawable() == null)
+					mHolder.ivProfile.setImageBitmap(thumb_image);
+				}
+			}
 		}
 	}
 
 	class ViewHolder {
+
+		public int pos;
 		public TextView tvName = null;
 		public TextView tvText = null;
 		public TextView tvFecha = null;
@@ -569,19 +627,8 @@ public class Home extends Activity implements OnClickListener,
 		public TextView tvReply_count = null;
 		public TextView tvURLPic = null;
 		public TextView tvGroupidPost = null;
-		public ImageView ivProfile;
-
-		ViewHolder(View row) {
-			tvName = (TextView) row.findViewById(R.id.tvName);
-			tvText = (TextView) row.findViewById(R.id.tvText);
-			tvFecha = (TextView) row.findViewById(R.id.tvFecha);
-			tvGroup = (TextView) row.findViewById(R.id.tvGroup);
-			tvIdPost = (TextView) row.findViewById(R.id.tvIdPost);
-			tvReply_count = (TextView) row.findViewById(R.id.tvReply_Count);
-			tvURLPic = (TextView) row.findViewById(R.id.tvURLPic);
-			tvGroupidPost = (TextView) row.findViewById(R.id.tvGroupidPost);
-			ivProfile = (ImageView) row.findViewById(R.id.ivProfile);
-		}
+		public ImageView ivProfile = null;
+		// public TextView tvlol = null;
 
 		void populateFrom(Post r) throws IOException {
 			tvName.setText(r.name);
@@ -597,10 +644,6 @@ public class Home extends Activity implements OnClickListener,
 			tvText.setTypeface(font, 0);
 			tvFecha.setTypeface(font);
 			tvGroup.setTypeface(font);
-			thumb_url = new URL("http://10.0.2.2:3000" + r.profile_pic);
-			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
-					.getInputStream());
-			ivProfile.setImageBitmap(thumb_image);
 		}
 	}
 
@@ -666,17 +709,27 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-	private void isScrollCompleted() throws IOException, ConnectionClosedException {
-		int min, lastitem = currentFirstVisibleItem + currentVisibleItemCount;
+	private void isScrollCompleted() throws IOException,
+			ConnectionClosedException {
+		int /* controlador = 0, */min, lastitem = currentFirstVisibleItem
+				+ currentVisibleItemCount;
 		superTotal = lastitem + nuevo;
 		min = (arrayOfWebData.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
 				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL = "http://10.0.2.2:3000/api/v1/groups/" + posicionid
+			URL = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid
 					+ "/posts.json?auth_token=" + token + "&older_than="
 					+ fechaformato[fechaformato.length - 1] + "&count=5";
 			ultimoItem = 1;
+			// controlador = 1;
 			getData();
-		}
+		} /*
+		 * else if (currentFirstVisibleItem == 0 && currentScrollState ==
+		 * SCROLL_STATE_IDLE && controlador == 0) { URL =
+		 * "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid +
+		 * "/posts.json?auth_token=" + token + "&newer_than=" +
+		 * fechaformato[fechaformato.length - 1] + "&count=5"; ultimoItem = 2;
+		 * getData(); }
+		 */
 	}
 }

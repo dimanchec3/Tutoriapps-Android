@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.DisplayMetrics;
@@ -62,8 +63,8 @@ public class Libros extends Activity implements OnClickListener,
 	Gallery myHorizontalListView;
 	ProgressDialog pDialog;
 	Integer valor;
-	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
+	final static String URL_TOKEN = "http://tutoriapps.herokuapp.com/api/v1/tokens/";
+	final static String URL_TIME = "http://tutoriapps.herokuapp.com/api/v1/system_time.json";
 	HttpClient client = new DefaultHttpClient();
 	int contador = 0, currentFirstVisibleItem, currentVisibleItemCount,
 			totalItem, currentScrollState, valorUltimo, superTotal, nuevo = 0,
@@ -126,7 +127,7 @@ public class Libros extends Activity implements OnClickListener,
 		bInicio.setTypeface(font, 1);
 		bPizarra.setTypeface(font, 1);
 		bLibros.setTypeface(font, 1);
-		URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/home/books.json?auth_token="
+		URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/home/books.json?auth_token="
 				+ token;
 		myListView = (ListView) findViewById(R.id.lvBooks);
 		myListView.setVerticalFadingEdgeEnabled(false);
@@ -138,6 +139,9 @@ public class Libros extends Activity implements OnClickListener,
 		valorUltimo = 0;
 		nuevo = 0;
 		myListView.setOnScrollListener(this);
+		myListView.setCacheColorHint(Color.TRANSPARENT);
+		myListView.setFastScrollEnabled(true);
+		myListView.setScrollingCacheEnabled(false);
 	}
 
 	private void getTiempo() {
@@ -176,7 +180,7 @@ public class Libros extends Activity implements OnClickListener,
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/"
+				URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/"
 						+ gid[position].toString() + "/books.json?auth_token=";
 				posicionId = gid[position].toString();
 				valorUltimo = 0;
@@ -227,6 +231,8 @@ public class Libros extends Activity implements OnClickListener,
 
 	private void getData() {
 		// TODO Auto-generated method stub
+		if (ultimoItem == 2)
+			aa.clear();
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(URL_BOOKS);
@@ -410,20 +416,80 @@ public class Libros extends Activity implements OnClickListener,
 				LayoutInflater inflater = getLayoutInflater();
 				convertView = inflater.inflate(R.layout.bookscontent, null);
 				holder = new ViewHolder(convertView);
+				holder.tvIdGroupBook = (TextView) convertView.findViewById(R.id.tvIdGroupBook);
+				holder.tvNameBooks = (TextView) convertView.findViewById(R.id.tvNameBooks);
+				holder.tvTitleBooks = (TextView) convertView.findViewById(R.id.tvTitleBooks);
+				holder.tvAuthorBooks = (TextView) convertView.findViewById(R.id.tvAuthorBooks);
+				holder.tvPublisherBooks = (TextView) convertView
+						.findViewById(R.id.tvPublisherBooks);
+				holder.tvAditionalInfoBooks = (TextView) convertView
+						.findViewById(R.id.tvAditionalInfoBooks);
+				holder.tvContactInfoBooks = (TextView) convertView
+						.findViewById(R.id.tvContactInfoBooks);
+				holder.tvOfferTypeBooks = (TextView) convertView
+						.findViewById(R.id.tvOfferTypeBooks);
+				holder.tvDateBooks = (TextView) convertView.findViewById(R.id.tvDateBooks);
+				holder.tvGroupBooks = (TextView) convertView.findViewById(R.id.tvGroupBooks);
+				holder.tvReplyCountBooks = (TextView) convertView
+						.findViewById(R.id.tvReplyCountBooks);
+				holder.tvIdPostBook = (TextView) convertView.findViewById(R.id.tvIdPostBook);
+				holder.tvPriceBooks = (TextView) convertView.findViewById(R.id.tvPriceBooks);
+				holder.tvSingleURL = (TextView) convertView.findViewById(R.id.tvSingleURL);
+				holder.ivProfileBooks = (ImageView) convertView.findViewById(R.id.ivProfileBooks);
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
 			try {
 				holder.populateFrom(arrayBooks.get(position));
+				holder.ivProfileBooks.setImageResource(R.drawable.unknownuser);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			new loadImages(holder.pos, holder).execute(arrayBooks.get(position).thumbnail_url);
 			return (convertView);
+		}
+		
+		public class loadImages extends AsyncTask<String, Integer, String> {
+			// ImageView ivProfile;
+			int mPosition;
+			ViewHolder mHolder;
+
+			public loadImages(int position, ViewHolder holder) {
+				mPosition = position;
+				mHolder = holder;
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				try {
+					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL (params[0]);
+					thumb_image = BitmapFactory.decodeStream(thumb_urlback
+							.openConnection().getInputStream());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+
+				if (mHolder.pos == mPosition) {
+					// if (mHolder.ivProfile.getDrawable() == null)
+					mHolder.ivProfileBooks.setImageBitmap(thumb_image);
+				}
+			}
 		}
 	}
 
 	class ViewHolder {
+		public int pos;
 		public TextView tvIdGroupBook = null;
 		public TextView tvNameBooks = null;
 		public TextView tvTitleBooks = null;
@@ -441,7 +507,7 @@ public class Libros extends Activity implements OnClickListener,
 		public ImageView ivProfileBooks = null;
 
 		ViewHolder(View row) {
-			tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
+			/*tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
 			tvNameBooks = (TextView) row.findViewById(R.id.tvNameBooks);
 			tvTitleBooks = (TextView) row.findViewById(R.id.tvTitleBooks);
 			tvAuthorBooks = (TextView) row.findViewById(R.id.tvAuthorBooks);
@@ -459,8 +525,8 @@ public class Libros extends Activity implements OnClickListener,
 					.findViewById(R.id.tvReplyCountBooks);
 			tvIdPostBook = (TextView) row.findViewById(R.id.tvIdPostBook);
 			tvPriceBooks = (TextView) row.findViewById(R.id.tvPriceBooks);
-			tvSingleURL = (TextView) row.findViewById(R.id.tvSingleURL);
-			ivProfileBooks = (ImageView) row.findViewById(R.id.ivProfileBooks);
+			tvSingleURL = (TextView) row.findViewById(R.id.tvSingleURL);*/
+			//ivProfileBooks = (ImageView) row.findViewById(R.id.ivProfileBooks);
 		}
 
 		void populateFrom(Books r) throws IOException {
@@ -495,10 +561,7 @@ public class Libros extends Activity implements OnClickListener,
 			tvAditionalInfoBooks.setText(Html.fromHtml("<b>"
 					+ "Información Adicional: " + "</b>" + r.additional_info));
 			verificarEmpty();
-			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
-			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
-					.getInputStream());
-			ivProfileBooks.setImageBitmap(thumb_image);
+
 			tvNameBooks.setTypeface(font, 1);
 			tvTitleBooks.setTypeface(font);
 			tvAuthorBooks.setTypeface(font);
@@ -618,11 +681,18 @@ public class Libros extends Activity implements OnClickListener,
 		min = (arrayBooks.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
 				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL_BOOKS = "http://10.0.2.2:3000/api/v1/groups/" + posicionId
+			URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionId
 					+ "/books.json?auth_token=" + token + "&older_than="
 					+ fechaformato[fechaformato.length - 1] + "&count=5";
 			ultimoItem = 1;
 			getData();
-		}
+		} /*else if (currentFirstVisibleItem == 0
+				&& currentScrollState == SCROLL_STATE_IDLE) {
+			URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionId
+					+ "/books.json?auth_token=" + token + "&newer_than="
+					+ fechaformato[fechaformato.length - 1] + "&count=5";
+			ultimoItem = 2;
+			getData();
+		}*/
 	}
 }

@@ -27,7 +27,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -70,8 +72,8 @@ public class SingleBooks extends Activity implements TextWatcher,
 	HttpClient client;
 	HttpResponse response;
 	HttpEntity entity;
-	final static String URL_TOKEN = "http://10.0.2.2:3000/api/v1/tokens/";
-	final static String URL_TIME = "http://10.0.2.2:3000/api/v1/system_time.json";
+	final static String URL_TOKEN = "http://tutoriapps.herokuapp.com/api/v1/tokens/";
+	final static String URL_TIME = "http://tutoriapps.herokuapp.com/api/v1/system_time.json";
 	ArrayList<NameValuePair> nameValuePairs;
 	ArrayList<Reply> arrayReply = new ArrayList<Reply>();
 	ArrayList<newTiempo> arrayTiempo = new ArrayList<newTiempo>();
@@ -165,7 +167,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		idGrupos = extras.getString("idGrupos");
 		idPost = extras.getString("idPost");
 		SingleURL = extras.getString("SingleURL");
-		URL_REPLY = "http://10.0.2.2:3000/api/v1/books/" + idPost
+		URL_REPLY = "http://tutoriapps.herokuapp.com/api/v1/books/" + idPost
 				+ "/replies.json?auth_token=" + token;
 		gnombre = extras.getStringArray("gnombre");
 		gid = extras.getStringArray("gid");
@@ -215,11 +217,36 @@ public class SingleBooks extends Activity implements TextWatcher,
 		bCrearBooks.setOnClickListener(this);
 		bCrearBooks.setTypeface(font);
 		etComentarioBooks.addTextChangedListener(this);
-		thumb_url = new URL("http://10.0.2.2:3000" + SingleURL);
-		thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
-				.getInputStream());
-		ivProfileSingleBooks.setImageBitmap(thumb_image);
+		lvComentariosBooks.setCacheColorHint(Color.TRANSPARENT);
+		lvComentariosBooks.setFastScrollEnabled(true);
+		lvComentariosBooks.setScrollingCacheEnabled(false);
+		ivProfileSingleBooks.setImageResource(R.drawable.unknownuser);
+		new loadImagesMain().execute(SingleURL);
 	}
+	
+	public class loadImagesMain extends AsyncTask<String, Integer, String> {
+		@Override
+				protected String doInBackground(String... params) {
+					// TODO Auto-generated method stub
+					try {
+						URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+						thumb_urlback = new URL (params[0]);
+						thumb_image = BitmapFactory.decodeStream(thumb_urlback
+								.openConnection().getInputStream());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(String result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					ivProfileSingleBooks.setImageBitmap(thumb_image);
+					}
+				}
 
 	private void splitter() {
 		// TODO Auto-generated method stub
@@ -375,11 +402,50 @@ public class SingleBooks extends Activity implements TextWatcher,
 				holder = (ViewHolder) convertView.getTag();
 			try {
 				holder.populateFrom(arrayReply.get(position));
+				holder.ivReplyPic.setImageResource(R.drawable.unknownuser);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			new loadImages(holder.pos, holder).execute(arrayReply.get(position).thumbnail_url);
 			return (convertView);
+		}
+		
+		public class loadImages extends AsyncTask<String, Integer, String> {
+			// ImageView ivProfile;
+			int mPosition;
+			ViewHolder mHolder;
+
+			public loadImages(int position, ViewHolder holder) {
+				mPosition = position;
+				mHolder = holder;
+			}
+
+			@Override
+			protected String doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				try {
+					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL (params[0]);
+					thumb_image = BitmapFactory.decodeStream(thumb_urlback
+							.openConnection().getInputStream());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+
+				if (mHolder.pos == mPosition) {
+					// if (mHolder.ivProfile.getDrawable() == null)
+					mHolder.ivReplyPic.setImageBitmap(thumb_image);
+				}
+			}
 		}
 	}
 
@@ -387,6 +453,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 
 		public TextView tvTextLV = null, tvNameLV = null, tvFechaLV = null;
 		public ImageView ivReplyPic;
+		public int pos;
 
 		ViewHolder(View row) {
 			tvFechaLV = (TextView) row.findViewById(R.id.tvFechaLV);
@@ -403,7 +470,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 			tvTextLV.setTypeface(font, 0);
 			tvNameLV.setTypeface(font, 0);
 			tvTextLV.setMovementMethod(LinkMovementMethod.getInstance());
-			thumb_url = new URL("http://10.0.2.2:3000" + r.thumbnail_url);
+			thumb_url = new URL("http://tutoriapps.herokuapp.com" + r.thumbnail_url);
 			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
 					.getInputStream());
 			ivReplyPic.setImageBitmap(thumb_image);
@@ -458,7 +525,7 @@ public class SingleBooks extends Activity implements TextWatcher,
 		String result = "";
 		try {
 			StringBuilder url = new StringBuilder(
-					"http://10.0.2.2:3000/api/v1/groups/" + idGrupos
+					"http://tutoriapps.herokuapp.com/api/v1/groups/" + idGrupos
 							+ "/books.json?auth_token=" + token);
 			HttpGet get = new HttpGet(url.toString());
 			HttpResponse r = client.execute(get);

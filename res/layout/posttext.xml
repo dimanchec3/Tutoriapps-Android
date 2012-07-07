@@ -14,7 +14,7 @@
         android:background="@drawable/custom_shape"
         android:paddingLeft="2dp"
         android:paddingRight="2dp" >
-
+        
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
@@ -31,6 +31,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/imagen_perfil"
+            
             android:paddingLeft="2.5dp"
             android:paddingRight="2.5dp"
             android:paddingTop="2.5dp" />
@@ -98,6 +99,15 @@
             android:layout_below="@+id/tvName"
             android:layout_toRightOf="@+id/ivProfile"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvlol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvFecha"
+            android:layout_below="@+id/tvFecha"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <RelativeLayout

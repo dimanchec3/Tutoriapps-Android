@@ -103,7 +103,7 @@ public class TutsActivity extends Activity implements OnClickListener,
 
 	public void submit() {
 		httpclient = new DefaultHttpClient();
-		httppost = new HttpPost("http://10.0.2.2:3000/api/v1/tokens.json");
+		httppost = new HttpPost("http://tutoriapps.herokuapp.com/api/v1/tokens.json");
 		username = etUser.getText().toString();
 		password = etPass.getText().toString();
 		tvWarning.setText("");

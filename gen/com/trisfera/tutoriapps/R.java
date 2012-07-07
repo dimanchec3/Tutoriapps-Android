@@ -42,6 +42,8 @@ public final class R {
         public static final int tab_libros_selected=0x7f02001c;
         public static final int tab_pizarra=0x7f02001d;
         public static final int tab_pizarra_selected=0x7f02001e;
+        public static final int unknownboard=0x7f02001f;
+        public static final int unknownuser=0x7f020020;
     }
     public static final class id {
         public static final int bCambiarFecha=0x7f060032;
@@ -54,12 +56,12 @@ public final class R {
         public static final int bPostear=0x7f060036;
         public static final int bPostearBooks=0x7f06002c;
         public static final int bPostearPic=0x7f060031;
-        public static final int bResponder=0x7f06005e;
-        public static final int bResponderBooks=0x7f060058;
+        public static final int bResponder=0x7f060060;
+        public static final int bResponderBooks=0x7f060059;
         public static final int bSubmit=0x7f06003d;
         public static final int etAuthor=0x7f060025;
-        public static final int etComentario=0x7f06005d;
-        public static final int etComentarioBooks=0x7f060057;
+        public static final int etComentario=0x7f06005f;
+        public static final int etComentarioBooks=0x7f060058;
         public static final int etContact=0x7f060028;
         public static final int etCrearPost=0x7f060035;
         public static final int etInfo=0x7f060027;
@@ -71,23 +73,23 @@ public final class R {
         public static final int horizontallistview=0x7f060012;
         public static final int ibBuscar=0x7f06002f;
         public static final int ibTomarPic=0x7f06002e;
-        public static final int itemtext=0x7f06004d;
+        public static final int itemtext=0x7f06004e;
         public static final int ivImagen=0x7f060004;
         public static final int ivProfile=0x7f060042;
         public static final int ivProfileBoard=0x7f060000;
         public static final int ivProfileBooks=0x7f060014;
-        public static final int ivProfileSingleBooks=0x7f06004e;
-        public static final int ivProfileSinglePost=0x7f06005a;
-        public static final int ivReplyPic=0x7f060049;
+        public static final int ivProfileSingleBooks=0x7f06004f;
+        public static final int ivProfileSinglePost=0x7f06005c;
+        public static final int ivReplyPic=0x7f06004a;
         public static final int ivReturnedPic=0x7f06002d;
-        public static final int ivSingleImage=0x7f060059;
-        public static final int logOut=0x7f060060;
+        public static final int ivSingleImage=0x7f06005a;
+        public static final int logOut=0x7f060062;
         public static final int lvBooks=0x7f060013;
-        public static final int lvComentarios=0x7f06005c;
-        public static final int lvComentariosBooks=0x7f060056;
+        public static final int lvComentarios=0x7f06005e;
+        public static final int lvComentariosBooks=0x7f060057;
         public static final int lvImages=0x7f060040;
         public static final int lvPosts=0x7f060038;
-        public static final int refresh=0x7f06005f;
+        public static final int refresh=0x7f060061;
         public static final int sGrupos=0x7f060030;
         public static final int sGruposBooks=0x7f06002b;
         public static final int sOffer=0x7f06002a;
@@ -96,11 +98,11 @@ public final class R {
         public static final int tvClassDate=0x7f060003;
         public static final int tvComentarios=0x7f060008;
         public static final int tvContactInfoBooks=0x7f06001f;
-        public static final int tvDate=0x7f06005b;
+        public static final int tvDate=0x7f06005d;
         public static final int tvDateBooks=0x7f06001d;
         public static final int tvFecha=0x7f060044;
         public static final int tvFechaBoard=0x7f060005;
-        public static final int tvFechaLV=0x7f06004b;
+        public static final int tvFechaLV=0x7f06004c;
         public static final int tvGroup=0x7f060043;
         public static final int tvGroupBoard=0x7f060002;
         public static final int tvGroupBooks=0x7f060018;
@@ -113,7 +115,7 @@ public final class R {
         public static final int tvName=0x7f060041;
         public static final int tvNameBoard=0x7f060001;
         public static final int tvNameBooks=0x7f060015;
-        public static final int tvNameLV=0x7f06004a;
+        public static final int tvNameLV=0x7f06004b;
         public static final int tvNotaFecha=0x7f060034;
         public static final int tvOfferTypeBooks=0x7f060020;
         public static final int tvPriceBooks=0x7f060021;
@@ -123,17 +125,17 @@ public final class R {
         public static final int tvSeparador=0x7f06000b;
         public static final int tvSeparador2=0x7f06000e;
         public static final int tvSeparador3=0x7f060010;
-        public static final int tvSingleAuthor=0x7f060050;
-        public static final int tvSingleContact=0x7f060053;
-        public static final int tvSingleEditorial=0x7f060051;
-        public static final int tvSingleInfo=0x7f060052;
-        public static final int tvSingleOffer=0x7f060054;
-        public static final int tvSinglePrice=0x7f060055;
-        public static final int tvSingleTitle=0x7f06004f;
+        public static final int tvSingleAuthor=0x7f060051;
+        public static final int tvSingleContact=0x7f060054;
+        public static final int tvSingleEditorial=0x7f060052;
+        public static final int tvSingleInfo=0x7f060053;
+        public static final int tvSingleOffer=0x7f060055;
+        public static final int tvSinglePrice=0x7f060056;
+        public static final int tvSingleTitle=0x7f060050;
         public static final int tvSingleURL=0x7f060022;
         public static final int tvSlogan=0x7f06003a;
         public static final int tvText=0x7f060045;
-        public static final int tvTextLV=0x7f06004c;
+        public static final int tvTextLV=0x7f06004d;
         public static final int tvTitleBooks=0x7f060019;
         public static final int tvTutoriapps=0x7f060039;
         public static final int tvURL=0x7f060007;
@@ -141,6 +143,8 @@ public final class R {
         public static final int tvURLSinglePic=0x7f060047;
         public static final int tvVerFecha=0x7f060033;
         public static final int tvWarning=0x7f06003e;
+        public static final int tvlol=0x7f060049;
+        public static final int wvImage=0x7f06005b;
     }
     public static final class layout {
         public static final int boardcontent=0x7f030000;
