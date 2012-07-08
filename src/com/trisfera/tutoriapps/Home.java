@@ -302,7 +302,7 @@ public class Home extends Activity implements OnClickListener,
 						String eventTime = new String(creado);
 						String currentTime = new String(SuperTiempo);
 						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd'T'hh:mm:ss'Z'");
+								"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'");
 						Date eventDate = sdf.parse(eventTime);
 						Date currentDate = sdf.parse(currentTime);
 						long eventTimelong = eventDate.getTime();
