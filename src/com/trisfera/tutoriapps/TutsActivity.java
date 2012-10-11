@@ -50,7 +50,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 	FileInputStream fis = null;
 	int contador = 0;
 
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,7 +81,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 		etPass.addTextChangedListener(this);
 	}
 
-
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.bSubmit:
@@ -93,7 +91,6 @@ public class TutsActivity extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -103,7 +100,8 @@ public class TutsActivity extends Activity implements OnClickListener,
 
 	public void submit() {
 		httpclient = new DefaultHttpClient();
-		httppost = new HttpPost("http://tutoriapps.herokuapp.com/api/v1/tokens.json");
+		httppost = new HttpPost(
+				"http://tutoriapps.herokuapp.com/api/v1/tokens.json");
 		username = etUser.getText().toString();
 		password = etPass.getText().toString();
 		tvWarning.setText("");
@@ -172,27 +170,24 @@ public class TutsActivity extends Activity implements OnClickListener,
 		return token;
 	}
 
-
 	public void afterTextChanged(Editable arg0) {
 		// TODO Auto-generated method stub
 	}
-
 
 	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 			int arg3) {
 		// TODO Auto-generated method stub
 	}
 
-
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		tvWarning.setVisibility(View.INVISIBLE);
 	}
-	
-	 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  // TODO Auto-generated method stub
-	  super.onActivityResult(requestCode, resultCode, data);
-	  if (resultCode == RESULT_OK)
-	   finish();
-	 }
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK)
+			finish();
+	}
 }
