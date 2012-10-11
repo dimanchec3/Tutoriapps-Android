@@ -92,7 +92,6 @@ public class Libros extends Activity implements OnClickListener,
 		public String thumbnail_url;
 	}
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -198,25 +197,21 @@ public class Libros extends Activity implements OnClickListener,
 			context = c;
 		}
 
-
 		public int getCount() {
 			// TODO Auto-generated method stub
 			cantidadGrupos = extras.getInt("cantidadGrupos");
 			return cantidadGrupos;
 		}
 
-
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return gnombre[position];
 		}
 
-
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
-
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -346,7 +341,6 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -381,7 +375,6 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
@@ -389,14 +382,12 @@ public class Libros extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		if (contador == 1)
 			pDialog.dismiss();
 	}
-
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -416,10 +407,14 @@ public class Libros extends Activity implements OnClickListener,
 				LayoutInflater inflater = getLayoutInflater();
 				convertView = inflater.inflate(R.layout.bookscontent, null);
 				holder = new ViewHolder(convertView);
-				holder.tvIdGroupBook = (TextView) convertView.findViewById(R.id.tvIdGroupBook);
-				holder.tvNameBooks = (TextView) convertView.findViewById(R.id.tvNameBooks);
-				holder.tvTitleBooks = (TextView) convertView.findViewById(R.id.tvTitleBooks);
-				holder.tvAuthorBooks = (TextView) convertView.findViewById(R.id.tvAuthorBooks);
+				holder.tvIdGroupBook = (TextView) convertView
+						.findViewById(R.id.tvIdGroupBook);
+				holder.tvNameBooks = (TextView) convertView
+						.findViewById(R.id.tvNameBooks);
+				holder.tvTitleBooks = (TextView) convertView
+						.findViewById(R.id.tvTitleBooks);
+				holder.tvAuthorBooks = (TextView) convertView
+						.findViewById(R.id.tvAuthorBooks);
 				holder.tvPublisherBooks = (TextView) convertView
 						.findViewById(R.id.tvPublisherBooks);
 				holder.tvAditionalInfoBooks = (TextView) convertView
@@ -428,14 +423,20 @@ public class Libros extends Activity implements OnClickListener,
 						.findViewById(R.id.tvContactInfoBooks);
 				holder.tvOfferTypeBooks = (TextView) convertView
 						.findViewById(R.id.tvOfferTypeBooks);
-				holder.tvDateBooks = (TextView) convertView.findViewById(R.id.tvDateBooks);
-				holder.tvGroupBooks = (TextView) convertView.findViewById(R.id.tvGroupBooks);
+				holder.tvDateBooks = (TextView) convertView
+						.findViewById(R.id.tvDateBooks);
+				holder.tvGroupBooks = (TextView) convertView
+						.findViewById(R.id.tvGroupBooks);
 				holder.tvReplyCountBooks = (TextView) convertView
 						.findViewById(R.id.tvReplyCountBooks);
-				holder.tvIdPostBook = (TextView) convertView.findViewById(R.id.tvIdPostBook);
-				holder.tvPriceBooks = (TextView) convertView.findViewById(R.id.tvPriceBooks);
-				holder.tvSingleURL = (TextView) convertView.findViewById(R.id.tvSingleURL);
-				holder.ivProfileBooks = (ImageView) convertView.findViewById(R.id.ivProfileBooks);
+				holder.tvIdPostBook = (TextView) convertView
+						.findViewById(R.id.tvIdPostBook);
+				holder.tvPriceBooks = (TextView) convertView
+						.findViewById(R.id.tvPriceBooks);
+				holder.tvSingleURL = (TextView) convertView
+						.findViewById(R.id.tvSingleURL);
+				holder.ivProfileBooks = (ImageView) convertView
+						.findViewById(R.id.ivProfileBooks);
 				convertView.setTag(holder);
 			} else
 				holder = (ViewHolder) convertView.getTag();
@@ -446,7 +447,8 @@ public class Libros extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new loadImages(holder.pos, holder).execute(arrayBooks.get(position).thumbnail_url);
+			new loadImages(holder.pos, holder)
+					.execute(arrayBooks.get(position).thumbnail_url);
 			return (convertView);
 		}
 
@@ -460,12 +462,12 @@ public class Libros extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
-					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-					thumb_urlback = new URL (params[0]);
+					URL thumb_urlback = new URL(
+							"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL(params[0]);
 					thumb_image = BitmapFactory.decodeStream(thumb_urlback
 							.openConnection().getInputStream());
 				} catch (IOException e) {
@@ -474,7 +476,6 @@ public class Libros extends Activity implements OnClickListener,
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
@@ -507,26 +508,26 @@ public class Libros extends Activity implements OnClickListener,
 		public ImageView ivProfileBooks = null;
 
 		ViewHolder(View row) {
-			/*tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
-			tvNameBooks = (TextView) row.findViewById(R.id.tvNameBooks);
-			tvTitleBooks = (TextView) row.findViewById(R.id.tvTitleBooks);
-			tvAuthorBooks = (TextView) row.findViewById(R.id.tvAuthorBooks);
-			tvPublisherBooks = (TextView) row
-					.findViewById(R.id.tvPublisherBooks);
-			tvAditionalInfoBooks = (TextView) row
-					.findViewById(R.id.tvAditionalInfoBooks);
-			tvContactInfoBooks = (TextView) row
-					.findViewById(R.id.tvContactInfoBooks);
-			tvOfferTypeBooks = (TextView) row
-					.findViewById(R.id.tvOfferTypeBooks);
-			tvDateBooks = (TextView) row.findViewById(R.id.tvDateBooks);
-			tvGroupBooks = (TextView) row.findViewById(R.id.tvGroupBooks);
-			tvReplyCountBooks = (TextView) row
-					.findViewById(R.id.tvReplyCountBooks);
-			tvIdPostBook = (TextView) row.findViewById(R.id.tvIdPostBook);
-			tvPriceBooks = (TextView) row.findViewById(R.id.tvPriceBooks);
-			tvSingleURL = (TextView) row.findViewById(R.id.tvSingleURL);*/
-			//ivProfileBooks = (ImageView) row.findViewById(R.id.ivProfileBooks);
+			/*
+			 * tvIdGroupBook = (TextView) row.findViewById(R.id.tvIdGroupBook);
+			 * tvNameBooks = (TextView) row.findViewById(R.id.tvNameBooks);
+			 * tvTitleBooks = (TextView) row.findViewById(R.id.tvTitleBooks);
+			 * tvAuthorBooks = (TextView) row.findViewById(R.id.tvAuthorBooks);
+			 * tvPublisherBooks = (TextView) row
+			 * .findViewById(R.id.tvPublisherBooks); tvAditionalInfoBooks =
+			 * (TextView) row .findViewById(R.id.tvAditionalInfoBooks);
+			 * tvContactInfoBooks = (TextView) row
+			 * .findViewById(R.id.tvContactInfoBooks); tvOfferTypeBooks =
+			 * (TextView) row .findViewById(R.id.tvOfferTypeBooks); tvDateBooks
+			 * = (TextView) row.findViewById(R.id.tvDateBooks); tvGroupBooks =
+			 * (TextView) row.findViewById(R.id.tvGroupBooks); tvReplyCountBooks
+			 * = (TextView) row .findViewById(R.id.tvReplyCountBooks);
+			 * tvIdPostBook = (TextView) row.findViewById(R.id.tvIdPostBook);
+			 * tvPriceBooks = (TextView) row.findViewById(R.id.tvPriceBooks);
+			 * tvSingleURL = (TextView) row.findViewById(R.id.tvSingleURL);
+			 */
+			// ivProfileBooks = (ImageView)
+			// row.findViewById(R.id.ivProfileBooks);
 		}
 
 		void populateFrom(Books r) throws IOException {
@@ -598,7 +599,6 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -656,7 +656,6 @@ public class Libros extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onScroll(AbsListView arg0, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
@@ -665,7 +664,6 @@ public class Libros extends Activity implements OnClickListener,
 		totalItem = totalItemCount;
 
 	}
-
 
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
@@ -681,18 +679,19 @@ public class Libros extends Activity implements OnClickListener,
 		min = (arrayBooks.size() + superTotal) / superTotal;
 		if (min >= 1 && lastitem == totalItem
 				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionId
-					+ "/books.json?auth_token=" + token + "&older_than="
-					+ fechaformato[fechaformato.length - 1] + "&count=5";
+			URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/"
+					+ posicionId + "/books.json?auth_token=" + token
+					+ "&older_than=" + fechaformato[fechaformato.length - 1]
+					+ "&count=5";
 			ultimoItem = 1;
 			getData();
-		} /*else if (currentFirstVisibleItem == 0
-				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL_BOOKS = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionId
-					+ "/books.json?auth_token=" + token + "&newer_than="
-					+ fechaformato[fechaformato.length - 1] + "&count=5";
-			ultimoItem = 2;
-			getData();
-		}*/
+		} /*
+		 * else if (currentFirstVisibleItem == 0 && currentScrollState ==
+		 * SCROLL_STATE_IDLE) { URL_BOOKS =
+		 * "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionId +
+		 * "/books.json?auth_token=" + token + "&newer_than=" +
+		 * fechaformato[fechaformato.length - 1] + "&count=5"; ultimoItem = 2;
+		 * getData(); }
+		 */
 	}
 }

@@ -19,8 +19,6 @@ public class SingleImage extends Activity {
 	ImageView ivSingleImage;
 	URL url_image;
 	Bitmap image;
-	//WebView wvImage;
-
 
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -44,9 +42,6 @@ public class SingleImage extends Activity {
 		extras = getIntent().getExtras();
 		URL = extras.getString("URL");
 		ivSingleImage = (ImageView) findViewById(R.id.ivSingleImage);
-		//wvImage = (WebView) findViewById(R.id.wvImage);
-		//wvImage.getSettings().setBuiltInZoomControls(true);
-		//wvImage.loadUrl(URL);
 		url_image = new URL(URL);
 		image = BitmapFactory.decodeStream(url_image.openConnection()
 				.getInputStream());

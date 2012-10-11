@@ -43,10 +43,9 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 	int contador = 0;
 	String[] gid, gnombre;
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crearpost);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
@@ -82,7 +81,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		etCrearPost.addTextChangedListener(this);
 	}
 
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -99,7 +97,6 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		}
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -109,8 +106,8 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 
 	private void postData() {
 		// TODO Auto-generated method stub
-		String url_post = "http://tutoriapps.herokuapp.com/api/v1/groups/" + gruposId
-				+ "/posts.json?auth_token=" + token;
+		String url_post = "http://tutoriapps.herokuapp.com/api/v1/groups/"
+				+ gruposId + "/posts.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_post);
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
@@ -128,22 +125,19 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 		}
 	}
 
-
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
-		switch(arg0.getId()){
+		switch (arg0.getId()) {
 		case R.id.sGrupos:
-		gruposId = gid[pos].toString();
-		break;
+			gruposId = gid[pos].toString();
+			break;
 		}
 	}
-
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 	}
-
 
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
@@ -151,14 +145,12 @@ public class CrearPost extends Activity implements OnItemSelectedListener,
 			bPostear.setEnabled(false);
 	}
 
-
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bPostear.setEnabled(false);
 	}
-
 
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// TODO Auto-generated method stub

@@ -46,7 +46,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 	private ProgressDialog pDialog;
 	int contador = 0;
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -100,7 +99,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 		etPrice.setTypeface(font);
 		etPrice.setVisibility(View.GONE);
 	}
-
 
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
@@ -158,7 +156,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -168,8 +165,8 @@ public class CrearBooks extends Activity implements OnClickListener,
 
 	private void postData() {
 		// TODO Auto-generated method stub
-		String url_books = "http://tutoriapps.herokuapp.com/api/v1/groups/" + gruposId
-				+ "/books.json?auth_token=" + token;
+		String url_books = "http://tutoriapps.herokuapp.com/api/v1/groups/"
+				+ gruposId + "/books.json?auth_token=" + token;
 		StringBuilder url = new StringBuilder(url_books);
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url.toString());
@@ -201,7 +198,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
@@ -228,7 +224,6 @@ public class CrearBooks extends Activity implements OnClickListener,
 			break;
 		}
 	}
-
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub

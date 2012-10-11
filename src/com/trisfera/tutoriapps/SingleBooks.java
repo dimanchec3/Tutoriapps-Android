@@ -94,7 +94,6 @@ public class SingleBooks extends Activity implements TextWatcher,
 		public String created_at;
 	}
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -226,27 +225,27 @@ public class SingleBooks extends Activity implements TextWatcher,
 
 	public class loadImagesMain extends AsyncTask<String, Integer, String> {
 
-				protected String doInBackground(String... params) {
-					// TODO Auto-generated method stub
-					try {
-						URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-						thumb_urlback = new URL (params[0]);
-						thumb_image = BitmapFactory.decodeStream(thumb_urlback
-								.openConnection().getInputStream());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return null;
-				}
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+				URL thumb_urlback = new URL(
+						"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+				thumb_urlback = new URL(params[0]);
+				thumb_image = BitmapFactory.decodeStream(thumb_urlback
+						.openConnection().getInputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
 
-
-				protected void onPostExecute(String result) {
-					// TODO Auto-generated method stub
-					super.onPostExecute(result);
-					ivProfileSingleBooks.setImageBitmap(thumb_image);
-					}
-				}
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			ivProfileSingleBooks.setImageBitmap(thumb_image);
+		}
+	}
 
 	private void splitter() {
 		// TODO Auto-generated method stub
@@ -407,7 +406,8 @@ public class SingleBooks extends Activity implements TextWatcher,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new loadImages(holder.pos, holder).execute(arrayReply.get(position).thumbnail_url);
+			new loadImages(holder.pos, holder)
+					.execute(arrayReply.get(position).thumbnail_url);
 			return (convertView);
 		}
 
@@ -421,12 +421,12 @@ public class SingleBooks extends Activity implements TextWatcher,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
-					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-					thumb_urlback = new URL (params[0]);
+					URL thumb_urlback = new URL(
+							"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL(params[0]);
 					thumb_image = BitmapFactory.decodeStream(thumb_urlback
 							.openConnection().getInputStream());
 				} catch (IOException e) {
@@ -435,7 +435,6 @@ public class SingleBooks extends Activity implements TextWatcher,
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
@@ -470,13 +469,13 @@ public class SingleBooks extends Activity implements TextWatcher,
 			tvTextLV.setTypeface(font, 0);
 			tvNameLV.setTypeface(font, 0);
 			tvTextLV.setMovementMethod(LinkMovementMethod.getInstance());
-			thumb_url = new URL("http://tutoriapps.herokuapp.com" + r.thumbnail_url);
+			thumb_url = new URL("http://tutoriapps.herokuapp.com"
+					+ r.thumbnail_url);
 			thumb_image = BitmapFactory.decodeStream(thumb_url.openConnection()
 					.getInputStream());
 			ivReplyPic.setImageBitmap(thumb_image);
 		}
 	}
-
 
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
@@ -484,19 +483,16 @@ public class SingleBooks extends Activity implements TextWatcher,
 			bResponderBooks.setEnabled(false);
 	}
 
-
 	public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponderBooks.setEnabled(false);
 	}
 
-
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		bResponderBooks.setEnabled(true);
 	}
-
 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub

@@ -98,7 +98,6 @@ public class SinglePost extends Activity implements OnClickListener,
 		public String profile_pic;
 	}
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -198,8 +197,9 @@ public class SinglePost extends Activity implements OnClickListener,
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			try {
-				URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-				thumb_urlback = new URL (params[0]);
+				URL thumb_urlback = new URL(
+						"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+				thumb_urlback = new URL(params[0]);
 				thumb_image = BitmapFactory.decodeStream(thumb_urlback
 						.openConnection().getInputStream());
 			} catch (IOException e) {
@@ -209,14 +209,12 @@ public class SinglePost extends Activity implements OnClickListener,
 			return null;
 		}
 
-
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-				ivProfileSinglePost.setImageBitmap(thumb_image);
-			}
+			ivProfileSinglePost.setImageBitmap(thumb_image);
 		}
-
+	}
 
 	private void getRespuestas() {
 		// TODO Auto-generated method stub
@@ -291,8 +289,10 @@ public class SinglePost extends Activity implements OnClickListener,
 						resultRow.text = json_data.getString("text");
 						JSONObject usuarios = json_data.getJSONObject("author");
 						resultRow.name = usuarios.getString("name");
-						JSONObject profile_pic = usuarios.getJSONObject("profile_pic");
-						resultRow.profile_pic = profile_pic.getString("thumbnail_url");
+						JSONObject profile_pic = usuarios
+								.getJSONObject("profile_pic");
+						resultRow.profile_pic = profile_pic
+								.getString("thumbnail_url");
 						arrayReply.add(resultRow);
 					}
 				} catch (Exception e1) {
@@ -306,7 +306,6 @@ public class SinglePost extends Activity implements OnClickListener,
 			e.printStackTrace();
 		}
 	}
-
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -328,7 +327,6 @@ public class SinglePost extends Activity implements OnClickListener,
 		}
 		return false;
 	}
-
 
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -355,7 +353,6 @@ public class SinglePost extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public boolean onCreateOptionsMenu(android.view.Menu menu) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu);
@@ -363,7 +360,6 @@ public class SinglePost extends Activity implements OnClickListener,
 		blowUp.inflate(R.menu.menu, menu);
 		return true;
 	}
-
 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -507,20 +503,17 @@ public class SinglePost extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponder.setEnabled(false);
 	}
 
-
 	public void beforeTextChanged(CharSequence s, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		if (s == null || s.length() == 0)
 			bResponder.setEnabled(false);
 	}
-
 
 	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
@@ -549,7 +542,8 @@ public class SinglePost extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new loadImages(holder.pos, holder).execute(arrayReply.get(position).profile_pic);
+			new loadImages(holder.pos, holder)
+					.execute(arrayReply.get(position).profile_pic);
 			return (convertView);
 		}
 
@@ -563,12 +557,12 @@ public class SinglePost extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
-					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-					thumb_urlback = new URL (params[0]);
+					URL thumb_urlback = new URL(
+							"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL(params[0]);
 					thumb_image = BitmapFactory.decodeStream(thumb_urlback
 							.openConnection().getInputStream());
 				} catch (IOException e) {
@@ -577,7 +571,6 @@ public class SinglePost extends Activity implements OnClickListener,
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub

@@ -90,7 +90,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		public String thumbnail_profile;
 	}
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -142,25 +141,21 @@ public class Pizarra extends Activity implements OnClickListener,
 			context = c;
 		}
 
-
 		public int getCount() {
 			// TODO Auto-generated method stub
 			cantidadGrupos = extras.getInt("cantidadGrupos");
 			return cantidadGrupos;
 		}
 
-
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return gnombre[position];
 		}
 
-
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
-
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -212,7 +207,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		valorUltimo = 0;
 	}
 
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -248,7 +242,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
@@ -256,14 +249,12 @@ public class Pizarra extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		if (contador == 1)
 			pDialog.dismiss();
 	}
-
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -450,8 +441,10 @@ public class Pizarra extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new loadImages(holder.pos, holder).execute(arregloPizarra.get(position).thumbnail_profile);
-			new loadPizarra(holder.pos, holder).execute(arregloPizarra.get(position).thumbnail_url);
+			new loadImages(holder.pos, holder).execute(arregloPizarra
+					.get(position).thumbnail_profile);
+			new loadPizarra(holder.pos, holder).execute(arregloPizarra
+					.get(position).thumbnail_url);
 			return (convertView);
 		}
 
@@ -465,12 +458,12 @@ public class Pizarra extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
-					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-					thumb_urlback = new URL (params[0]);
+					URL thumb_urlback = new URL(
+							"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL(params[0]);
 					image_profile = BitmapFactory.decodeStream(thumb_urlback
 							.openConnection().getInputStream());
 
@@ -480,7 +473,6 @@ public class Pizarra extends Activity implements OnClickListener,
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
@@ -504,20 +496,19 @@ public class Pizarra extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
 					URL thumb_urlback = null;
-					thumb_urlback = new URL (params[0]);
-					thumb_image = BitmapFactory.decodeStream(thumb_urlback.openConnection().getInputStream());
+					thumb_urlback = new URL(params[0]);
+					thumb_image = BitmapFactory.decodeStream(thumb_urlback
+							.openConnection().getInputStream());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
@@ -568,7 +559,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
@@ -582,7 +572,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onScroll(AbsListView arg0, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
@@ -590,7 +579,6 @@ public class Pizarra extends Activity implements OnClickListener,
 		currentVisibleItemCount = visibleItemCount;
 		totalItem = totalItemCount;
 	}
-
 
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
@@ -627,13 +615,13 @@ public class Pizarra extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} /*else if (currentFirstVisibleItem == 0
-				&& currentScrollState == SCROLL_STATE_IDLE) {
-			URL = "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid
-					+ "/books.json?auth_token=" + token + "&newer_than="
-					+ fechaclase[fechaclase.length - 1] + "&count=5";
-			ultimoItem = 2;
-			getData();
-		}*/
+		} /*
+		 * else if (currentFirstVisibleItem == 0 && currentScrollState ==
+		 * SCROLL_STATE_IDLE) { URL =
+		 * "http://tutoriapps.herokuapp.com/api/v1/groups/" + posicionid +
+		 * "/books.json?auth_token=" + token + "&newer_than=" +
+		 * fechaclase[fechaclase.length - 1] + "&count=5"; ultimoItem = 2;
+		 * getData(); }
+		 */
 	}
 }

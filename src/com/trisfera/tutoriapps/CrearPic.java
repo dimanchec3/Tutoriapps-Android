@@ -70,7 +70,6 @@ public class CrearPic extends Activity implements OnClickListener,
 	private ProgressDialog pDialog;
 	Typeface font;
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -119,7 +118,6 @@ public class CrearPic extends Activity implements OnClickListener,
 		bPostearPic.setEnabled(false);
 	}
 
-
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
@@ -164,7 +162,6 @@ public class CrearPic extends Activity implements OnClickListener,
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sGrupos.setAdapter(adaptador);
 	}
-
 
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
@@ -216,7 +213,6 @@ public class CrearPic extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
@@ -224,14 +220,12 @@ public class CrearPic extends Activity implements OnClickListener,
 			pDialog.dismiss();
 	}
 
-
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		if (contador == 1)
 			pDialog.dismiss();
 	}
-
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
@@ -291,7 +285,6 @@ public class CrearPic extends Activity implements OnClickListener,
 		// Toast.makeText(getBaseContext(), sResponse, 10000).show();
 	}
 
-
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
 			long arg3) {
 		// TODO Auto-generated method stub
@@ -302,7 +295,6 @@ public class CrearPic extends Activity implements OnClickListener,
 		else
 			bPostearPic.setEnabled(true);
 	}
-
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub

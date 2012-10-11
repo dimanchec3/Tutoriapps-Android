@@ -102,7 +102,6 @@ public class Home extends Activity implements OnClickListener,
 		public String id;
 	}
 
-
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -161,7 +160,6 @@ public class Home extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		myHorizontalListView.setOnItemClickListener(new OnItemClickListener() {
 
-
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				URL = "http://tutoriapps.herokuapp.com/api/v1/groups/"
@@ -191,25 +189,21 @@ public class Home extends Activity implements OnClickListener,
 			context = c;
 		}
 
-
 		public int getCount() {
 			// TODO Auto-generated method stub
 			cantidadGrupos = arrayGrupos.size();
 			return cantidadGrupos;
 		}
 
-
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return gnombre[position];
 		}
 
-
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
-
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -408,7 +402,6 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
@@ -458,14 +451,12 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK)
 			finish();
 	}
-
 
 	public boolean onCreateOptionsMenu(android.view.Menu menu) {
 		// TODO Auto-generated method stub
@@ -474,7 +465,6 @@ public class Home extends Activity implements OnClickListener,
 		blowUp.inflate(R.menu.menu, menu);
 		return true;
 	}
-
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -504,7 +494,6 @@ public class Home extends Activity implements OnClickListener,
 		}
 		return false;
 	}
-
 
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -572,9 +561,10 @@ public class Home extends Activity implements OnClickListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 holder.ivProfile.setImageResource(R.drawable.unknownuser);
+			holder.ivProfile.setImageResource(R.drawable.unknownuser);
 			// holder.tvlol.setText(String.valueOf(thumb_url));
-			new loadImages(holder.pos, holder).execute(arrayOfWebData.get(position).profile_pic);
+			new loadImages(holder.pos, holder).execute(arrayOfWebData
+					.get(position).profile_pic);
 			return (convertView);
 		}
 
@@ -588,12 +578,12 @@ public class Home extends Activity implements OnClickListener,
 				mHolder = holder;
 			}
 
-
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				try {
-					URL thumb_urlback = new URL ("http://tutoriapps.herokuapp.com/assets/unknown-user.png");
-					thumb_urlback = new URL (params[0]);
+					URL thumb_urlback = new URL(
+							"http://tutoriapps.herokuapp.com/assets/unknown-user.png");
+					thumb_urlback = new URL(params[0]);
 					thumb_image = BitmapFactory.decodeStream(thumb_urlback
 							.openConnection().getInputStream());
 				} catch (IOException e) {
@@ -602,7 +592,6 @@ public class Home extends Activity implements OnClickListener,
 				}
 				return null;
 			}
-
 
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
@@ -628,6 +617,7 @@ public class Home extends Activity implements OnClickListener,
 		public TextView tvURLPic = null;
 		public TextView tvGroupidPost = null;
 		public ImageView ivProfile = null;
+
 		// public TextView tvlol = null;
 
 		void populateFrom(Post r) throws IOException {
@@ -646,7 +636,6 @@ public class Home extends Activity implements OnClickListener,
 			tvGroup.setTypeface(font);
 		}
 	}
-
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
@@ -685,7 +674,6 @@ public class Home extends Activity implements OnClickListener,
 		}
 	}
 
-
 	public void onScroll(AbsListView arg0, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
@@ -693,7 +681,6 @@ public class Home extends Activity implements OnClickListener,
 		currentVisibleItemCount = visibleItemCount;
 		totalItem = totalItemCount;
 	}
-
 
 	public void onScrollStateChanged(AbsListView arg0, int scrollState) {
 		// TODO Auto-generated method stub
